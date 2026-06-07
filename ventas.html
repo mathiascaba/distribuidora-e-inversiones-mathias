@@ -127,6 +127,7 @@
     </div>
     <div style="display:flex;gap:8px;flex-wrap:wrap">
       <button class="ven-btn" onclick="openVentaModal()">+ Nueva Venta</button>
+      <button class="ven-btn del" onclick="borrarHistorial()">🗑 Borrar Historial</button>
     </div>
   </div>
   <div class="ven-tabs" id="ven-tabs">
@@ -553,6 +554,13 @@ function printVentaData(v) {
 }
 
 function printVenta() { }
+
+function borrarHistorial() {
+  if (!confirm('¿Estás seguro de borrar TODO el historial de ventas? Esta acción no se puede deshacer.')) return;
+  if (!confirm('⚠️ CONFIRMACIÓN FINAL: ¿Borrar todas las ventas permanentemente?')) return;
+  localStorage.removeItem('fp_ventas');
+  renderVentas();
+}
 
 renderVentas();
 </script>
