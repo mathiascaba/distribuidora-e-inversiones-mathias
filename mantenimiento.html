@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mantenimiento – Distribuidora Mathias</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>body{cursor:auto!important}</style>
+<link rel="stylesheet" href="shared.css">
+<style>
+.mto-page{padding:96px 48px 60px;max-width:1100px;margin:0 auto}
+.mto-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:12px}
+.mto-head h1{font-family:'Bebas Neue',cursive;font-size:36px;color:var(--w);letter-spacing:1px;margin:0}
+.mto-tabs{display:flex;gap:0;margin-bottom:28px;border-bottom:1px solid var(--mute2);flex-wrap:wrap}
+.mto-tab{padding:10px 22px;border:none;background:none;color:var(--mute);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;border-bottom:2px solid transparent;margin-bottom:-1px}
+.mto-tab:hover{color:var(--w);background:var(--mute3)}
+.mto-tab.active{color:var(--amber);border-bottom-color:var(--amber);background:rgba(245,158,11,.07)}
+.mto-section{display:none}
+.mto-section.active{display:block}
+.mto-card{background:var(--ink2);border:1px solid var(--mute2);border-radius:16px;padding:24px}
+.mto-card-title{font-family:'Bebas Neue',cursive;font-size:22px;color:var(--w);letter-spacing:1px;margin-bottom:16px;display:flex;align-items:center;gap:10px}
+.mto-row{display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap;align-items:end}
+.mto-field{display:flex;flex-direction:column;gap:4px}
+.mto-field label{font-size:10px;font-family:'Space Mono',monospace;text-transform:uppercase;letter-spacing:1px;color:var(--mute)}
+.mto-field input{background:var(--ink3);border:1px solid var(--mute2);border-radius:6px;padding:8px 12px;color:var(--w);font-size:13px;font-family:'DM Sans',sans-serif;outline:none;transition:border .2s;min-width:140px}
+.mto-field input:focus{border-color:var(--amber)}
+.mto-field input.required{border-color:rgba(245,158,11,.4)}
+.mto-btn{background:var(--amber);color:var(--ink);border:none;padding:8px 18px;border-radius:6px;font-weight:700;font-size:12px;cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif;white-space:nowrap;height:36px}
+.mto-btn:hover{background:var(--amber2)}
+.mto-btn-out{background:transparent;border:1px solid var(--mute2);color:var(--mute);padding:7px 16px;border-radius:6px;font-weight:600;font-size:12px;cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif;white-space:nowrap}
+.mto-btn-out:hover{background:var(--mute2);color:var(--w)}
+.mto-btn-sm{padding:5px 12px;font-size:11px;height:auto}
+.mto-btn-del{background:rgba(234,88,12,.15);border:1px solid rgba(234,88,12,.3);color:#f97316}
+.mto-btn-del:hover{background:rgba(234,88,12,.3)}
+.mto-btn-save{background:var(--lime);color:var(--ink)}
+.mto-btn-save:hover{background:#9ae63e}
+.mto-table{width:100%;border-collapse:collapse;font-size:13px}
+.mto-table th{text-align:left;padding:10px 12px;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:1px;color:var(--mute);text-transform:uppercase;border-bottom:1px solid var(--mute2)}
+.mto-table td{padding:10px 12px;border-bottom:1px solid var(--mute3);color:var(--w)}
+.mto-table tr:hover td{background:var(--mute3)}
+.mto-table .actions{display:flex;gap:6px}
+.mto-table input{background:var(--ink3);border:1px solid var(--mute2);border-radius:4px;padding:5px 8px;color:var(--w);font-size:12px;font-family:'DM Sans',sans-serif;outline:none;width:100%;min-width:60px;transition:border .2s}
+.mto-table input:focus{border-color:var(--amber)}
+.mto-table .editing td{vertical-align:top}
+.mto-empty{padding:32px;text-align:center;color:var(--mute);font-size:13px}
+.mto-link{display:inline-flex;align-items:center;gap:8px;background:var(--ink2);border:1px solid var(--mute2);border-radius:14px;padding:16px 28px;text-decoration:none;color:var(--w);font-family:'Bebas Neue',cursive;font-size:20px;letter-spacing:1px;transition:all .25s}
+.mto-link:hover{transform:translateY(-3px);border-color:var(--amber);background:var(--ink3)}
+.mto-link span{font-size:28px}
+.mto-simple-list{display:flex;flex-direction:column;gap:6px}
+.mto-simple-item{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--ink3);border:1px solid var(--mute2);border-radius:8px;transition:background .15s}
+.mto-simple-item:hover{background:var(--mute3)}
+.mto-simple-item span{font-size:14px;font-weight:500;color:var(--w)}
+@media(max-width:600px){.mto-page{padding:80px 12px 40px}.mto-row{flex-direction:column;align-items:stretch}.mto-field input{min-width:0}.mto-table{font-size:12px}.mto-table th,.mto-table td{padding:8px 6px}.mto-table input{min-width:40px;font-size:11px}.mto-tab{padding:8px 14px;font-size:12px}}
+</style>
+</head>
+<body>
+
+<nav class="dm-nav">
+  <a class="dm-logo" href="index.html">
+    <div class="dm-logo-mark">🔧</div>
+    <div class="dm-logo-text">Distrib. e Inv. Mathias<span>Lima, Perú · Est. 2020</span></div>
+  </a>
+  <ul class="dm-nav-links">
+    <li><a href="catalogo.html">📦 Catálogo</a></li>
+    <li><a href="electrico.html">⚡ Eléctrico</a></li>
+    <li><a href="herramienta.html">🔨 Herramientas</a></li>
+    <li><a href="gasfiteria.html">🚿 Gasfitería</a></li>
+    <li><a href="quimicos.html">🧪 Químicos</a></li>
+    <li><a href="construccion.html">🧱 Construcción</a></li>
+    <li><a href="otros.html">🔩 Otros</a></li>
+  </ul>
+  <div class="dm-nav-icons">
+    <button class="dm-nav-btn" id="search-btn" title="Buscar">🔍</button>
+    <button class="dm-nav-btn" id="user-btn" title="Cuenta">👤</button>
+    <button class="dm-nav-btn" id="cart-btn" title="Carrito">🛒<span class="cart-badge">0</span></button>
+  </div>
+</nav>
+
+<div id="search-bar"><input type="text" id="search-input" placeholder="🔍  Buscar productos..."/><div id="search-results"></div></div>
+<div id="user-panel"></div>
+<div id="cart-overlay"></div>
+<div id="cart-panel">
+  <div class="cart-header"><h3>🛒 Carrito</h3><button class="cart-close" onclick="closeCart()">✕</button></div>
+  <div id="cart-body"></div>
+  <div class="cart-footer">
+    <div class="cart-total-row"><span>Total:</span><span id="cart-total">S/ 0.00</span></div>
+    <button class="btn-checkout" onclick="checkout()">Proceder al pago →</button>
+  </div>
+</div>
+
+<div class="mto-page">
+  <div class="mto-head">
+    <h1>🛠️ Mantenimiento</h1>
+  </div>
+
+  <div class="mto-tabs">
+    <button class="mto-tab active" data-tab="productos">📦 Productos</button>
+    <button class="mto-tab" data-tab="clientes">👥 Clientes</button>
+    <button class="mto-tab" data-tab="proveedores">📋 Proveedores</button>
+    <button class="mto-tab" data-tab="marcas">🏷️ Marcas</button>
+    <button class="mto-tab" data-tab="categorias">📂 Categorías</button>
+  </div>
+
+  <!-- Productos -->
+  <div class="mto-section active" id="sec-productos">
+    <div class="mto-card">
+      <div class="mto-card-title">📦 Productos</div>
+      <p style="color:var(--mute);font-size:13px;margin-bottom:16px">Gestiona tu inventario de productos desde la página de inventario.</p>
+      <a class="mto-link" href="inventario.html"><span>📦</span> Ir a Inventario</a>
+    </div>
+  </div>
+
+  <!-- Clientes -->
+  <div class="mto-section" id="sec-clientes">
+    <div class="mto-card">
+      <div class="mto-card-title">👥 Clientes</div>
+      <div class="mto-row" id="cli-form">
+        <div class="mto-field">
+          <label>Nombre *</label>
+          <input type="text" id="cli-nombre" placeholder="Nombre completo" class="required">
+        </div>
+        <div class="mto-field">
+          <label>Documento</label>
+          <input type="text" id="cli-documento" placeholder="DNI / RUC">
+        </div>
+        <div class="mto-field">
+          <label>Teléfono</label>
+          <input type="text" id="cli-telefono" placeholder="Teléfono">
+        </div>
+        <div class="mto-field">
+          <label>Email</label>
+          <input type="text" id="cli-email" placeholder="Email">
+        </div>
+        <div class="mto-field">
+          <label>Dirección</label>
+          <input type="text" id="cli-direccion" placeholder="Dirección">
+        </div>
+        <button class="mto-btn" onclick="cliAddItem()">+ Agregar</button>
+      </div>
+      <table class="mto-table" id="cli-table">
+        <thead><tr><th>Nombre</th><th>Documento</th><th>Teléfono</th><th>Email</th><th style="width:110px">Acción</th></tr></thead>
+        <tbody id="cli-tbody"></tbody>
+      </table>
+      <div class="mto-empty" id="cli-empty">No hay clientes registrados</div>
+    </div>
+  </div>
+
+  <!-- Proveedores -->
+  <div class="mto-section" id="sec-proveedores">
+    <div class="mto-card">
+      <div class="mto-card-title">📋 Proveedores</div>
+      <div class="mto-row" id="prov-form">
+        <div class="mto-field">
+          <label>Nombre *</label>
+          <input type="text" id="prov-nombre" placeholder="Nombre o razón social" class="required">
+        </div>
+        <div class="mto-field">
+          <label>RUC</label>
+          <input type="text" id="prov-ruc" placeholder="RUC">
+        </div>
+        <div class="mto-field">
+          <label>Teléfono</label>
+          <input type="text" id="prov-telefono" placeholder="Teléfono">
+        </div>
+        <div class="mto-field">
+          <label>Email</label>
+          <input type="text" id="prov-email" placeholder="Email">
+        </div>
+        <div class="mto-field">
+          <label>Dirección</label>
+          <input type="text" id="prov-direccion" placeholder="Dirección">
+        </div>
+        <button class="mto-btn" onclick="provAddItem()">+ Agregar</button>
+      </div>
+      <table class="mto-table" id="prov-table">
+        <thead><tr><th>Nombre</th><th>RUC</th><th>Teléfono</th><th>Email</th><th style="width:110px">Acción</th></tr></thead>
+        <tbody id="prov-tbody"></tbody>
+      </table>
+      <div class="mto-empty" id="prov-empty">No hay proveedores registrados</div>
+    </div>
+  </div>
+
+  <!-- Marcas -->
+  <div class="mto-section" id="sec-marcas">
+    <div class="mto-card">
+      <div class="mto-card-title">🏷️ Marcas</div>
+      <div class="mto-row">
+        <div class="mto-field">
+          <label>Nueva marca</label>
+          <input type="text" id="marca-nombre" placeholder="Nombre de la marca">
+        </div>
+        <button class="mto-btn" onclick="marcaAddItem()">+ Agregar</button>
+      </div>
+      <div class="mto-simple-list" id="marcas-list"></div>
+      <div class="mto-empty" id="marcas-empty">No hay marcas registradas</div>
+    </div>
+  </div>
+
+  <!-- Categorías -->
+  <div class="mto-section" id="sec-categorias">
+    <div class="mto-card">
+      <div class="mto-card-title">📂 Categorías</div>
+      <div class="mto-row">
+        <div class="mto-field">
+          <label>Nueva categoría</label>
+          <input type="text" id="cat-nombre" placeholder="Nombre de la categoría">
+        </div>
+        <button class="mto-btn" onclick="catAddItem()">+ Agregar</button>
+      </div>
+      <div class="mto-simple-list" id="cats-list"></div>
+      <div class="mto-empty" id="cats-empty">No hay categorías registradas</div>
+    </div>
+  </div>
+</div>
+
+<script src="shared.js"></script>
+<script>
+const user = getUser();
+if (!user || user.type !== 'owner') { window.location.href = 'index.html'; }
+
+let editingCliId = null;
+let editingProvId = null;
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.mto-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.mto-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.mto-section').forEach(s => s.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById('sec-' + tab.dataset.tab).classList.add('active');
+    });
+  });
+  renderClients();
+  renderProvs();
+  renderMarcas();
+  renderCats();
+});
+
+function cliAddItem() {
+  const nombre = document.getElementById('cli-nombre').value.trim();
+  if (!nombre) { showToast('⚠️ El nombre del cliente es obligatorio'); return; }
+  cliAdd({ nombre, documento: document.getElementById('cli-documento').value.trim(), telefono: document.getElementById('cli-telefono').value.trim(), email: document.getElementById('cli-email').value.trim(), direccion: document.getElementById('cli-direccion').value.trim() });
+  document.getElementById('cli-nombre').value = ''; document.getElementById('cli-documento').value = ''; document.getElementById('cli-telefono').value = ''; document.getElementById('cli-email').value = ''; document.getElementById('cli-direccion').value = '';
+  renderClients();
+  showToast('✅ Cliente agregado');
+}
+
+function cliDelete(id) {
+  if (!confirm('¿Eliminar este cliente?')) return;
+  cliDel(id);
+  renderClients();
+  showToast('🗑️ Cliente eliminado');
+}
+
+function cliEdit(id) {
+  editingCliId = id;
+  renderClients();
+}
+
+function cliSave(id) {
+  const nombre = document.getElementById('cli-e-nombre-' + id)?.value?.trim();
+  if (!nombre) { showToast('⚠️ El nombre es obligatorio'); return; }
+  cliUpd(id, { nombre, documento: document.getElementById('cli-e-documento-' + id)?.value?.trim(), telefono: document.getElementById('cli-e-telefono-' + id)?.value?.trim(), email: document.getElementById('cli-e-email-' + id)?.value?.trim(), direccion: document.getElementById('cli-e-direccion-' + id)?.value?.trim() });
+  editingCliId = null;
+  renderClients();
+  showToast('✅ Cliente actualizado');
+}
+
+function cliCancel() {
+  editingCliId = null;
+  renderClients();
+}
+
+function renderClients() {
+  const data = cliGet();
+  const tbody = document.getElementById('cli-tbody');
+  const empty = document.getElementById('cli-empty');
+  if (!data.length) { tbody.innerHTML = ''; empty.style.display = 'block'; return; }
+  empty.style.display = 'none';
+  tbody.innerHTML = data.map(c => {
+    if (editingCliId === c.id) {
+      return `<tr class="editing">
+        <td><input type="text" id="cli-e-nombre-${c.id}" value="${esc(c.nombre)}" placeholder="Nombre"></td>
+        <td><input type="text" id="cli-e-documento-${c.id}" value="${esc(c.documento||'')}"></td>
+        <td><input type="text" id="cli-e-telefono-${c.id}" value="${esc(c.telefono||'')}"></td>
+        <td><input type="text" id="cli-e-email-${c.id}" value="${esc(c.email||'')}"></td>
+        <td><div class="actions">
+          <button class="mto-btn mto-btn-sm mto-btn-save" onclick="cliSave('${c.id}')">💾</button>
+          <button class="mto-btn-out mto-btn-sm" onclick="cliCancel()">✕</button>
+        </div></td>
+      </tr>`;
+    }
+    return `<tr>
+      <td>${esc(c.nombre)}</td>
+      <td>${esc(c.documento||'—')}</td>
+      <td>${esc(c.telefono||'—')}</td>
+      <td>${esc(c.email||'—')}</td>
+      <td><div class="actions">
+        <button class="mto-btn-out mto-btn-sm" onclick="cliEdit('${c.id}')">✏️</button>
+        <button class="mto-btn-out mto-btn-sm mto-btn-del" onclick="cliDelete('${c.id}')">🗑️</button>
+      </div></td>
+    </tr>`;
+  }).join('');
+}
+
+function provAddItem() {
+  const nombre = document.getElementById('prov-nombre').value.trim();
+  if (!nombre) { showToast('⚠️ El nombre del proveedor es obligatorio'); return; }
+  provAdd({ nombre, ruc: document.getElementById('prov-ruc').value.trim(), telefono: document.getElementById('prov-telefono').value.trim(), email: document.getElementById('prov-email').value.trim(), direccion: document.getElementById('prov-direccion').value.trim() });
+  document.getElementById('prov-nombre').value = ''; document.getElementById('prov-ruc').value = ''; document.getElementById('prov-telefono').value = ''; document.getElementById('prov-email').value = ''; document.getElementById('prov-direccion').value = '';
+  renderProvs();
+  showToast('✅ Proveedor agregado');
+}
+
+function provDelete(id) {
+  if (!confirm('¿Eliminar este proveedor?')) return;
+  provDel(id);
+  renderProvs();
+  showToast('🗑️ Proveedor eliminado');
+}
+
+function provEdit(id) {
+  editingProvId = id;
+  renderProvs();
+}
+
+function provSave(id) {
+  const nombre = document.getElementById('prov-e-nombre-' + id)?.value?.trim();
+  if (!nombre) { showToast('⚠️ El nombre es obligatorio'); return; }
+  provUpd(id, { nombre, ruc: document.getElementById('prov-e-ruc-' + id)?.value?.trim(), telefono: document.getElementById('prov-e-telefono-' + id)?.value?.trim(), email: document.getElementById('prov-e-email-' + id)?.value?.trim(), direccion: document.getElementById('prov-e-direccion-' + id)?.value?.trim() });
+  editingProvId = null;
+  renderProvs();
+  showToast('✅ Proveedor actualizado');
+}
+
+function provCancel() {
+  editingProvId = null;
+  renderProvs();
+}
+
+function renderProvs() {
+  const data = provGet();
+  const tbody = document.getElementById('prov-tbody');
+  const empty = document.getElementById('prov-empty');
+  if (!data.length) { tbody.innerHTML = ''; empty.style.display = 'block'; return; }
+  empty.style.display = 'none';
+  tbody.innerHTML = data.map(p => {
+    if (editingProvId === p.id) {
+      return `<tr class="editing">
+        <td><input type="text" id="prov-e-nombre-${p.id}" value="${esc(p.nombre)}" placeholder="Nombre"></td>
+        <td><input type="text" id="prov-e-ruc-${p.id}" value="${esc(p.ruc||'')}"></td>
+        <td><input type="text" id="prov-e-telefono-${p.id}" value="${esc(p.telefono||'')}"></td>
+        <td><input type="text" id="prov-e-email-${p.id}" value="${esc(p.email||'')}"></td>
+        <td><div class="actions">
+          <button class="mto-btn mto-btn-sm mto-btn-save" onclick="provSave('${p.id}')">💾</button>
+          <button class="mto-btn-out mto-btn-sm" onclick="provCancel()">✕</button>
+        </div></td>
+      </tr>`;
+    }
+    return `<tr>
+      <td>${esc(p.nombre)}</td>
+      <td>${esc(p.ruc||'—')}</td>
+      <td>${esc(p.telefono||'—')}</td>
+      <td>${esc(p.email||'—')}</td>
+      <td><div class="actions">
+        <button class="mto-btn-out mto-btn-sm" onclick="provEdit('${p.id}')">✏️</button>
+        <button class="mto-btn-out mto-btn-sm mto-btn-del" onclick="provDelete('${p.id}')">🗑️</button>
+      </div></td>
+    </tr>`;
+  }).join('');
+}
+
+function marcaAddItem() {
+  const n = document.getElementById('marca-nombre').value.trim();
+  if (!n) { showToast('⚠️ Ingresa un nombre de marca'); return; }
+  const r = marcasAdd(n);
+  if (!r) { showToast('⚠️ La marca ya existe'); return; }
+  document.getElementById('marca-nombre').value = '';
+  renderMarcas();
+  showToast('✅ Marca agregada');
+}
+
+function marcaDelete(id) {
+  if (!confirm('¿Eliminar esta marca?')) return;
+  marcasDel(id);
+  renderMarcas();
+  showToast('🗑️ Marca eliminada');
+}
+
+function renderMarcas() {
+  const data = marcasGet();
+  const list = document.getElementById('marcas-list');
+  const empty = document.getElementById('marcas-empty');
+  if (!data.length) { list.innerHTML = ''; empty.style.display = 'block'; return; }
+  empty.style.display = 'none';
+  list.innerHTML = data.map(m => `
+    <div class="mto-simple-item">
+      <span>🏷️ ${esc(m.nombre)}</span>
+      <button class="mto-btn-out mto-btn-sm mto-btn-del" onclick="marcaDelete('${m.id}')">🗑️</button>
+    </div>
+  `).join('');
+}
+
+function catAddItem() {
+  const n = document.getElementById('cat-nombre').value.trim();
+  if (!n) { showToast('⚠️ Ingresa un nombre de categoría'); return; }
+  const r = catsAdd(n);
+  if (!r) { showToast('⚠️ La categoría ya existe'); return; }
+  document.getElementById('cat-nombre').value = '';
+  renderCats();
+  showToast('✅ Categoría agregada');
+}
+
+function catDelete(id) {
+  if (!confirm('¿Eliminar esta categoría?')) return;
+  catsDel(id);
+  renderCats();
+  showToast('🗑️ Categoría eliminada');
+}
+
+function renderCats() {
+  const data = catsGet();
+  const list = document.getElementById('cats-list');
+  const empty = document.getElementById('cats-empty');
+  if (!data.length) { list.innerHTML = ''; empty.style.display = 'block'; return; }
+  empty.style.display = 'none';
+  list.innerHTML = data.map(c => `
+    <div class="mto-simple-item">
+      <span>📂 ${esc(c.nombre)}</span>
+      <button class="mto-btn-out mto-btn-sm mto-btn-del" onclick="catDelete('${c.id}')">🗑️</button>
+    </div>
+  `).join('');
+}
+
+function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+</script>
+</body>
+</html>

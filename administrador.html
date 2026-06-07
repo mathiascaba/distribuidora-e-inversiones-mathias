@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Administrador – Distribuidora Mathias</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<style>body{cursor:auto}
+.adm-card{background:var(--ink2);border:1px solid var(--mute2);border-radius:14px;padding:28px 32px;margin-top:28px;max-width:600px}
+.adm-card h3{font-family:'Bebas Neue',cursive;font-size:22px;color:var(--w);letter-spacing:1px;margin-bottom:20px}
+.adm-field{margin-bottom:16px}
+.adm-field label{display:block;font-size:12px;color:var(--mute);font-weight:600;margin-bottom:4px;text-transform:uppercase;letter-spacing:1px}
+.adm-field input{font-size:14px;color:var(--w);padding:10px 14px;background:var(--ink3);border:1px solid var(--mute2);border-radius:6px;width:100%;box-sizing:border-box;font-family:'DM Sans',sans-serif;outline:none;transition:border-color .2s}
+.adm-field input:focus{border-color:var(--amber)}
+.adm-btn{background:var(--amber);color:var(--ink);border:none;padding:10px 24px;border-radius:6px;font-weight:700;font-size:13px;cursor:pointer;transition:background .2s;font-family:'DM Sans',sans-serif}
+.adm-btn:hover{background:var(--amber2)}
+.adm-btn.danger{background:rgba(220,38,38,.1);color:#ef4444;border:1px solid rgba(220,38,38,.3)}
+.adm-btn.danger:hover{background:rgba(220,38,38,.2)}
+.adm-visit{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--mute2);flex-wrap:wrap;gap:4px}
+.adm-visit:last-child{border-bottom:none}
+.adm-visit-ip{font-family:'Space Mono',monospace;font-size:13px;color:var(--amber);font-weight:700}
+.adm-visit-info{font-size:11px;color:var(--mute)}
+.adm-empty{text-align:center;padding:60px 20px;color:var(--mute)}
+.adm-empty span{font-size:56px;display:block;margin-bottom:16px}
+.adm-empty h3{font-size:22px;color:var(--w);margin-bottom:8px}
+.adm-empty .btn-ir{display:inline-block;background:var(--amber);color:var(--ink);padding:10px 28px;border-radius:8px;font-weight:700;font-size:14px;text-decoration:none}
+#visits-list{margin-top:16px;max-height:400px;overflow-y:auto}
+@media(max-width:600px){.adm-card{padding:20px}}
+</style>
+</head>
+<body>
+
+<nav class="dm-nav">
+  <a class="dm-logo" href="index.html">
+    <div class="dm-logo-mark">🔧</div>
+    <div class="dm-logo-text">Distrib. e Inv. Mathias<span>Lima, Perú · Est. 2020</span></div>
+  </a>
+  <ul class="dm-nav-links">
+    <li><a href="catalogo.html">📦 Catálogo</a></li>
+    <li><a href="electrico.html">⚡ Eléctrico</a></li>
+    <li><a href="herramienta.html">🔨 Herramientas</a></li>
+    <li><a href="gasfiteria.html">🚿 Gasfitería</a></li>
+    <li><a href="quimicos.html">🧪 Químicos</a></li>
+    <li><a href="construccion.html">🧱 Construcción</a></li>
+    <li><a href="otros.html">🔩 Otros</a></li>
+  </ul>
+  <div class="dm-nav-icons">
+    <button class="dm-nav-btn" id="search-btn" title="Buscar">🔍</button>
+    <button class="dm-nav-btn" id="user-btn" title="Cuenta">👤</button>
+    <button class="dm-nav-btn" id="cart-btn" title="Carrito">🛒<span class="cart-badge">0</span></button>
+  </div>
+</nav>
+
+<div id="search-bar"><input type="text" id="search-input" placeholder="🔍  Buscar productos..."/><div id="search-results"></div></div>
+<div id="user-panel"></div>
+<div id="cart-overlay"></div>
+<div id="cart-panel">
+  <div class="cart-header"><h3>🛒 Carrito</h3><button class="cart-close" onclick="closeCart()">✕</button></div>
+  <div id="cart-body"></div>
+  <div class="cart-footer">
+    <div class="cart-total-row"><span>Total:</span><span id="cart-total">S/ 0.00</span></div>
+    <button class="btn-checkout" onclick="checkout()">Proceder al pago →</button>
+  </div>
+</div>
+
+<div class="cat-page">
+  <div class="cat-hero-card">
+    <div class="cat-hero-bg-icon">⚙️</div>
+    <div class="cat-breadcrumb"><a href="index.html">Inicio</a> › Administrador</div>
+    <h1>⚙️ Panel de Administrador</h1>
+    <p>Control de visitas y administración de la cuenta.</p>
+  </div>
+  <div id="adm-content"></div>
+</div>
+
+<footer class="dm-footer">
+  <div class="dm-footer-grid">
+    <div>
+      <a class="dm-footer-logo" href="index.html">
+        <div class="dm-footer-logo-mark">🔧</div>
+        <div class="dm-footer-logo-txt">Distrib. e Inv. Mathias<small>Lima, Perú · Est. 2020</small></div>
+      </a>
+      <p class="dm-footer-desc">Tu distribuidora de confianza en Lima. Herramientas, materiales y más para tus proyectos con calidad garantizada y precios directos.</p>
+      <div class="dm-footer-socials">
+        <a class="dm-social" href="https://wa.me/51980583077" target="_blank">💬</a>
+        <a class="dm-social" href="#">📘</a>
+        <a class="dm-social" href="#">📸</a>
+      </div>
+    </div>
+    <div class="dm-footer-col"><h5>Categorías</h5><ul>
+      <li><a href="electrico.html">⚡ Eléctrico</a></li>
+      <li><a href="herramienta.html">🔨 Herramienta</a></li>
+      <li><a href="gasfiteria.html">🚿 Gasfitería</a></li>
+      <li><a href="quimicos.html">🧪 Químicos</a></li>
+      <li><a href="construccion.html">🧱 Construcción</a></li>
+      <li><a href="otros.html">🔩 Otros</a></li>
+    </ul></div>
+    <div class="dm-footer-col"><h5>Empresa</h5><ul>
+      <li><a href="#">Sobre Nosotros</a></li>
+      <li><a href="#">Devoluciones</a></li>
+      <li><a href="#">Términos y Condiciones</a></li>
+      <li><a href="#">Preguntas Frecuentes</a></li>
+    </ul></div>
+    <div class="dm-footer-col"><h5>Contacto</h5><ul>
+      <li><a href="#">📍 Lima, Perú</a></li>
+      <li><a href="tel:+51980583077">📞 +51 980 583 077</a></li>
+      <li><a href="tel:+51997057917">📞 +51 997 057 917</a></li>
+      <li><a href="https://wa.me/51980583077" target="_blank">💬 WhatsApp</a></li>
+    </ul></div>
+  </div>
+  <div class="dm-footer-bottom"><p>© 2025 Distribuidora e Inversiones Mathias. Todos los derechos reservados.</p><p>Hecho con ❤️ en Lima, Perú 🇵🇪</p></div>
+</footer>
+
+<a class="wa-float" href="https://wa.me/51980583077?text=Hola%20%F0%9F%91%8B%20quiero%20m%C3%A1s%20informaci%C3%B3n" target="_blank" title="WhatsApp">💬</a>
+
+<script src="shared.js"></script>
+<script>
+function renderAdmin() {
+  const div = document.getElementById('adm-content');
+  const user = getUser();
+  if (!user || user.type !== 'developer') {
+    div.innerHTML = '<div class="adm-empty"><span>🔒</span><h3>Acceso restringido</h3><p>Solo el desarrollador puede acceder a este panel.</p><a class="btn-ir" href="javascript:void(0)" onclick="closeUserPanel();document.getElementById(\'user-btn\').click()">Iniciar Sesión</a></div>';
+    return;
+  }
+  const visits = JSON.parse(localStorage.getItem('fp_visits') || '[]');
+  div.innerHTML = `
+    <div class="adm-card">
+      <h3>📋 Visitas Recientes (${visits.length})</h3>
+      <div id="visits-list">${visits.length ? visits.slice().reverse().map(v => `
+        <div class="adm-visit">
+          <div>
+            <div class="adm-visit-ip">${v.ip || 'IP desconocida'}</div>
+            <div class="adm-visit-info">${new Date(v.date).toLocaleDateString('es-PE', {year:'numeric',month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'})} · ${v.page || '—'}${v.device ? ` · ${v.device}` : ''}</div>
+          </div>
+        </div>
+      `).join('') : '<div style="padding:20px 0;text-align:center;color:var(--mute);font-size:14px">Aún no hay visitas registradas</div>'}</div>
+    </div>
+    <div class="adm-card">
+      <h3>👤 ${user.displayName}</h3>
+      <p style="font-size:13px;color:var(--mute)">Sesión iniciada como <strong style="color:var(--amber)">@${user.username}</strong></p>
+      <a href="inventario.html" class="adm-btn" style="display:inline-block;text-decoration:none;margin-top:8px">📦 Ir a Inventario</a>
+      <button class="adm-btn danger" style="margin-top:8px;margin-left:8px" onclick="logoutUser()">Cerrar Sesión</button>
+    </div>
+  `;
+}
+
+renderAdmin();
+</script>
+</body>
+</html>

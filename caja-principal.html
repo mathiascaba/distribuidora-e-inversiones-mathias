@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Caja Principal · Ferretería</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--ink:#0e0e12;--ink2:#1a1a22;--ink3:#262633;--mute:#6b7280;--mute2:#9ca3af;--w:#f4f4f6;--amber:#f59e0b;--amber2:#d97706}
+body{background:var(--ink);color:var(--w);font-family:'DM Sans',sans-serif;min-height:100vh;display:flex;flex-direction:column;cursor:auto}
+a{color:var(--amber);text-decoration:none}
+.dm-nav{display:flex;align-items:center;padding:10px 24px;background:var(--ink2);border-bottom:1px solid var(--ink3);gap:24px;flex-wrap:wrap}
+.dm-logo{display:flex;align-items:center;gap:10px;color:var(--w)}
+.dm-logo-mark{font-size:1.6rem}
+.dm-logo-text{font-size:1.1rem;font-weight:700;font-family:'Bebas Neue',sans-serif;letter-spacing:1px;line-height:1}
+.dm-logo-text span{display:block;font-size:.65rem;font-family:'DM Sans',sans-serif;font-weight:400;color:var(--mute);letter-spacing:0}
+.dm-nav-links{display:flex;list-style:none;gap:6px;flex-wrap:wrap}
+.dm-nav-links a{padding:6px 12px;border-radius:6px;font-size:.82rem;color:var(--mute2);transition:.2s}
+.dm-nav-links a:hover{color:var(--w);background:var(--ink3)}
+.dm-nav-icons{display:flex;gap:8px;margin-left:auto}
+.dm-nav-btn{background:var(--ink3);border:none;color:var(--mute2);width:38px;height:38px;border-radius:8px;font-size:1.1rem;cursor:pointer;position:relative;transition:.2s}
+.dm-nav-btn:hover{background:var(--amber);color:#000}
+.cart-badge{position:absolute;top:-4px;right:-4px;background:var(--amber);color:#000;font-size:.65rem;border-radius:50%;width:18px;height:18px;display:flex;align-items:center;justify-content:center;font-weight:700}
+.search-panel,.user-panel,.cart-panel{display:none;background:var(--ink2);padding:16px 24px;border-bottom:1px solid var(--ink3)}
+.search-panel.open,.user-panel.open,.cart-panel.open{display:block}
+.search-panel input{width:100%;padding:10px 14px;border-radius:8px;border:1px solid var(--ink3);background:var(--ink);color:var(--w);font-size:.95rem;outline:none}
+.search-panel input:focus{border-color:var(--amber)}
+.user-panel p{color:var(--mute2)}
+.cart-panel .cart-item{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--ink3);font-size:.85rem;color:var(--mute2)}
+.cart-panel .cart-total{font-weight:700;color:var(--w);padding-top:8px;text-align:right}
+
+/* PAGE LAYOUT */
+.page{padding:24px;flex:1;max-width:1360px;margin:0 auto;width:100%}
+.page h1{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--w);margin-bottom:6px;letter-spacing:1px}
+.page .sub{color:var(--mute);margin-bottom:24px;font-size:.85rem}
+
+/* SALDO BIG */
+.saldo-hero{background:var(--ink2);border:1px solid var(--ink3);border-radius:16px;padding:28px 32px;text-align:center;margin-bottom:24px}
+.saldo-hero .label{font-size:.85rem;color:var(--mute);text-transform:uppercase;letter-spacing:2px}
+.saldo-hero .amount{font-family:'Space Mono',monospace;font-size:3.2rem;font-weight:700;color:var(--amber);line-height:1.2}
+.saldo-hero .saldo-date{font-size:.75rem;color:var(--mute2);margin-top:4px}
+
+/* STATS CARDS */
+.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-bottom:24px}
+.stat-card{background:var(--ink2);border:1px solid var(--ink3);border-radius:12px;padding:18px}
+.stat-card .stat-label{font-size:.75rem;color:var(--mute);text-transform:uppercase;letter-spacing:1px}
+.stat-card .stat-value{font-family:'Space Mono',monospace;font-size:1.5rem;font-weight:700;margin-top:4px}
+.stat-card .stat-value.green{color:#22c55e}
+.stat-card .stat-value.red{color:#ef4444}
+.stat-card .stat-value.amber{color:var(--amber)}
+.stat-card .stat-value.blue{color:#3b82f6}
+
+/* ACTION BUTTONS */
+.action-row{display:flex;gap:12px;margin-bottom:24px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.88rem;font-weight:600;cursor:pointer;transition:.2s}
+.btn-amber{background:var(--amber);color:#000}
+.btn-amber:hover{background:var(--amber2)}
+.btn-outline{background:transparent;border:1px solid var(--ink3);color:var(--mute2)}
+.btn-outline:hover{border-color:var(--amber);color:var(--amber)}
+.btn-red{background:#ef4444;color:#fff}
+.btn-red:hover{background:#dc2626}
+.btn-green{background:#22c55e;color:#000}
+.btn-green:hover{background:#16a34a}
+
+/* MODAL */
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:100;align-items:center;justify-content:center}
+.modal.open{display:flex}
+.modal-content{background:var(--ink2);border:1px solid var(--ink3);border-radius:16px;padding:28px;width:90%;max-width:480px;max-height:90vh;overflow-y:auto}
+.modal-content h2{font-family:'Bebas Neue',sans-serif;font-size:1.5rem;margin-bottom:16px;letter-spacing:1px}
+.form-group{margin-bottom:14px}
+.form-group label{display:block;font-size:.8rem;color:var(--mute);margin-bottom:4px;text-transform:uppercase;letter-spacing:1px}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:10px 12px;border-radius:8px;border:1px solid var(--ink3);background:var(--ink);color:var(--w);font-size:.9rem;outline:none;font-family:'DM Sans',sans-serif}
+.form-group input:focus,.form-group select:focus{border-color:var(--amber)}
+.form-group textarea{resize:vertical;min-height:60px}
+.form-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:18px}
+
+/* TABLE */
+.table-wrap{background:var(--ink2);border:1px solid var(--ink3);border-radius:12px;overflow:hidden;margin-bottom:24px}
+.table-header{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid var(--ink3);flex-wrap:wrap;gap:10px}
+.table-header h3{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:1px}
+.filter-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.filter-row input{background:var(--ink);border:1px solid var(--ink3);border-radius:6px;padding:6px 10px;color:var(--w);font-size:.8rem;font-family:'DM Sans',sans-serif;outline:none}
+.filter-row input:focus{border-color:var(--amber)}
+.filter-row label{font-size:.75rem;color:var(--mute)}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;padding:10px 14px;font-size:.72rem;color:var(--mute);text-transform:uppercase;letter-spacing:1px;border-bottom:1px solid var(--ink3);font-weight:500}
+td{padding:10px 14px;font-size:.85rem;color:var(--mute2);border-bottom:1px solid var(--ink3)}
+tr:hover td{background:var(--ink3)}
+td .tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:.7rem;font-weight:600}
+.tag-ingreso{background:rgba(34,197,94,.15);color:#22c55e}
+.tag-egreso{background:rgba(239,68,68,.15);color:#ef4444}
+.monto-pos{font-family:'Space Mono',monospace;color:#22c55e}
+.monto-neg{font-family:'Space Mono',monospace;color:#ef4444}
+
+/* GASTOS ROW */
+.gastos-list{display:flex;flex-direction:column;gap:8px;padding:14px 18px}
+.gasto-item{display:flex;justify-content:space-between;align-items:center;background:var(--ink3);border-radius:8px;padding:10px 14px;font-size:.85rem}
+.gasto-item .gasto-info{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.gasto-item .gasto-info strong{color:var(--w)}
+.gasto-item .gasto-info .cat{font-size:.7rem;color:var(--mute);background:var(--ink);padding:2px 8px;border-radius:4px}
+.gasto-item .gasto-info .desc{color:var(--mute2);font-size:.8rem}
+.gasto-item .gasto-del{background:none;border:none;color:#ef4444;cursor:pointer;font-size:1.1rem;padding:4px}
+.gasto-item .gasto-del:hover{color:#fff}
+
+/* SUMMARY */
+.summary-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-top:18px}
+.summary-item{background:var(--ink3);border-radius:8px;padding:12px 16px;text-align:center}
+.summary-item .s-label{font-size:.7rem;color:var(--mute);text-transform:uppercase;letter-spacing:1px}
+.summary-item .s-value{font-family:'Space Mono',monospace;font-size:1.1rem;font-weight:700;margin-top:2px}
+
+/* FOOTER */
+footer{background:var(--ink2);border-top:1px solid var(--ink3);padding:20px 24px;text-align:center;font-size:.8rem;color:var(--mute)}
+footer a{color:var(--amber)}
+.wa-float{position:fixed;bottom:24px;right:24px;width:52px;height:52px;background:#25d366;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.6rem;color:#fff;box-shadow:0 4px 16px rgba(0,0,0,.5);z-index:50;transition:.2s}
+.wa-float:hover{transform:scale(1.08)}
+
+@media(max-width:700px){.dm-nav-links{display:none}.saldo-hero .amount{font-size:2.2rem}.page{padding:14px}.stats-row{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+
+<nav class="dm-nav">
+  <a class="dm-logo" href="index.html">
+    <div class="dm-logo-mark">🔧</div>
+    <div class="dm-logo-text">Distrib. e Inv. Mathias<span>Lima, Per&uacute; &middot; Est. 2020</span></div>
+  </a>
+  <ul class="dm-nav-links">
+    <li><a href="catalogo.html">📦 Cat&aacute;logo</a></li>
+    <li><a href="electrico.html">⚡ El&eacute;ctrico</a></li>
+    <li><a href="herramienta.html">🔨 Herramientas</a></li>
+    <li><a href="gasfiteria.html">🚿 Gasfiter&iacute;a</a></li>
+    <li><a href="quimicos.html">🧪 Qu&iacute;micos</a></li>
+    <li><a href="construccion.html">🧱 Construcci&oacute;n</a></li>
+    <li><a href="otros.html">🔩 Otros</a></li>
+  </ul>
+  <div class="dm-nav-icons">
+    <button class="dm-nav-btn" id="search-btn">🔍</button>
+    <button class="dm-nav-btn" id="user-btn">👤</button>
+    <button class="dm-nav-btn" id="cart-btn">🛒<span class="cart-badge">0</span></button>
+  </div>
+</nav>
+
+<div class="search-panel" id="search-panel">
+  <input type="text" id="global-search" placeholder="Buscar productos, categor&iacute;as...">
+</div>
+<div class="user-panel" id="user-panel">
+  <p id="user-info">Cargando...</p>
+</div>
+<div class="cart-panel" id="cart-panel">
+  <div id="cart-items"></div>
+  <div id="cart-footer" class="cart-total">Total: S/ 0.00</div>
+</div>
+
+<div class="page">
+  <h1>Caja Principal</h1>
+  <p class="sub">Control de ingresos, egresos y movimientos del d&iacute;a</p>
+
+  <div class="saldo-hero" id="saldo-hero">
+    <div class="label">Saldo Actual</div>
+    <div class="amount" id="saldo-amount">S/ 0.00</div>
+    <div class="saldo-date" id="saldo-date"></div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-label">Ingresos Hoy</div><div class="stat-value green" id="stat-ingresos">S/ 0.00</div></div>
+    <div class="stat-card"><div class="stat-label">Egresos Hoy</div><div class="stat-value red" id="stat-egresos">S/ 0.00</div></div>
+    <div class="stat-card"><div class="stat-label">Ventas Hoy</div><div class="stat-value amber" id="stat-ventas">S/ 0.00</div></div>
+    <div class="stat-card"><div class="stat-label">Gastos Hoy</div><div class="stat-value blue" id="stat-gastos">S/ 0.00</div></div>
+  </div>
+
+  <div class="action-row">
+    <button class="btn btn-amber" id="btn-ingreso">➕ Registrar Ingreso</button>
+    <button class="btn btn-outline" id="btn-egreso">➖ Registrar Egreso</button>
+    <button class="btn btn-outline" id="btn-resumen">📊 Calcular Resumen</button>
+  </div>
+
+  <div class="table-wrap">
+    <div class="table-header">
+      <h3>Movimientos</h3>
+      <div class="filter-row">
+        <label>Desde</label>
+        <input type="date" id="filtro-desde">
+        <label>Hasta</label>
+        <input type="date" id="filtro-hasta">
+        <button class="btn btn-outline" id="btn-filtrar" style="padding:6px 14px;font-size:.8rem">Filtrar</button>
+      </div>
+    </div>
+    <table>
+      <thead>
+        <tr><th>Fecha</th><th>Tipo</th><th>Concepto</th><th>M&eacute;todo</th><th>Monto</th></tr>
+      </thead>
+      <tbody id="movimientos-body"></tbody>
+    </table>
+  </div>
+
+  <div class="table-wrap">
+    <div class="table-header">
+      <h3>Gastos</h3>
+      <button class="btn btn-amber" id="btn-gasto-add" style="padding:6px 14px;font-size:.8rem">➕ A&ntilde;adir Gasto</button>
+    </div>
+    <div class="gastos-list" id="gastos-list"></div>
+  </div>
+
+  <div class="table-wrap" id="resumen-wrap" style="display:none">
+    <div class="table-header"><h3>Resumen de Saldo</h3></div>
+    <div class="summary-grid" id="resumen-grid"></div>
+  </div>
+</div>
+
+<footer>
+  <p>&copy; 2026 Distribuidora e Inversiones Mathias &mdash; <a href="caja-principal.html">Caja Principal</a> &middot; <a href="pos.html">Punto de Venta</a> &middot; <a href="procesos.html">Procesos</a></p>
+</footer>
+
+<a class="wa-float" href="https://wa.me/51999999999" target="_blank">💬</a>
+
+<div class="modal" id="modal-mov">
+  <div class="modal-content">
+    <h2 id="modal-title">Registrar Movimiento</h2>
+    <div class="form-group">
+      <label>Monto (S/)</label>
+      <input type="number" id="mov-monto" step="0.01" min="0.01">
+    </div>
+    <div class="form-group">
+      <label>Concepto</label>
+      <input type="text" id="mov-concepto" placeholder="Ej: Venta diaria, pago proveedor">
+    </div>
+    <div class="form-group">
+      <label>M&eacute;todo / Forma de Pago</label>
+      <select id="mov-metodo">
+        <option value="efectivo">Efectivo</option>
+        <option value="yape">Yape</option>
+        <option value="transferencia">Transferencia</option>
+        <option value="tarjeta">Tarjeta</option>
+      </select>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-outline" id="modal-cancel">Cancelar</button>
+      <button class="btn btn-amber" id="modal-confirm">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="modal-gasto">
+  <div class="modal-content">
+    <h2>A&ntilde;adir Gasto</h2>
+    <div class="form-group">
+      <label>Categor&iacute;a</label>
+      <select id="gasto-categoria">
+        <option value="alquiler">Alquiler</option>
+        <option value="servicios">Servicios</option>
+        <option value="proveedores">Proveedores</option>
+        <option value="transporte">Transporte</option>
+        <option value="publicidad">Publicidad</option>
+        <option value="mantenimiento">Mantenimiento</option>
+        <option value="otros">Otros</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Monto (S/)</label>
+      <input type="number" id="gasto-monto" step="0.01" min="0.01">
+    </div>
+    <div class="form-group">
+      <label>Descripci&oacute;n</label>
+      <textarea id="gasto-desc" placeholder="Detalle del gasto"></textarea>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-outline" id="gasto-cancel">Cancelar</button>
+      <button class="btn btn-amber" id="gasto-confirm">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── PROTECT ──────────────────────────────────────────────
+var _u=getUser();if(!_u||_u.type!=='owner')window.location.href='index.html';
+
+// ── STATE ────────────────────────────────────────────────
+var caja=cajaPriGet();
+var gastos=gastosGet();
+var ventas=ventasGet();
+var today=dbToday();
+var movTipo='ingreso';
+
+function render(){
+  renderSaldo();
+  renderStats();
+  renderMovimientos();
+  renderGastos();
+}
+
+// ── SALDO ────────────────────────────────────────────────
+function renderSaldo(){
+  var el=document.getElementById('saldo-amount');
+  el.textContent='S/ '+(caja.saldo||0).toFixed(2);
+  document.getElementById('saldo-date').textContent='Actualizado: '+dbDate();
+}
+
+// ── STATS ────────────────────────────────────────────────
+function renderStats(){
+  var movs=caja.movimientos||[];
+  var hoy=today;
+  var ingHoy=0,egrHoy=0;
+  movs.forEach(function(m){
+    if(m.fecha.indexOf(hoy)!==0)return;
+    if(m.tipo==='ingreso')ingHoy+=Number(m.monto);
+    else egrHoy+=Number(m.monto);
+  });
+  var venHoy=0;
+  (ventas||[]).forEach(function(v){
+    if(v.fecha&&v.fecha.indexOf(hoy)===0)venHoy+=Number(v.total||0);
+  });
+  var gasHoy=0;
+  (gastos||[]).forEach(function(g){
+    if(g.fecha&&g.fecha.indexOf(hoy)===0)gasHoy+=Number(g.monto||0);
+  });
+  document.getElementById('stat-ingresos').textContent='S/ '+ingHoy.toFixed(2);
+  document.getElementById('stat-egresos').textContent='S/ '+egrHoy.toFixed(2);
+  document.getElementById('stat-ventas').textContent='S/ '+venHoy.toFixed(2);
+  document.getElementById('stat-gastos').textContent='S/ '+gasHoy.toFixed(2);
+}
+
+// ── MOVIMIENTOS ──────────────────────────────────────────
+function renderMovimientos(){
+  var desde=document.getElementById('filtro-desde').value;
+  var hasta=document.getElementById('filtro-hasta').value;
+  var tbody=document.getElementById('movimientos-body');
+  var movs=caja.movimientos||[];
+  if(desde)movs=movs.filter(function(m){return m.fecha>=desde});
+  if(hasta)movs=movs.filter(function(m){return m.fecha<=hasta+'T23:59:59'});
+  movs=movs.slice().reverse();
+  if(!movs.length){tbody.innerHTML='<tr><td colspan="5" style="text-align:center;color:var(--mute);padding:24px">Sin movimientos</td></tr>';return}
+  tbody.innerHTML=movs.map(function(m){
+    var cls=m.tipo==='ingreso'?'tag-ingreso':'tag-egreso';
+    var mCls=m.tipo==='ingreso'?'monto-pos':'monto-neg';
+    var sign=m.tipo==='ingreso'?'+':'-';
+    var d=m.fecha?m.fecha.slice(0,10):'—';
+    return '<tr><td>'+d+'</td><td><span class="tag '+cls+'">'+m.tipo+'</span></td><td>'+(m.concepto||'—')+'</td><td>'+(m.metodo||'—')+'</td><td class="'+mCls+'">'+sign+' S/ '+Number(m.monto).toFixed(2)+'</td></tr>';
+  }).join('');
+}
+
+// ── GASTOS ───────────────────────────────────────────────
+function renderGastos(){
+  var el=document.getElementById('gastos-list');
+  if(!gastos.length){el.innerHTML='<p style="color:var(--mute);text-align:center;padding:12px">Sin gastos registrados</p>';return}
+  el.innerHTML=gastos.map(function(g,i){
+    return '<div class="gasto-item"><div class="gasto-info"><strong>S/ '+Number(g.monto).toFixed(2)+'</strong><span class="cat">'+(g.categoria||'')+'</span><span class="desc">'+(g.descripcion||'')+'</span><span style="font-size:.7rem;color:var(--mute)">'+g.fecha.slice(0,10)+'</span></div><button class="gasto-del" data-idx="'+i+'">&times;</button></div>';
+  }).join('');
+  el.querySelectorAll('.gasto-del').forEach(function(b){
+    b.addEventListener('click',function(){
+      var idx=Number(this.dataset.idx);
+      var g=gastos[idx];
+      if(!confirm('Eliminar gasto por S/ '+Number(g.monto).toFixed(2)+'?'))return;
+      gastosDel(g.id);
+      gastos=gastosGet();
+      renderGastos();
+      renderStats();
+      showToast('Gasto eliminado');
+    });
+  });
+}
+
+// ── MODAL LOGIC ──────────────────────────────────────────
+function openMovModal(tipo){
+  movTipo=tipo;
+  document.getElementById('modal-title').textContent=tipo==='ingreso'?'Registrar Ingreso':'Registrar Egreso';
+  document.getElementById('mov-monto').value='';
+  document.getElementById('mov-concepto').value='';
+  document.getElementById('mov-metodo').value='efectivo';
+  document.getElementById('modal-mov').classList.add('open');
+}
+
+function closeMovModal(){
+  document.getElementById('modal-mov').classList.remove('open');
+}
+
+function saveMov(){
+  var monto=parseFloat(document.getElementById('mov-monto').value);
+  if(!monto||monto<=0){showToast('Ingrese un monto v&aacute;lido');return}
+  var concepto=document.getElementById('mov-concepto').value.trim()||'Sin concepto';
+  var metodo=document.getElementById('mov-metodo').value;
+  var obj={fecha:dbDate(),tipo:movTipo,monto:monto,concepto:concepto,metodo:metodo,id:dbId()};
+  cajaPriMov(obj);
+  caja=cajaPriGet();
+  closeMovModal();
+  render();
+  showToast(movTipo==='ingreso'?'Ingreso registrado':'Egreso registrado');
+}
+
+function openGastoModal(){
+  document.getElementById('gasto-categoria').value='alquiler';
+  document.getElementById('gasto-monto').value='';
+  document.getElementById('gasto-desc').value='';
+  document.getElementById('modal-gasto').classList.add('open');
+}
+
+function closeGastoModal(){
+  document.getElementById('modal-gasto').classList.remove('open');
+}
+
+function saveGasto(){
+  var monto=parseFloat(document.getElementById('gasto-monto').value);
+  if(!monto||monto<=0){showToast('Ingrese un monto v&aacute;lido');return}
+  var categoria=document.getElementById('gasto-categoria').value;
+  var desc=document.getElementById('gasto-desc').value.trim()||'';
+  gastosAdd({fecha:dbDate(),categoria:categoria,monto:monto,descripcion:desc,id:dbId()});
+  gastos=gastosGet();
+  closeGastoModal();
+  renderGastos();
+  renderStats();
+  showToast('Gasto registrado');
+}
+
+// ── RESUMEN ──────────────────────────────────────────────
+function calcularResumen(){
+  var totalVentas=0;
+  (ventas||[]).forEach(function(v){totalVentas+=Number(v.total||0)});
+  var totalGastos=0;
+  (gastos||[]).forEach(function(g){totalGastos+=Number(g.monto||0)});
+  var totalIngresos=0,totalEgresos=0;
+  (caja.movimientos||[]).forEach(function(m){
+    if(m.tipo==='ingreso')totalIngresos+=Number(m.monto);
+    else totalEgresos+=Number(m.monto);
+  });
+  var calc=totalVentas-totalGastos;
+  var wrap=document.getElementById('resumen-wrap');
+  wrap.style.display='block';
+  document.getElementById('resumen-grid').innerHTML=
+    '<div class="summary-item"><div class="s-label">Total Ventas</div><div class="s-value" style="color:#22c55e">S/ '+totalVentas.toFixed(2)+'</div></div>'+
+    '<div class="summary-item"><div class="s-label">Total Gastos</div><div class="s-value" style="color:#ef4444">S/ '+totalGastos.toFixed(2)+'</div></div>'+
+    '<div class="summary-item"><div class="s-label">Total Ingresos (Caja)</div><div class="s-value" style="color:#22c55e">S/ '+totalIngresos.toFixed(2)+'</div></div>'+
+    '<div class="summary-item"><div class="s-label">Total Egresos (Caja)</div><div class="s-value" style="color:#ef4444">S/ '+totalEgresos.toFixed(2)+'</div></div>'+
+    '<div class="summary-item"><div class="s-label">Saldo Calculado</div><div class="s-value" style="color:'+(calc>=0?'#22c55e':'#ef4444')+'">S/ '+calc.toFixed(2)+'</div></div>';
+  showToast('Resumen calculado');
+}
+
+// ── BASE ─────────────────────────────────────────────────
+function initNav(){
+  document.getElementById('search-btn').addEventListener('click',function(){document.getElementById('search-panel').classList.toggle('open')});
+  document.getElementById('user-btn').addEventListener('click',function(){
+    var p=document.getElementById('user-panel');p.classList.toggle('open');
+    var u=getUser();
+    document.getElementById('user-info').textContent=u?'Usuario: '+u.nombre+' ('+u.rol+')':'No conectado';
+  });
+  document.getElementById('cart-btn').addEventListener('click',function(){document.getElementById('cart-panel').classList.toggle('open')});
+}
+
+function init(){
+  initNav();
+  document.getElementById('btn-ingreso').addEventListener('click',function(){openMovModal('ingreso')});
+  document.getElementById('btn-egreso').addEventListener('click',function(){openMovModal('egreso')});
+  document.getElementById('btn-resumen').addEventListener('click',calcularResumen);
+  document.getElementById('modal-cancel').addEventListener('click',closeMovModal);
+  document.getElementById('modal-confirm').addEventListener('click',saveMov);
+  document.getElementById('btn-gasto-add').addEventListener('click',openGastoModal);
+  document.getElementById('gasto-cancel').addEventListener('click',closeGastoModal);
+  document.getElementById('gasto-confirm').addEventListener('click',saveGasto);
+  document.getElementById('btn-filtrar').addEventListener('click',renderMovimientos);
+  document.getElementById('filtro-desde').value=today;
+  document.getElementById('filtro-hasta').value=today;
+  render();
+}
+
+document.addEventListener('DOMContentLoaded',init);
+</script>
+</body>
+</html>

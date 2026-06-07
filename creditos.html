@@ -1,0 +1,316 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Créditos – Distribuidora Mathias</title><link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="shared.css"><style>body{cursor:auto}
+.cred-page{padding:96px 48px 60px;max-width:1200px;margin:0 auto}
+.cred-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:24px}
+.cred-head h1{font-family:'Bebas Neue',cursive;font-size:36px;color:var(--w);letter-spacing:1px;margin:0}
+.cred-head p{font-size:13px;color:var(--mute);margin:4px 0 0}
+.cred-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:28px}
+.cred-stat{background:var(--ink2);border:1px solid var(--mute2);border-radius:14px;padding:20px 24px}
+.cred-stat-label{font-size:11px;color:var(--mute);text-transform:uppercase;letter-spacing:1px;font-family:'Space Mono',monospace}
+.cred-stat-val{font-family:'Bebas Neue',cursive;font-size:32px;letter-spacing:1px;margin-top:4px}
+.cred-stat-val.pendiente{color:var(--amber)}.cred-stat-val.vencido{color:#ef4444}.cred-stat-val.pagado{color:#22c55e}
+.cred-toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px;align-items:center}
+.cred-toolbar input,.cred-toolbar select{padding:9px 14px;background:var(--ink3);border:1px solid var(--mute2);border-radius:8px;font-size:13px;color:var(--w);outline:none;font-family:'DM Sans',sans-serif}
+.cred-toolbar input:focus,.cred-toolbar select:focus{border-color:var(--amber)}
+.cred-btn{background:var(--ink3);border:1px solid var(--amber);color:var(--amber);padding:9px 18px;border-radius:8px;cursor:pointer;font-weight:600;font-size:13px;transition:all .2s;font-family:'DM Sans',sans-serif}
+.cred-btn:hover{background:var(--amber);color:var(--ink)}
+.cred-btn-primary{background:var(--amber);color:var(--ink);border-color:var(--amber)}
+.cred-btn-primary:hover{background:var(--amber2);border-color:var(--amber2)}
+.cred-btn-danger{border-color:#ef4444;color:#ef4444}
+.cred-btn-danger:hover{background:#ef4444;color:#fff}
+.cred-table-wrap{background:var(--ink2);border:1px solid var(--mute2);border-radius:14px;overflow:hidden;margin-bottom:24px}
+.cred-table{width:100%;border-collapse:collapse;font-size:13px}
+.cred-table th{text-align:left;padding:14px 16px;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--mute);background:var(--ink3);border-bottom:1px solid var(--mute2)}
+.cred-table td{padding:12px 16px;border-bottom:1px solid var(--mute3);color:var(--w)}
+.cred-table tr:last-child td{border-bottom:none}
+.cred-table tr{cursor:pointer;transition:background .15s}
+.cred-table tr:hover{background:var(--mute3)}
+.cred-row-expanded{background:var(--ink3)!important}
+.cred-badge{display:inline-block;padding:3px 10px;border-radius:4px;font-size:11px;font-weight:700;font-family:'Space Mono',monospace}
+.cred-badge.pendiente{background:rgba(245,158,11,.15);color:var(--amber)}.cred-badge.vencido{background:rgba(239,68,68,.15);color:#ef4444}.cred-badge.pagado{background:rgba(34,197,94,.15);color:#22c55e}
+.cred-expanded{padding:16px 16px 16px 48px;background:var(--ink3);border-bottom:1px solid var(--mute2)}
+.cred-expanded-inner{background:var(--ink2);border:1px solid var(--mute2);border-radius:10px;padding:16px}
+.cred-expanded h4{font-family:'Bebas Neue',cursive;font-size:18px;color:var(--w);margin:0 0 10px;letter-spacing:.5px}
+.cred-expanded table{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:12px}
+.cred-expanded table th{text-align:left;padding:6px 8px;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--mute);border-bottom:1px solid var(--mute2)}
+.cred-expanded table td{padding:6px 8px;border-bottom:1px solid var(--mute3);color:var(--w)}
+.cred-pago-form{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:10px;padding-top:10px;border-top:1px solid var(--mute2)}
+.cred-pago-form input,.cred-pago-form select{padding:7px 12px;background:var(--ink);border:1px solid var(--mute2);border-radius:6px;font-size:12px;color:var(--w);outline:none;font-family:'DM Sans',sans-serif}
+.cred-pago-form input:focus,.cred-pago-form select:focus{border-color:var(--amber)}
+.cred-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);z-index:800;align-items:center;justify-content:center}
+.cred-modal-overlay.open{display:flex}
+.cred-modal{background:var(--ink2);border:1px solid var(--mute2);border-radius:16px;padding:28px;width:100%;max-width:560px;max-height:85vh;overflow-y:auto}
+.cred-modal h3{font-family:'Bebas Neue',cursive;font-size:24px;color:var(--amber);letter-spacing:1px;margin:0 0 16px}
+.cred-modal-close{float:right;background:none;border:none;color:var(--mute);font-size:20px;cursor:pointer}
+.cred-modal-close:hover{color:var(--w)}
+.cred-form-group{margin-bottom:12px}
+.cred-form-group label{display:block;font-size:11px;color:var(--mute);margin-bottom:4px;font-family:'Space Mono',monospace;letter-spacing:.5px;text-transform:uppercase}
+.cred-form-group input,.cred-form-group select{padding:9px 14px;background:var(--ink3);border:1px solid var(--mute2);border-radius:6px;font-size:13px;color:var(--w);outline:none;width:100%;font-family:'DM Sans',sans-serif}
+.cred-form-group input:focus,.cred-form-group select:focus{border-color:var(--amber)}
+.cred-item-row{display:flex;gap:8px;align-items:center;margin-bottom:8px;flex-wrap:wrap}
+.cred-item-row input{flex:1;min-width:60px}
+.cred-item-row .cred-item-prod{flex:2;min-width:120px}
+.cred-item-del{background:none;border:none;color:#ef4444;cursor:pointer;font-size:16px}
+.cred-total-display{font-family:'Bebas Neue',cursive;font-size:28px;color:var(--amber);text-align:right;margin-top:8px;letter-spacing:1px}
+@media(max-width:600px){.cred-page{padding:80px 12px 40px}.cred-stats{grid-template-columns:1fr}.cred-stat{padding:14px 18px}.cred-stat-val{font-size:26px}.cred-table th,.cred-table td{padding:10px}.cred-expanded{padding:12px 12px 12px 16px}.cred-modal{padding:20px;max-width:96vw}}
+</style></head><body>
+
+<nav class="dm-nav">
+  <a class="dm-logo" href="index.html">
+    <div class="dm-logo-mark">🔧</div>
+    <div class="dm-logo-text">Distrib. e Inv. Mathias<span>Lima, Perú · Est. 2020</span></div>
+  </a>
+  <ul class="dm-nav-links">
+    <li><a href="catalogo.html">📦 Catálogo</a></li>
+    <li><a href="electrico.html">⚡ Eléctrico</a></li>
+    <li><a href="herramienta.html">🔨 Herramientas</a></li>
+    <li><a href="gasfiteria.html">🚿 Gasfitería</a></li>
+    <li><a href="quimicos.html">🧪 Químicos</a></li>
+    <li><a href="construccion.html">🧱 Construcción</a></li>
+    <li><a href="otros.html">🔩 Otros</a></li>
+  </ul>
+  <div class="dm-nav-icons">
+    <button class="dm-nav-btn" id="search-btn" title="Buscar">🔍</button>
+    <button class="dm-nav-btn" id="user-btn" title="Cuenta">👤</button>
+    <button class="dm-nav-btn" id="cart-btn" title="Carrito">🛒<span class="cart-badge">0</span></button>
+  </div>
+</nav>
+
+<div id="search-bar"><input type="text" id="search-input" placeholder="🔍  Buscar productos..."/><div id="search-results"></div></div>
+<div id="user-panel"></div>
+<div id="cart-overlay"></div>
+<div id="cart-panel">
+  <div class="cart-header"><h3>🛒 Carrito</h3><button class="cart-close" onclick="closeCart()">✕</button></div>
+  <div id="cart-body"></div>
+  <div class="cart-footer">
+    <div class="cart-total-row"><span>Total:</span><span id="cart-total">S/ 0.00</span></div>
+    <button class="btn-checkout" onclick="checkout()">Proceder al pago →</button>
+  </div>
+</div>
+
+<div class="cred-page">
+  <div class="cred-head">
+    <div>
+      <h1>💳 Créditos</h1>
+      <p>Cuentas por cobrar — control de pagos y vencimientos</p>
+    </div>
+    <button class="cred-btn cred-btn-primary" onclick="showNuevoCredito()">+ Nuevo Crédito</button>
+  </div>
+
+  <div class="cred-stats" id="credStats">
+    <div class="cred-stat"><div class="cred-stat-label">Total Pendiente</div><div class="cred-stat-val pendiente" id="statPendiente">S/ 0.00</div></div>
+    <div class="cred-stat"><div class="cred-stat-label">Total Vencido</div><div class="cred-stat-val vencido" id="statVencido">S/ 0.00</div></div>
+    <div class="cred-stat"><div class="cred-stat-label">Total Pagado</div><div class="cred-stat-val pagado" id="statPagado">S/ 0.00</div></div>
+  </div>
+
+  <div class="cred-toolbar">
+    <input type="text" id="credSearch" placeholder="🔍 Buscar por cliente..." oninput="renderCreditos()" style="min-width:200px">
+    <select id="credFilterEstado" onchange="renderCreditos()">
+      <option value="">Todos los estados</option>
+      <option value="pendiente">Pendiente</option>
+      <option value="vencido">Vencido</option>
+      <option value="pagado">Pagado</option>
+    </select>
+  </div>
+
+  <div class="cred-table-wrap" id="credTableWrap">
+    <table class="cred-table" id="credTable">
+      <thead><tr>
+        <th>Fecha</th><th>Cliente</th><th>Documento</th><th>Total</th><th>Pagado</th><th>Saldo</th><th>Estado</th><th>Vencimiento</th>
+      </tr></thead>
+      <tbody id="credTbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<div class="cred-modal-overlay" id="credModal"><div class="cred-modal">
+  <button class="cred-modal-close" onclick="closeModal()">✕</button>
+  <h3 id="credModalTitle">+ Nuevo Crédito</h3>
+  <div id="credModalBody"></div>
+</div></div>
+
+<script src="shared.js"></script>
+<script>
+const user = getUser();
+if (!user || user.type !== 'owner') { window.location.href = 'index.html'; }
+
+function getSaldo(c) { return c.total - c.pagos.reduce((s,p)=>s+p.monto,0); }
+function isVencido(c) { return c.estado !== 'pagado' && c.fechaVenc && c.fechaVenc < dbToday(); }
+function updateEstado(c) { if (c.estado !== 'pagado' && isVencido(c)) c.estado = 'vencido'; return c; }
+
+function renderCreditos() {
+  const q = document.getElementById('credSearch').value.toLowerCase();
+  const f = document.getElementById('credFilterEstado').value;
+  let creditos = creditosGet().map(updateEstado).filter(c => {
+    if (f && c.estado !== f) return false;
+    if (q && !c.cliente.toLowerCase().includes(q)) return false;
+    return true;
+  });
+  creditos.sort((a,b) => b.fecha.localeCompare(a.fecha));
+
+  let totalPend = 0, totalVenc = 0, totalPag = 0;
+  creditosGet().forEach(c => {
+    const saldo = getSaldo(c);
+    const venc = isVencido(c) && c.estado !== 'pagado';
+    if (c.estado === 'pagado') totalPag += c.total;
+    else if (venc) totalVenc += saldo;
+    else totalPend += saldo;
+  });
+  document.getElementById('statPendiente').textContent = 'S/ ' + totalPend.toFixed(2);
+  document.getElementById('statVencido').textContent = 'S/ ' + totalVenc.toFixed(2);
+  document.getElementById('statPagado').textContent = 'S/ ' + totalPag.toFixed(2);
+
+  const tbody = document.getElementById('credTbody');
+  if (!creditos.length) {
+    tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:40px;color:var(--mute)">No hay créditos</td></tr>';
+    return;
+  }
+  tbody.innerHTML = creditos.map(c => {
+    const saldo = getSaldo(c);
+    const badgeClass = c.estado === 'pagado' ? 'pagado' : (isVencido(c) ? 'vencido' : 'pendiente');
+    const badgeLabel = badgeClass === 'vencido' ? 'Vencido' : c.estado.charAt(0).toUpperCase() + c.estado.slice(1);
+    return `<tr onclick="toggleExpand('${c.id}')">
+      <td>${c.fecha.slice(0,10)}</td>
+      <td><strong>${c.cliente}</strong></td>
+      <td>${c.documento || '—'}</td>
+      <td>S/ ${c.total.toFixed(2)}</td>
+      <td>S/ ${(c.total - saldo).toFixed(2)}</td>
+      <td><strong>S/ ${saldo.toFixed(2)}</strong></td>
+      <td><span class="cred-badge ${badgeClass}">${badgeLabel}</span></td>
+      <td>${c.fechaVenc ? c.fechaVenc.slice(0,10) : '—'}</td>
+    </tr>
+    <tr id="expand-${c.id}" style="display:none"><td colspan="8"><div class="cred-expanded">${renderExpand(c)}</div></td></tr>`;
+  }).join('');
+}
+
+function renderExpand(c) {
+  let html = '<div class="cred-expanded-inner">';
+  html += '<h4>📋 Items</h4>';
+  html += '<table><thead><tr><th>Producto</th><th>Variación</th><th>Cant</th><th>Precio</th><th>Subtotal</th></tr></thead><tbody>';
+  c.items.forEach(i => {
+    html += `<tr><td>${i.producto}</td><td>${i.variacion || '—'}</td><td>${i.cantidad}</td><td>S/ ${i.precio.toFixed(2)}</td><td>S/ ${i.subtotal.toFixed(2)}</td></tr>`;
+  });
+  html += '</tbody></table>';
+
+  if (c.pagos && c.pagos.length) {
+    html += '<h4 style="margin-top:12px">💰 Pagos</h4>';
+    html += '<table><thead><tr><th>Fecha</th><th>Monto</th><th>Método</th></tr></thead><tbody>';
+    c.pagos.forEach(p => {
+      html += `<tr><td>${p.fecha}</td><td>S/ ${p.monto.toFixed(2)}</td><td>${p.metodo}</td></tr>`;
+    });
+    html += '</tbody></table>';
+  }
+
+  if (c.estado !== 'pagado') {
+    const saldo = getSaldo(c);
+    html += `<div class="cred-pago-form">
+      <strong style="color:var(--amber);font-size:13px">Saldo: S/ ${saldo.toFixed(2)}</strong>
+      <input type="number" id="pagoMonto-${c.id}" placeholder="Monto" step="0.01" min="0.01" max="${saldo}" style="width:100px">
+      <select id="pagoMetodo-${c.id}"><option value="Efectivo">Efectivo</option><option value="Yape">Yape</option><option value="Transferencia">Transferencia</option><option value="Tarjeta">Tarjeta</option></select>
+      <button class="cred-btn cred-btn-primary" onclick="registrarPago('${c.id}')">Registrar Pago</button>
+    </div>`;
+  }
+  html += '</div></div>';
+  return html;
+}
+
+function toggleExpand(id) {
+  const row = document.getElementById('expand-' + id);
+  if (!row) return;
+  const isOpen = row.style.display !== 'none';
+  document.querySelectorAll('[id^="expand-"]').forEach(r => r.style.display = 'none');
+  if (!isOpen) row.style.display = 'table-row';
+}
+
+function registrarPago(id) {
+  const monto = parseFloat(document.getElementById('pagoMonto-' + id).value);
+  const metodo = document.getElementById('pagoMetodo-' + id).value;
+  if (!monto || monto <= 0) { showToast('⚠️ Ingresa un monto válido'); return; }
+  creditosPagar(id, monto, metodo);
+  cajaPriMov({ tipo:'ingreso', monto, concepto:'Pago de crédito #' + id.slice(0,8), metodo });
+  showToast('✅ Pago registrado: S/ ' + monto.toFixed(2));
+  renderCreditos();
+}
+
+function showNuevoCredito() {
+  document.getElementById('credModalTitle').textContent = '+ Nuevo Crédito';
+  const clientes = cliGet();
+  let opts = clientes.map(cl => `<option value="${cl.nombre}">${cl.nombre}</option>`).join('');
+  document.getElementById('credModalBody').innerHTML = `
+    <div class="cred-form-group">
+      <label>Cliente</label>
+      <select id="ncCliente">${opts}</select>
+    </div>
+    <div class="cred-form-group">
+      <label>Documento (opcional)</label>
+      <input type="text" id="ncDocumento" placeholder="Factura / Boleta N°">
+    </div>
+    <div class="cred-form-group">
+      <label>Fecha de Vencimiento</label>
+      <input type="date" id="ncVenc">
+    </div>
+    <hr style="border:none;border-top:1px solid var(--mute2);margin:14px 0">
+    <label style="font-size:11px;color:var(--mute);font-family:'Space Mono',monospace;letter-spacing:.5px;text-transform:uppercase">Items</label>
+    <div id="ncItems"><div class="cred-item-row">
+      <input class="cred-item-prod" placeholder="Producto">
+      <input placeholder="Variación" style="flex:1">
+      <input type="number" placeholder="Cant" value="1" min="1" style="width:60px">
+      <input type="number" placeholder="Precio" step="0.01" min="0" style="width:80px">
+      <button class="cred-item-del" onclick="this.parentElement.remove();calcTotal()">✕</button>
+    </div></div>
+    <button class="cred-btn" onclick="addItemRow()" style="margin-bottom:8px">+ Agregar Item</button>
+    <div class="cred-total-display">Total: S/ <span id="ncTotal">0.00</span></div>
+    <button class="cred-btn cred-btn-primary" onclick="guardarCredito()" style="width:100%;margin-top:10px">💾 Guardar Crédito</button>
+  `;
+  document.getElementById('credModal').classList.add('open');
+}
+
+function addItemRow() {
+  const div = document.createElement('div'); div.className = 'cred-item-row';
+  div.innerHTML = `<input class="cred-item-prod" placeholder="Producto"><input placeholder="Variación" style="flex:1"><input type="number" placeholder="Cant" value="1" min="1" style="width:60px"><input type="number" placeholder="Precio" step="0.01" min="0" style="width:80px" oninput="calcTotal()"><button class="cred-item-del" onclick="this.parentElement.remove();calcTotal()">✕</button>`;
+  document.getElementById('ncItems').appendChild(div);
+  div.querySelector('input[placeholder="Precio"]').focus();
+}
+
+function calcTotal() {
+  let t = 0;
+  document.querySelectorAll('#ncItems .cred-item-row').forEach(r => {
+    const inputs = r.querySelectorAll('input');
+    const cant = parseFloat(inputs[2].value) || 0;
+    const precio = parseFloat(inputs[3].value) || 0;
+    t += cant * precio;
+  });
+  document.getElementById('ncTotal').textContent = t.toFixed(2);
+}
+
+function guardarCredito() {
+  const cliente = document.getElementById('ncCliente').value;
+  const documento = document.getElementById('ncDocumento').value;
+  const fechaVenc = document.getElementById('ncVenc').value;
+  if (!cliente) { showToast('⚠️ Selecciona un cliente'); return; }
+  const items = [];
+  document.querySelectorAll('#ncItems .cred-item-row').forEach(r => {
+    const inputs = r.querySelectorAll('input');
+    const producto = inputs[0].value.trim();
+    const variacion = inputs[1].value.trim();
+    const cantidad = parseInt(inputs[2].value) || 0;
+    const precio = parseFloat(inputs[3].value) || 0;
+    if (producto && cantidad > 0 && precio > 0) {
+      items.push({ producto, variacion, cantidad, precio, subtotal: cantidad * precio });
+    }
+  });
+  if (!items.length) { showToast('⚠️ Agrega al menos un item válido'); return; }
+  const total = items.reduce((s,i) => s + i.subtotal, 0);
+  const obj = { cliente, documento, items, total, fechaVenc };
+  creditosAdd(obj);
+  showToast('✅ Crédito creado por S/ ' + total.toFixed(2));
+  closeModal();
+  renderCreditos();
+}
+
+function closeModal() { document.getElementById('credModal').classList.remove('open'); }
+
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(renderCreditos, 100);
+  document.getElementById('credModal').addEventListener('click', e => { if (e.target === document.getElementById('credModal')) closeModal(); });
+});
+</script></body></html>

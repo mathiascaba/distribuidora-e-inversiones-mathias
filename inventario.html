@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inventario – Distribuidora Mathias</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<style>body{cursor:auto}
+.inv-page{padding:96px 48px 60px;max-width:900px;margin:0 auto}
+.inv-login{max-width:360px;margin:60px auto;background:var(--ink2);border:1px solid var(--mute2);border-radius:16px;padding:36px 32px;text-align:center}
+.inv-login h2{font-family:'Bebas Neue',cursive;font-size:26px;color:var(--w);letter-spacing:1px;margin-bottom:6px}
+.inv-login p{font-size:13px;color:var(--mute);margin-bottom:24px}
+.inv-login input{width:100%;font-size:14px;color:var(--w);padding:10px 14px;background:var(--ink3);border:1px solid var(--mute2);border-radius:8px;outline:none;font-family:'DM Sans',sans-serif;transition:border-color .2s;box-sizing:border-box;margin-bottom:10px}
+.inv-login input:focus{border-color:var(--amber)}
+.inv-login button{width:100%;background:var(--amber);color:var(--ink);border:none;padding:12px;border-radius:8px;font-weight:700;font-size:14px;cursor:pointer;font-family:'DM Sans',sans-serif}
+.inv-login button:hover{background:var(--amber2)}
+.inv-login .inv-error{font-size:12px;color:#ef4444;margin-top:8px;display:none}
+/* ── HEADER ── */
+.inv-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:10px}
+.inv-head h1{font-family:'Bebas Neue',cursive;font-size:32px;color:var(--w);letter-spacing:1px;margin:0}
+.inv-head-actions{display:flex;gap:8px;flex-wrap:wrap}
+.inv-btn{background:var(--amber);color:var(--ink);border:none;padding:8px 18px;border-radius:8px;font-weight:700;font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;transition:background .2s}
+.inv-btn:hover{background:var(--amber2)}
+.inv-btn.sec{background:transparent;border:1px solid var(--mute2);color:var(--w)}
+.inv-btn.sec:hover{background:var(--mute2)}
+.inv-btn.del{background:rgba(220,38,38,.1);color:#ef4444;border:1px solid rgba(220,38,38,.3);padding:4px 10px;font-size:11px}
+.inv-btn.del:hover{background:rgba(220,38,38,.2)}
+.inv-btn.sm{font-size:11px;padding:5px 12px}
+.inv-search input{width:100%;padding:10px 14px;background:var(--ink3);border:1px solid var(--mute2);border-radius:10px;color:var(--w);font-size:14px;outline:none;font-family:'DM Sans',sans-serif;transition:border-color .2s;box-sizing:border-box;margin-bottom:20px}
+.inv-search input:focus{border-color:var(--amber)}
+/* ── PRODUCT CARD ── */
+.inv-card{background:var(--ink2);border:1px solid var(--mute2);border-radius:14px;margin-bottom:10px;overflow:hidden}
+.inv-card-h{display:flex;align-items:center;gap:12px;padding:14px 18px;cursor:pointer;user-select:none;transition:background .2s}
+.inv-card-h:hover{background:rgba(255,255,255,.03)}
+.inv-card-h .inv-arrow{font-size:10px;color:var(--mute);transition:transform .2s;flex-shrink:0}
+.inv-card-h .inv-arrow.open{transform:rotate(90deg)}
+.inv-card-h .inv-ci{font-size:24px;flex-shrink:0}
+.inv-card-h .inv-cn{flex:1;font-weight:600;font-size:13px;color:var(--w)}
+.inv-card-h .inv-cc{font-size:10px;color:var(--mute);text-transform:uppercase;letter-spacing:1px;margin-right:12px}
+.inv-card-h .inv-cstock{font-family:'Space Mono',monospace;font-size:12px;color:var(--amber)}
+.inv-card-body{padding:0 18px 14px;display:none}
+.inv-card-body.open{display:block}
+/* ── VARIATION ROW ── */
+.inv-var{display:flex;align-items:center;gap:8px;padding:6px 0;border-top:1px solid var(--mute2);flex-wrap:wrap}
+.inv-var:first-child{border-top:none}
+.inv-var .vv-name{font-size:13px;font-weight:600;color:var(--w);min-width:120px}
+.inv-var .vv-label{font-size:10px;color:var(--mute);text-transform:uppercase;letter-spacing:.5px}
+.inv-var input{width:65px;padding:5px 8px;background:var(--ink3);border:1px solid var(--mute2);border-radius:6px;color:var(--w);font-size:13px;outline:none;font-family:'Space Mono',monospace;transition:border-color .2s;box-sizing:border-box}
+.inv-var input:focus{border-color:var(--amber)}
+.inv-var input.vv-name-input{width:140px;font-family:'DM Sans',sans-serif}
+.inv-var .vv-del{margin-left:auto;cursor:pointer;font-size:14px;opacity:.4;transition:opacity .2s;background:none;border:none;color:var(--w);padding:2px 6px}
+.inv-var .vv-del:hover{opacity:1}
+.inv-add-var{display:flex;gap:6px;align-items:center;padding:8px 0 0;flex-wrap:wrap;border-top:1px solid var(--mute2);margin-top:4px}
+.inv-add-var input{padding:5px 8px;background:var(--ink3);border:1px solid var(--mute2);border-radius:6px;color:var(--w);font-size:12px;outline:none;font-family:'DM Sans',sans-serif;transition:border-color .2s;box-sizing:border-box}
+.inv-add-var input:focus{border-color:var(--amber)}
+.inv-add-var .iav-n{width:140px}
+.inv-add-var .iav-p{width:70px;font-family:'Space Mono',monospace}
+.inv-add-var .iav-s{width:55px;font-family:'Space Mono',monospace}
+@media(max-width:600px){.inv-page{padding:80px 12px 40px}.inv-card-h{padding:12px 14px}.inv-card-body{padding:0 14px 12px}.inv-var{gap:4px}.inv-var .vv-name{min-width:80px;font-size:12px}.inv-var input{width:55px}.inv-var input.vv-name-input{width:100px}}
+</style>
+</head>
+<body>
+
+<nav class="dm-nav">
+  <a class="dm-logo" href="index.html">
+    <div class="dm-logo-mark">🔧</div>
+    <div class="dm-logo-text">Distrib. e Inv. Mathias<span>Lima, Perú · Est. 2020</span></div>
+  </a>
+  <ul class="dm-nav-links">
+    <li><a href="catalogo.html">📦 Catálogo</a></li>
+    <li><a href="electrico.html">⚡ Eléctrico</a></li>
+    <li><a href="herramienta.html">🔨 Herramientas</a></li>
+    <li><a href="gasfiteria.html">🚿 Gasfitería</a></li>
+    <li><a href="quimicos.html">🧪 Químicos</a></li>
+    <li><a href="construccion.html">🧱 Construcción</a></li>
+    <li><a href="otros.html">🔩 Otros</a></li>
+  </ul>
+  <div class="dm-nav-icons">
+    <button class="dm-nav-btn" id="search-btn" title="Buscar">🔍</button>
+    <button class="dm-nav-btn" id="user-btn" title="Cuenta">👤</button>
+    <button class="dm-nav-btn" id="cart-btn" title="Carrito">🛒<span class="cart-badge">0</span></button>
+  </div>
+</nav>
+
+<div id="search-bar"><input type="text" id="search-input" placeholder="🔍  Buscar productos..."/><div id="search-results"></div></div>
+<div id="user-panel"></div>
+<div id="cart-overlay"></div>
+<div id="cart-panel">
+  <div class="cart-header"><h3>🛒 Carrito</h3><button class="cart-close" onclick="closeCart()">✕</button></div>
+  <div id="cart-body"></div>
+  <div class="cart-footer">
+    <div class="cart-total-row"><span>Total:</span><span id="cart-total">S/ 0.00</span></div>
+    <button class="btn-checkout" onclick="checkout()">Proceder al pago →</button>
+  </div>
+</div>
+
+<div class="inv-page">
+  <div id="inv-content"></div>
+</div>
+
+<script src="shared.js"></script>
+<script>
+function seedInv() {
+  let inv = getInv();
+  if (inv.length) return inv;
+  const list = [
+    { name:'Cable THW 2.5mm Rollo 100m', icon:'🔌', cat:'electrico' },
+    { name:'Foco LED 12W Luz Fría Pack x10', icon:'💡', cat:'electrico' },
+    { name:'Interruptor Doble Ticino', icon:'🔆', cat:'electrico' },
+    { name:'Tablero Eléctrico 12 Polos', icon:'⚡', cat:'electrico' },
+    { name:'Taladro Percutor 800W Profesional', icon:'🔧', cat:'herramienta' },
+    { name:'Set Destornilladores 12 piezas', icon:'🔩', cat:'herramienta' },
+    { name:'Amoladora Angular 4.5" 850W', icon:'⚙️', cat:'herramienta' },
+    { name:'Sierra Circular 7.25" 1200W', icon:'🪚', cat:'herramienta' },
+    { name:'Tubería PVC 4" x 3m Desagüe', icon:'🚿', cat:'gasfiteria' },
+    { name:'Llave de Paso 1/2" Bronce', icon:'🔑', cat:'gasfiteria' },
+    { name:'Codo PVC 90° 2" Presión', icon:'🔄', cat:'gasfiteria' },
+    { name:'Termocalefón 20 Litros Gas', icon:'🌡️', cat:'gasfiteria' },
+    { name:'Pintura Látex Interior 4 Galones', icon:'🎨', cat:'quimicos' },
+    { name:'Thinner Acrílico 1 Galón', icon:'🪣', cat:'quimicos' },
+    { name:'Sellador Acrílico 280ml', icon:'💊', cat:'quimicos' },
+    { name:'Impermeabilizante 4 Litros', icon:'🧴', cat:'quimicos' },
+    { name:'Cemento Sol Bolsa 42.5kg', icon:'🧱', cat:'construccion' },
+    { name:'Cemento Andino Bolsa 42.5kg', icon:'🧱', cat:'construccion' },
+    { name:'Cemento Andino Ultra Bolsa 42.5kg', icon:'🧱', cat:'construccion' },
+    { name:'Cemento Apu Bolsa 42.5kg', icon:'🧱', cat:'construccion' },
+    { name:'Fierro Corrugado 1/2" x 9m', icon:'🏗️', cat:'construccion' },
+    { name:'Fierro 6mm x 9m', icon:'🏗️', cat:'construccion' },
+    { name:'Fierro 8mm x 9m', icon:'🏗️', cat:'construccion' },
+    { name:'Fierro 5/8" x 9m', icon:'🏗️', cat:'construccion' },
+    { name:'Fierro 3/8" x 9m', icon:'🏗️', cat:'construccion' },
+    { name:'Fierro 1/4" x 9m', icon:'🏗️', cat:'construccion' },
+    { name:'Ladrillo 18 Huecos', icon:'🧱', cat:'construccion' },
+    { name:'Ladrillo King Kong 18 Huecos', icon:'🧱', cat:'construccion' },
+    { name:'Ladrillo Pandereta', icon:'🧱', cat:'construccion' },
+    { name:'Arena Fina Bolsa 40kg', icon:'⛱️', cat:'construccion' },
+    { name:'Arena Gruesa Bolsa 40kg', icon:'⛱️', cat:'construccion' },
+    { name:'Cinta Aislante Pack x5', icon:'🎗️', cat:'otros' },
+    { name:'Mascarilla N95 Pack x10', icon:'😷', cat:'otros' },
+    { name:'Guantes de Seguridad Par', icon:'🧤', cat:'otros' },
+    { name:'Casco de Seguridad', icon:'⛑️', cat:'otros' },
+  ];
+  inv = list.map(p => ({
+    id: p.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+$/,''),
+    name: p.name, icon: p.icon, cat: p.cat,
+    catLabel: CAT_NAMES[p.cat] || p.cat,
+    variations: [{ id: 'v1', name: 'Unidad', price: 0, stock: 0 }]
+  }));
+  saveInv(inv);
+  return inv;
+}
+
+function renderInv() {
+  const c = document.getElementById('inv-content');
+  if (!c) return;
+  if (!sessionStorage.getItem('fp_inv_auth')) {
+    c.innerHTML = `
+      <div class="inv-login">
+        <h2>🔐 Inventario</h2>
+        <p>Ingresa para gestionar productos y stock.</p>
+        <input type="text" id="ilu" placeholder="Usuario" value="conta">
+        <input type="password" id="ilp" placeholder="Contraseña" onkeydown="if(event.key==='Enter') doInvLogin()">
+        <button onclick="doInvLogin()">Ingresar</button>
+        <div class="inv-error" id="inv-err">❌ Usuario o contraseña incorrectos</div>
+      </div>`;
+    return;
+  }
+  const inv = seedInv();
+  const totalStock = inv.reduce((s,p) => s + p.variations.reduce((ss,v) => ss + (v.stock||0),0), 0);
+  c.innerHTML = `
+    <div class="inv-head">
+      <h1>📦 Inventario</h1>
+      <div class="inv-head-actions">
+        <span style="font-family:'Space Mono',monospace;font-size:13px;color:var(--mute);padding:8px 0">Stock total: <strong style="color:var(--amber)">${totalStock}</strong></span>
+        <button class="inv-btn" onclick="addProd()">+ Producto</button>
+        <button class="inv-btn sec" onclick="sessionStorage.removeItem('fp_inv_auth');renderInv()">🔒 Salir</button>
+      </div>
+    </div>
+    <div class="inv-search"><input type="text" id="inv-f" placeholder="🔍  Buscar producto..." oninput="renderList()"></div>
+    <div id="inv-list"></div>`;
+  renderList();
+}
+
+function renderList() {
+  const list = document.getElementById('inv-list');
+  if (!list) return;
+  let inv = getInv();
+  const f = (document.getElementById('inv-f')?.value || '').toLowerCase();
+  if (f) inv = inv.filter(p => p.name.toLowerCase().includes(f));
+  if (!inv.length) {
+    list.innerHTML = '<div style="text-align:center;padding:60px 20px;color:var(--mute)"><span style="font-size:56px;display:block;margin-bottom:12px">📭</span><p>No hay productos</p></div>';
+    return;
+  }
+  list.innerHTML = inv.map(p => {
+    const st = p.variations.reduce((s,v) => s + (v.stock||0), 0);
+    return `
+    <div class="inv-card">
+      <div class="inv-card-h" onclick="toggleCard(this)">
+        <span class="inv-arrow">▶</span>
+        <span class="inv-ci">${p.icon||'📦'}</span>
+        <span class="inv-cn">${p.name}</span>
+        <span class="inv-cc">${p.catLabel||p.cat}</span>
+        <span class="inv-cstock">${st} uds</span>
+      </div>
+      <div class="inv-card-body">
+        ${p.variations.map((v, vi) => `
+          <div class="inv-var">
+            <input class="vv-name-input" value="${v.name}" onchange="updV('${p.id}',${vi},'name',this.value)" placeholder="Nombre">
+            <span class="vv-label">S/</span>
+            <input value="${v.price}" onchange="updV('${p.id}',${vi},'price',parseFloat(this.value)||0)" placeholder="0.00">
+            <span class="vv-label">Stock</span>
+            <input value="${v.stock||0}" onchange="updV('${p.id}',${vi},'stock',parseInt(this.value)||0)" placeholder="0">
+            ${p.variations.length > 1 ? `<button class="vv-del" onclick="delV('${p.id}',${vi})">✕</button>` : ''}
+          </div>
+        `).join('')}
+        <div class="inv-add-var">
+          <input class="iav-n" id="ian-${p.id}" placeholder="Nueva variación">
+          <span class="vv-label">S/</span>
+          <input class="iav-p" id="iap-${p.id}" placeholder="0.00">
+          <input class="iav-s" id="ias-${p.id}" placeholder="Stock">
+          <button class="inv-btn sm" onclick="addV('${p.id}')">Agregar</button>
+          <button class="inv-btn sm sec" onclick="delProd('${p.id}')" style="margin-left:auto">🗑️</button>
+        </div>
+      </div>
+    </div>`}).join('');
+}
+
+function toggleCard(el) {
+  el.querySelector('.inv-arrow').classList.toggle('open');
+  el.nextElementSibling.classList.toggle('open');
+}
+
+function doInvLogin() {
+  const u = document.getElementById('ilu').value.trim();
+  const p = document.getElementById('ilp').value;
+  const e = document.getElementById('inv-err');
+  if (u === 'conta' && p === '12345678') { e.style.display='none'; sessionStorage.setItem('fp_inv_auth','1'); renderInv(); }
+  else { e.style.display='block'; }
+}
+
+function updV(pid, vi, field, val) {
+  let inv = getInv();
+  const prod = inv.find(x => x.id === pid);
+  if (prod && prod.variations[vi]) { prod.variations[vi][field] = val; saveInv(inv); }
+}
+
+function addV(pid) {
+  const n = document.getElementById('ian-'+pid)?.value.trim();
+  if (!n) return;
+  let inv = getInv();
+  const prod = inv.find(x => x.id === pid);
+  if (!prod) return;
+  prod.variations.push({ id:'v'+Date.now(), name:n, price:parseFloat(document.getElementById('iap-'+pid)?.value)||0, stock:parseInt(document.getElementById('ias-'+pid)?.value)||0 });
+  saveInv(inv);
+  document.getElementById('ian-'+pid).value=''; document.getElementById('iap-'+pid).value=''; document.getElementById('ias-'+pid).value='';
+  renderList();
+}
+
+function delV(pid, vi) {
+  if (!confirm('¿Eliminar esta variación?')) return;
+  let inv = getInv();
+  const prod = inv.find(x => x.id === pid);
+  if (!prod || prod.variations.length <= 1) return;
+  prod.variations.splice(vi, 1);
+  saveInv(inv);
+  renderList();
+}
+
+function addProd() {
+  const name = prompt('Nombre del nuevo producto:');
+  if (!name || !name.trim()) return;
+  let inv = getInv();
+  const id = name.trim().toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/-+$/,'');
+  if (inv.find(x => x.id === id)) { showToast('⚠️ Ya existe'); return; }
+  inv.push({ id, name:name.trim(), icon:'📦', cat:'otros', catLabel: CAT_NAMES['otros'], variations:[{ id:'v1', name:'Unidad', price:0, stock:0 }] });
+  saveInv(inv);
+  renderList();
+}
+
+function delProd(pid) {
+  if (!confirm('¿Eliminar este producto?')) return;
+  let inv = getInv();
+  saveInv(inv.filter(x => x.id !== pid));
+  renderList();
+}
+
+renderInv();
+</script>
+</body>
+</html>

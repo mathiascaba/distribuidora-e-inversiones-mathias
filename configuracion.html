@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Configuración – Distribuidora Mathias</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<style>body{cursor:auto}
+.cfg-page{padding:96px 48px 60px;max-width:900px;margin:0 auto}
+.cfg-tabs{display:flex;gap:0;border-bottom:1px solid var(--mute2);margin-bottom:28px}
+.cfg-tab{flex:1;padding:14px 24px;border:none;background:none;cursor:pointer;font-size:14px;font-weight:600;color:var(--mute);font-family:'DM Sans',sans-serif;transition:all .2s;border-bottom:2px solid transparent;margin-bottom:-1px}
+.cfg-tab:hover{color:var(--w);background:var(--mute3)}
+.cfg-tab.active{color:var(--amber);border-bottom-color:var(--amber);background:rgba(245,158,11,.07)}
+.cfg-panel{display:none}
+.cfg-panel.active{display:block}
+.cfg-card{background:var(--ink2);border:1px solid var(--mute2);border-radius:16px;padding:32px}
+.cfg-card h2{font-family:'Bebas Neue',cursive;font-size:28px;color:var(--w);letter-spacing:1px;margin:0 0 24px;display:flex;align-items:center;gap:10px}
+.cfg-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.cfg-field{display:flex;flex-direction:column;gap:5px}
+.cfg-field.full{grid-column:1/-1}
+.cfg-field label{font-size:11px;color:var(--mute);font-weight:600;text-transform:uppercase;letter-spacing:1px}
+.cfg-field input,.cfg-field select{padding:10px 14px;background:var(--ink3);border:1px solid var(--mute2);border-radius:6px;font-size:13px;color:var(--w);outline:none;font-family:'DM Sans',sans-serif;transition:border-color .2s}
+.cfg-field input:focus{border-color:var(--amber)}
+.cfg-field input[type=number]{font-family:'Space Mono',monospace}
+.cfg-save{padding:12px 32px;background:var(--amber);color:var(--ink);border:none;border-radius:6px;font-weight:700;font-size:14px;cursor:pointer;transition:background .2s;font-family:'DM Sans',sans-serif;margin-top:20px;width:100%}
+.cfg-save:hover{background:var(--amber2)}
+@media(max-width:700px){.cfg-page{padding:80px 14px 40px}.cfg-grid{grid-template-columns:1fr}.cfg-card{padding:20px}}
+</style>
+</head>
+<body>
+
+<nav class="dm-nav">
+  <a class="dm-logo" href="index.html">
+    <div class="dm-logo-mark">🔧</div>
+    <div class="dm-logo-text">Distrib. e Inv. Mathias<span>Lima, Perú · Est. 2020</span></div>
+  </a>
+  <ul class="dm-nav-links">
+    <li><a href="catalogo.html">📦 Catálogo</a></li>
+    <li><a href="electrico.html">⚡ Eléctrico</a></li>
+    <li><a href="herramienta.html">🔨 Herramientas</a></li>
+    <li><a href="gasfiteria.html">🚿 Gasfitería</a></li>
+    <li><a href="quimicos.html">🧪 Químicos</a></li>
+    <li><a href="construccion.html">🧱 Construcción</a></li>
+    <li><a href="otros.html">🔩 Otros</a></li>
+  </ul>
+  <div class="dm-nav-icons">
+    <button class="dm-nav-btn" id="search-btn" title="Buscar">🔍</button>
+    <button class="dm-nav-btn" id="user-btn" title="Cuenta">👤</button>
+    <button class="dm-nav-btn" id="cart-btn" title="Carrito">🛒<span class="cart-badge">0</span></button>
+  </div>
+</nav>
+
+<div id="search-bar"><input type="text" id="search-input" placeholder="🔍  Buscar productos..."/><div id="search-results"></div></div>
+<div id="user-panel"></div>
+<div id="cart-overlay"></div>
+<div id="cart-panel">
+  <div class="cart-header"><h3>🛒 Carrito</h3><button class="cart-close" onclick="closeCart()">✕</button></div>
+  <div id="cart-body"></div>
+  <div class="cart-footer">
+    <div class="cart-total-row"><span>Total:</span><span id="cart-total">S/ 0.00</span></div>
+    <button class="btn-checkout" onclick="checkout()">Proceder al pago →</button>
+  </div>
+</div>
+
+<div class="cfg-page">
+  <div class="cfg-tabs">
+    <button class="cfg-tab active" data-tab="empresa">🏢 Empresa</button>
+  </div>
+
+  <div id="panel-empresa" class="cfg-panel active">
+    <div class="cfg-card">
+      <h2>🏢 Configuración de la Empresa</h2>
+      <div class="cfg-grid">
+        <div class="cfg-field full"><label>Nombre de la empresa</label><input type="text" id="f-empresa"/></div>
+        <div class="cfg-field"><label>RUC</label><input type="text" id="f-ruc"/></div>
+        <div class="cfg-field"><label>Dirección</label><input type="text" id="f-direccion"/></div>
+        <div class="cfg-field"><label>Teléfono</label><input type="text" id="f-telefono"/></div>
+        <div class="cfg-field"><label>Email</label><input type="email" id="f-email"/></div>
+        <div class="cfg-field"><label>IGV (%)</label><input type="number" id="f-igv" step="0.01"/></div>
+        <div class="cfg-field"><label>Moneda (símbolo)</label><input type="text" id="f-moneda"/></div>
+      </div>
+      <button class="cfg-save" onclick="saveCompanyCfg()">💾 Guardar Configuración</button>
+    </div>
+  </div>
+
+
+<script src="shared.js"></script>
+<script>
+const user = getUser();
+if (!user || user.type !== 'owner') { window.location.href = 'index.html'; }
+
+function loadCompanyCfg() {
+  const c = cfgGet();
+  document.getElementById('f-empresa').value = c.empresa || '';
+  document.getElementById('f-ruc').value = c.ruc || '';
+  document.getElementById('f-direccion').value = c.direccion || '';
+  document.getElementById('f-telefono').value = c.telefono || '';
+  document.getElementById('f-email').value = c.email || '';
+  document.getElementById('f-igv').value = c.igv || 18;
+  document.getElementById('f-moneda').value = c.moneda || 'S/';
+}
+
+function saveCompanyCfg() {
+  cfgSave({
+    empresa: document.getElementById('f-empresa').value.trim(),
+    ruc: document.getElementById('f-ruc').value.trim(),
+    direccion: document.getElementById('f-direccion').value.trim(),
+    telefono: document.getElementById('f-telefono').value.trim(),
+    email: document.getElementById('f-email').value.trim(),
+    igv: parseFloat(document.getElementById('f-igv').value) || 18,
+    moneda: document.getElementById('f-moneda').value.trim() || 'S/'
+  });
+  showToast('✅ Configuración guardada correctamente');
+}
+
+document.querySelectorAll('.cfg-tab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.cfg-tab').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.cfg-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('panel-' + btn.dataset.tab).classList.add('active');
+  });
+});
+
+loadCompanyCfg();
+</script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Dashboard – Distribuidora Mathias</title><link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="shared.css">
+<style>body{cursor:auto}
+.dash-page{padding:96px 48px 60px;max-width:1100px;margin:0 auto}
+.dash-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:28px;flex-wrap:wrap;gap:12px}
+.dash-head h1{font-family:'Bebas Neue',cursive;font-size:36px;color:var(--w);letter-spacing:1px;margin:0}
+.dash-head p{font-size:13px;color:var(--mute);margin:4px 0 0}
+.dash-logout{background:transparent;border:1px solid var(--mute2);color:var(--w);padding:8px 20px;border-radius:8px;font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .2s}
+.dash-logout:hover{background:var(--mute2)}
+/* STATS */
+.dash-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:28px}
+.dash-stat{background:var(--ink2);border:1px solid var(--mute2);border-radius:14px;padding:18px 20px;text-decoration:none;display:block;transition:all .25s;position:relative;overflow:hidden}
+.dash-stat:hover{border-color:var(--amber);transform:translateY(-2px)}
+.dash-stat-icon{position:absolute;font-size:48px;right:12px;top:50%;transform:translateY(-50%);opacity:.08;pointer-events:none}
+.dash-stat-num{font-family:'Space Mono',monospace;font-size:26px;color:var(--amber);font-weight:700}
+.dash-stat-label{font-size:10px;color:var(--mute);text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+.dash-stat-sub{font-size:10px;color:var(--mute);margin-top:4px;opacity:.7}
+/* MODULES */
+.dash-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}
+.dash-mod{background:var(--ink2);border:1px solid var(--mute2);border-radius:14px;padding:20px 14px;text-align:center;cursor:pointer;transition:all .25s;text-decoration:none;display:block}
+.dash-mod:hover{transform:translateY(-3px);border-color:var(--amber);background:var(--ink3)}
+.dash-mod-icon{font-size:30px;margin-bottom:6px}
+.dash-mod-name{font-family:'Bebas Neue',cursive;font-size:17px;color:var(--w);letter-spacing:.5px}
+.dash-mod-desc{font-size:9px;color:var(--mute);margin-top:2px;text-transform:uppercase;letter-spacing:1px}
+@media(max-width:600px){.dash-page{padding:80px 12px 40px}.dash-stats{grid-template-columns:repeat(2,1fr)}.dash-grid{grid-template-columns:repeat(2,1fr);gap:10px}.dash-mod{padding:16px 10px}.dash-mod-icon{font-size:24px}.dash-mod-name{font-size:15px}}
+</style></head><body>
+<nav class="dm-nav"><a class="dm-logo" href="index.html"><div class="dm-logo-mark">🔧</div><div class="dm-logo-text">Distrib. e Inv. Mathias<span>Lima, Perú · Est. 2020</span></div></a><ul class="dm-nav-links"><li><a href="catalogo.html">📦 Catálogo</a></li><li><a href="electrico.html">⚡ Eléctrico</a></li><li><a href="herramienta.html">🔨 Herramientas</a></li><li><a href="gasfiteria.html">🚿 Gasfitería</a></li><li><a href="quimicos.html">🧪 Químicos</a></li><li><a href="construccion.html">🧱 Construcción</a></li><li><a href="otros.html">🔩 Otros</a></li></ul><div class="dm-nav-icons"><button class="dm-nav-btn" id="search-btn">🔍</button><button class="dm-nav-btn" id="user-btn">👤</button><button class="dm-nav-btn" id="cart-btn">🛒<span class="cart-badge">0</span></button></div></nav>
+<div id="search-bar"><input type="text" id="search-input" placeholder="🔍  Buscar productos..."/><div id="search-results"></div></div>
+<div id="user-panel"></div><div id="cart-overlay"></div>
+<div id="cart-panel"><div class="cart-header"><h3>🛒 Carrito</h3><button class="cart-close" onclick="closeCart()">✕</button></div><div id="cart-body"></div><div class="cart-footer"><div class="cart-total-row"><span>Total:</span><span id="cart-total">S/ 0.00</span></div><button class="btn-checkout" onclick="checkout()">Proceder al pago →</button></div></div>
+<div class="dash-page">
+  <div class="dash-head">
+    <div><h1>👑 Panel del Dueño</h1><p>Bienvenido, <strong style="color:var(--amber)">Dueño</strong> — Resumen general del negocio</p></div>
+    <button class="dash-logout" onclick="logoutUser()">🔒 Cerrar Sesión</button>
+  </div>
+  <div class="dash-stats" id="dash-stats"></div>
+  <h3 style="font-family:'Bebas Neue',cursive;font-size:20px;color:var(--w);letter-spacing:1px;margin:0 0 14px">📋 Módulos</h3>
+  <div class="dash-grid">
+    <a class="dash-mod" href="dashboard.html"><div class="dash-mod-icon">📊</div><div class="dash-mod-name">Dashboard</div><div class="dash-mod-desc">Inicio</div></a>
+    <a class="dash-mod" href="pos.html"><div class="dash-mod-icon">🛒</div><div class="dash-mod-name">POS</div><div class="dash-mod-desc">Punto de venta</div></a>
+    <a class="dash-mod" href="ventas.html"><div class="dash-mod-icon">📋</div><div class="dash-mod-name">Ventas</div><div class="dash-mod-desc">Facturas, boletas</div></a>
+    <a class="dash-mod" href="creditos.html"><div class="dash-mod-icon">💳</div><div class="dash-mod-name">Créditos</div><div class="dash-mod-desc">Ctas por cobrar</div></a>
+    <a class="dash-mod" href="compras.html"><div class="dash-mod-icon">📥</div><div class="dash-mod-name">Compras</div><div class="dash-mod-desc">Ingreso mercadería</div></a>
+    <a class="dash-mod" href="cajas.html"><div class="dash-mod-icon">🧾</div><div class="dash-mod-name">Cajas</div><div class="dash-mod-desc">Apertura y cierre</div></a>
+    <a class="dash-mod" href="caja-principal.html"><div class="dash-mod-icon">🏦</div><div class="dash-mod-name">Caja Principal</div><div class="dash-mod-desc">Control de dinero</div></a>
+    <a class="dash-mod" href="procesos.html"><div class="dash-mod-icon">⚙️</div><div class="dash-mod-name">Procesos</div><div class="dash-mod-desc">Ajustes y cierres</div></a>
+    <a class="dash-mod" href="mantenimiento.html"><div class="dash-mod-icon">🛠️</div><div class="dash-mod-name">Mantenimiento</div><div class="dash-mod-desc">Catálogos base</div></a>
+    <a class="dash-mod" href="configuracion.html"><div class="dash-mod-icon">🔧</div><div class="dash-mod-name">Configuración</div><div class="dash-mod-desc">Usuarios, empresa</div></a>
+    <a class="dash-mod" href="inventario.html"><div class="dash-mod-icon">📦</div><div class="dash-mod-name">Inventario</div><div class="dash-mod-desc">Stock y productos</div></a>
+    <a class="dash-mod" href="administrador.html"><div class="dash-mod-icon">📈</div><div class="dash-mod-name">Estadísticas</div><div class="dash-mod-desc">Visitas del sitio</div></a>
+  </div>
+</div>
+
+<script src="shared.js"></script>
+<script>
+function loadDashboard() {
+  const u = getUser();
+  if (!u || u.type !== 'owner') { window.location.href = 'index.html'; return; }
+  const inv = getInv();
+  const invCount = inv.length;
+  const stockTotal = inv.reduce((s,p) => s + p.variations.reduce((ss,v) => ss + (v.stock||0),0), 0);
+  const ventas = ventasGet();
+  const ventasHoy = ventas.filter(v => v.fecha && v.fecha.startsWith(dbToday()) && v.estado !== 'anulada');
+  const totalVentasHoy = ventasHoy.reduce((s,v) => s + (v.total||0), 0);
+  const ventasMes = ventas.filter(v => v.fecha && v.fecha.slice(0,7) === dbToday().slice(0,7) && v.estado !== 'anulada');
+  const totalVentasMes = ventasMes.reduce((s,v) => s + (v.total||0), 0);
+  const cajaPri = cajaPriGet();
+  const creditos = creditosGet();
+  const pendientes = creditos.filter(c => c.estado === 'pendiente');
+  const totalPendiente = pendientes.reduce((s,c) => s + (c.total||0) - c.pagos.reduce((ps,p) => ps+p.monto,0), 0);
+  const clientes = cliGet().length;
+  const cajaAbierta = cajasGet().find(c => c.estado === 'abierta');
+  document.getElementById('dash-stats').innerHTML = `
+    <a class="dash-stat" href="caja-principal.html"><span class="dash-stat-icon">🏦</span><div class="dash-stat-num">S/ ${(cajaPri.saldo||0).toFixed(2)}</div><div class="dash-stat-label">Caja Principal</div><div class="dash-stat-sub">Saldo actual</div></a>
+    <a class="dash-stat" href="ventas.html"><span class="dash-stat-icon">📋</span><div class="dash-stat-num">S/ ${totalVentasHoy.toFixed(2)}</div><div class="dash-stat-label">Ventas Hoy</div><div class="dash-stat-sub">${ventasHoy.length} transacciones</div></a>
+    <a class="dash-stat" href="ventas.html"><span class="dash-stat-icon">📅</span><div class="dash-stat-num">S/ ${totalVentasMes.toFixed(2)}</div><div class="dash-stat-label">Ventas del Mes</div><div class="dash-stat-sub">${ventasMes.length} transacciones</div></a>
+    <a class="dash-stat" href="creditos.html"><span class="dash-stat-icon">💳</span><div class="dash-stat-num" style="${pendientes.length?'color:#ef4444':''}">S/ ${totalPendiente.toFixed(2)}</div><div class="dash-stat-label">Por Cobrar</div><div class="dash-stat-sub">${pendientes.length} créditos pendientes</div></a>
+    <a class="dash-stat" href="inventario.html"><span class="dash-stat-icon">📦</span><div class="dash-stat-num">${stockTotal}</div><div class="dash-stat-label">Stock Total</div><div class="dash-stat-sub">${invCount} productos</div></a>
+    <a class="dash-stat" href="cajas.html"><span class="dash-stat-icon">${cajaAbierta?'🟢':'🔴'}</span><div class="dash-stat-num">${cajaAbierta?'Abierta':'Cerrada'}</div><div class="dash-stat-label">Caja del Día</div><div class="dash-stat-sub">${cajaAbierta?'S/ '+(cajaAbierta.saldo||0).toFixed(2):'—'}</div></a>
+    <a class="dash-stat" href="mantenimiento.html"><span class="dash-stat-icon">👥</span><div class="dash-stat-num">${clientes}</div><div class="dash-stat-label">Clientes</div><div class="dash-stat-sub">Registrados</div></a>
+    <a class="dash-stat" href="compras.html"><span class="dash-stat-icon">📥</span><div class="dash-stat-num">${compGet().length}</div><div class="dash-stat-label">Compras</div><div class="dash-stat-sub">Registradas</div></a>`;
+}
+loadDashboard();
+</script></body></html>

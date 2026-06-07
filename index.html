@@ -1,0 +1,1104 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Distribuidora e Inversiones Mathias</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<style>
+/* ══════════════════════════════════════════════
+   DISTRIBUIDORA E INVERSIONES MATHIAS
+   Aesthetic: Neoindustrial · Bento Grid · Motion
+══════════════════════════════════════════════ */
+:root{
+  --ink:#0d2a5e;
+  --ink2:#1a3f8a;
+  --ink3:#1e4fa8;
+  --ink4:#2558b8;
+  --amber:#f59e0b;
+  --amber2:#fbbf24;
+  --ember:#ea580c;
+  --lime:#84cc16;
+  --ice:#e0f2fe;
+  --w:#ffffff;
+  --mute:rgba(255,255,255,0.45);
+  --mute2:rgba(255,255,255,0.08);
+  --mute3:rgba(255,255,255,0.04);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:var(--ink);
+  font-family:'DM Sans',sans-serif;
+  color:var(--w);
+  overflow-x:hidden;
+  cursor:none;
+}
+
+/* ── CURSOR ── */
+#cursor{
+  width:12px;height:12px;
+  background:var(--amber);
+  border-radius:50%;
+  position:fixed;
+  pointer-events:none;
+  z-index:99999;
+  transition:transform .15s,width .25s,height .25s,background .25s;
+  transform:translate(-50%,-50%);
+}
+#cursor-ring{
+  width:40px;height:40px;
+  border:1.5px solid rgba(245,158,11,0.5);
+  border-radius:50%;
+  position:fixed;
+  pointer-events:none;
+  z-index:99998;
+  transition:transform .35s cubic-bezier(.165,.84,.44,1),width .3s,height .3s,opacity .3s;
+  transform:translate(-50%,-50%);
+}
+body:has(a:hover) #cursor,body:has(button:hover) #cursor{
+  width:20px;height:20px;background:var(--ember);
+}
+body:has(a:hover) #cursor-ring,body:has(button:hover) #cursor-ring{
+  width:60px;height:60px;opacity:.5;
+}
+
+/* ── NAV ── */
+.dm-nav{
+  position:fixed;top:0;left:0;right:0;z-index:500;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 48px;height:64px;
+  background:rgba(13,42,94,0.85);
+  backdrop-filter:blur(24px);
+  border-bottom:1px solid var(--mute2);
+}
+.dm-logo{
+  display:flex;align-items:center;gap:12px;
+  text-decoration:none;
+}
+.dm-logo-mark{
+  width:36px;height:36px;
+  background:var(--amber);
+  border-radius:6px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;
+  flex-shrink:0;
+}
+.dm-logo-text{
+  font-family:'Bebas Neue',cursive;
+  font-size:24px;
+  letter-spacing:2px;
+  color:var(--w);
+  line-height:1.1;
+}
+.dm-logo-text span{color:var(--amber);display:block;font-size:12px;letter-spacing:4px;font-family:'Space Mono',monospace;}
+.dm-nav-links{
+  display:flex;align-items:center;gap:4px;
+  list-style:none;
+}
+.dm-nav-links li a{
+  display:flex;align-items:center;gap:5px;
+  padding:7px 14px;border-radius:6px;
+  font-size:13px;font-weight:500;
+  color:var(--mute);text-decoration:none;
+  transition:all .2s;
+}
+.dm-nav-links li a:hover{color:var(--w);background:var(--mute2)}
+.dm-nav-icons{display:flex;align-items:center;gap:6px;}
+.dm-nav-btn{
+  min-width:46px;height:46px;border-radius:10px;
+  border:1px solid var(--mute2);background:none;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  font-size:22px;color:var(--mute);transition:all .2s;position:relative;padding:0 12px;
+}
+.dm-nav-btn:hover{background:var(--mute2);color:var(--w);border-color:var(--amber)}
+
+/* ── SEARCH/CART ── */
+#search-bar{
+  display:none;position:fixed;top:64px;left:0;right:0;
+  background:var(--ink2);padding:16px 48px;
+  box-shadow:0 8px 32px rgba(0,0,0,.4);
+  z-index:490;border-bottom:1px solid var(--mute2);
+}
+#search-bar.open{display:block}
+#search-input{
+  width:100%;padding:12px 18px;
+  background:var(--ink3);border:1px solid var(--mute2);
+  border-radius:8px;font-size:15px;color:var(--w);outline:none;
+  font-family:'DM Sans',sans-serif;
+  transition:border-color .2s;
+}
+#search-input:focus{border-color:var(--amber)}
+#search-results{background:var(--ink3);border:1px solid var(--mute2);border-top:none;border-radius:0 0 8px 8px;max-height:300px;overflow-y:auto}
+.sr-item{display:flex;align-items:center;gap:12px;padding:12px 18px;cursor:pointer;border-bottom:1px solid var(--mute2);transition:background .15s}
+.sr-item:hover{background:var(--mute3)}
+.sr-icon{font-size:24px;flex-shrink:0}
+.sr-name{font-size:13px;font-weight:600;color:var(--w)}
+.sr-price{font-size:12px;color:var(--amber);font-weight:700}
+.sr-add{margin-left:auto;background:var(--lime);color:#000;border:none;cursor:pointer;padding:5px 12px;border-radius:4px;font-size:11px;font-weight:700}
+.sr-empty{padding:16px;text-align:center;color:var(--mute);font-size:13px}
+#cart-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:600;backdrop-filter:blur(4px)}
+#cart-overlay.open{display:block}
+#cart-panel{
+  position:fixed;top:0;right:-520px;width:500px;height:100vh;
+  background:var(--ink2);z-index:700;
+  transition:right .35s cubic-bezier(.77,0,.18,1);
+  display:flex;flex-direction:column;
+  border-left:1px solid var(--mute2);
+}
+#cart-panel.open{right:0}
+.cart-header{display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:1px solid var(--mute2)}
+.cart-header h3{font-family:'Bebas Neue',cursive;font-size:24px;letter-spacing:2px;color:var(--amber)}
+.cart-close{background:none;border:none;color:var(--mute);font-size:22px;cursor:none;transition:color .2s}
+.cart-close:hover{color:var(--w)}
+#cart-body{flex:1;overflow-y:auto;padding:16px}
+.cart-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:12px;color:var(--mute)}
+.cart-empty span{font-size:48px}
+.cart-empty p{font-size:14px;font-weight:600}
+.cart-item{display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--mute2)}
+.cart-item-icon{font-size:28px;flex-shrink:0}
+.cart-item-info{flex:1}
+.cart-item-name{font-size:12px;font-weight:600;color:var(--w);line-height:1.3}
+.cart-item-cat{font-size:11px;color:var(--mute);margin:2px 0}
+.cart-item-price{font-size:13px;font-weight:700;color:var(--amber)}
+.cart-item-controls{display:flex;align-items:center;gap:6px}
+.cart-item-controls button{width:26px;height:26px;border-radius:5px;border:1px solid var(--mute2);background:none;cursor:none;font-size:15px;font-weight:700;color:var(--w);display:flex;align-items:center;justify-content:center;transition:background .15s}
+.cart-item-controls button:hover{background:var(--amber);color:var(--ink);border-color:var(--amber)}
+.cart-item-controls span{font-size:14px;font-weight:700;min-width:20px;text-align:center}
+.cart-item-del{background:none;border:none;cursor:none;font-size:16px;opacity:.4;transition:opacity .2s}
+.cart-item-del:hover{opacity:1}
+.cart-footer{padding:20px 24px;border-top:1px solid var(--mute2);background:var(--ink3)}
+.cart-total-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.cart-total-row span{font-size:13px;font-weight:600;color:var(--mute)}
+.cart-total-row #cart-total{font-family:'Bebas Neue',cursive;font-size:28px;letter-spacing:1px;color:var(--amber)}
+.btn-checkout{width:100%;background:var(--amber);color:var(--ink);border:none;cursor:none;padding:13px;border-radius:6px;font-weight:700;font-size:14px;transition:background .2s}
+.btn-checkout:hover{background:var(--amber2)}
+
+.fp-toast{position:fixed;bottom:32px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--amber);color:var(--ink);padding:12px 26px;border-radius:30px;font-weight:700;font-size:13px;opacity:0;transition:all .3s;z-index:9999;white-space:nowrap;pointer-events:none}
+.fp-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.wa-float{position:fixed;bottom:28px;left:28px;width:52px;height:52px;background:#25d366;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;box-shadow:0 6px 24px rgba(37,211,102,.4);text-decoration:none;z-index:1000;transition:transform .2s}
+.wa-float:hover{transform:scale(1.1)}
+.cart-badge{position:absolute;top:-4px;right:-4px;width:18px;height:18px;background:var(--ember);color:#fff;font-size:10px;font-weight:700;border-radius:50%;display:none;align-items:center;justify-content:center;font-family:'Space Mono',monospace}
+
+/* ══ HERO BENTO ══ */
+.hero-bento{
+  min-height:100vh;
+  padding:80px 40px 40px;
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  grid-template-rows:auto auto auto;
+  gap:14px;
+}
+
+/* Card base */
+.bc{
+  border-radius:20px;
+  overflow:hidden;
+  position:relative;
+  transition:transform .3s cubic-bezier(.34,1.56,.64,1);
+}
+.bc:hover{transform:scale(1.015)}
+
+/* CARD 1 — Hero principal (span 2 cols, 2 rows) */
+.bc-main{
+  grid-column:1/3;
+  grid-row:1/3;
+  background:var(--ink2);
+  border:1px solid var(--mute2);
+  padding:64px 64px 52px;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+  min-height:540px;
+  overflow:hidden;
+}
+.bc-main-bg{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(ellipse 80% 60% at 80% 20%, rgba(245,158,11,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 50% at 20% 80%, rgba(132,204,22,0.07) 0%, transparent 50%);
+}
+.bc-main-grid{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size:48px 48px;
+}
+.bc-main-number{
+  position:absolute;
+  right:-20px;top:-30px;
+  font-family:'Bebas Neue',cursive;
+  font-size:340px;
+  line-height:1;
+  color:rgba(245,158,11,0.04);
+  pointer-events:none;
+  letter-spacing:-10px;
+}
+.bc-eyebrow{
+  font-family:'Space Mono',monospace;
+  font-size:11px;
+  color:var(--amber);
+  letter-spacing:3px;
+  text-transform:uppercase;
+  margin-bottom:20px;
+  display:flex;align-items:center;gap:10px;
+  position:relative;z-index:2;
+}
+.bc-eyebrow::before{content:'';width:24px;height:1px;background:var(--amber)}
+.bc-h1{
+  font-family:'Bebas Neue',cursive;
+  font-size:clamp(64px,7vw,108px);
+  line-height:.9;
+  letter-spacing:-1px;
+  color:var(--w);
+  margin-bottom:24px;
+  position:relative;z-index:2;
+}
+.bc-h1 em{
+  font-style:normal;
+  color:transparent;
+  -webkit-text-stroke:2px var(--amber);
+}
+.bc-sub{
+  font-size:15px;
+  color:var(--mute);
+  line-height:1.65;
+  max-width:460px;
+  margin-bottom:36px;
+  position:relative;z-index:2;
+}
+.bc-cta-row{
+  display:flex;gap:12px;align-items:center;
+  position:relative;z-index:2;
+}
+.bc-cta-a{
+  display:inline-flex;align-items:center;gap:10px;
+  background:var(--amber);color:var(--ink);
+  padding:14px 32px;border-radius:8px;
+  font-weight:700;font-size:14px;
+  text-decoration:none;
+  transition:all .25s;
+  letter-spacing:.5px;
+}
+.bc-cta-a:hover{background:var(--amber2);transform:translateY(-2px);box-shadow:0 8px 32px rgba(245,158,11,0.35)}
+.bc-cta-b{
+  display:inline-flex;align-items:center;gap:8px;
+  background:transparent;color:var(--w);
+  padding:14px 28px;border-radius:8px;
+  font-weight:500;font-size:14px;
+  text-decoration:none;
+  border:1px solid var(--mute2);
+  transition:all .25s;
+}
+.bc-cta-b:hover{border-color:var(--w);background:var(--mute2)}
+
+/* CARD 2 — Oferta top (col 3, row 1) */
+.bc-promo{
+  grid-column:3;grid-row:1;
+  background:linear-gradient(140deg,#1a0d00,#7c3d00 60%,#c46200 100%);
+  border:1px solid rgba(245,158,11,0.25);
+  padding:36px;
+  display:flex;flex-direction:column;justify-content:flex-end;
+  min-height:260px;
+}
+.bc-promo-num{
+  position:absolute;top:-10px;right:10px;
+  font-family:'Bebas Neue',cursive;
+  font-size:160px;color:rgba(255,255,255,0.05);
+  line-height:1;pointer-events:none;
+}
+.bc-tag{
+  font-family:'Space Mono',monospace;
+  font-size:10px;letter-spacing:2px;text-transform:uppercase;
+  color:rgba(255,255,255,0.5);
+  margin-bottom:10px;
+  position:relative;z-index:2;
+}
+.bc-promo-title{
+  font-family:'Bebas Neue',cursive;
+  font-size:38px;line-height:.95;
+  color:var(--w);margin-bottom:8px;
+  position:relative;z-index:2;
+}
+.bc-promo-desc{font-size:12.5px;color:rgba(255,255,255,.6);margin-bottom:16px;line-height:1.4;position:relative;z-index:2}
+.bc-btn-sm{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(255,255,255,.12);color:#fff;
+  padding:9px 18px;border-radius:6px;
+  font-size:12px;font-weight:600;
+  text-decoration:none;letter-spacing:.5px;
+  border:1px solid rgba(255,255,255,.2);
+  transition:all .2s;align-self:flex-start;
+  position:relative;z-index:2;
+}
+.bc-btn-sm:hover{background:rgba(255,255,255,.22)}
+
+/* CARD 3 — Stats (col 3, row 2) */
+.bc-stats{
+  grid-column:3;grid-row:2;
+  background:var(--ink3);
+  border:1px solid var(--mute2);
+  padding:32px;
+  display:grid;grid-template-columns:1fr 1fr;gap:20px;
+}
+.bc-stat-n{
+  font-family:'Bebas Neue',cursive;
+  font-size:44px;color:var(--amber);line-height:1;
+}
+.bc-stat-label{
+  font-size:11px;color:var(--mute);
+  text-transform:uppercase;letter-spacing:1px;
+  margin-top:4px;
+}
+
+/* CARD 4 — Categorías (full width, row 3) */
+.bc-cats{
+  grid-column:1/4;
+  grid-row:3;
+  background:var(--ink2);
+  border:1px solid var(--mute2);
+  padding:36px 40px;
+}
+.bc-cats-header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:24px;
+}
+.bc-cats-label{
+  font-family:'Bebas Neue',cursive;
+  font-size:22px;letter-spacing:2px;color:var(--w);
+}
+.bc-cats-link{
+  font-family:'Space Mono',monospace;
+  font-size:11px;letter-spacing:1px;color:var(--amber);
+  text-decoration:none;text-transform:uppercase;
+}
+.bc-cats-link:hover{text-decoration:underline}
+.bc-cats-grid{
+  display:grid;grid-template-columns:repeat(6,1fr);gap:10px;
+}
+.bc-cat{
+  background:var(--ink3);
+  border:1px solid var(--mute2);
+  border-radius:12px;
+  padding:20px 12px 16px;
+  text-align:center;
+  text-decoration:none;
+  color:var(--w);
+  display:flex;flex-direction:column;align-items:center;gap:10px;
+  transition:all .25s;
+  position:relative;overflow:hidden;
+}
+.bc-cat::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;
+  height:2px;background:var(--amber);
+  transform:scaleX(0);transition:transform .25s;
+}
+.bc-cat:hover{background:rgba(245,158,11,.07);border-color:rgba(245,158,11,.4);transform:translateY(-4px)}
+.bc-cat:hover::after{transform:scaleX(1)}
+.bc-cat-ico{
+  width:56px;height:56px;border-radius:10px;
+  background:rgba(255,255,255,.04);
+  display:flex;align-items:center;justify-content:center;
+  font-size:26px;transition:background .25s;
+}
+.bc-cat:hover .bc-cat-ico{background:rgba(245,158,11,.12)}
+.bc-cat-name{
+  font-family:'Bebas Neue',cursive;
+  font-size:14px;letter-spacing:1px;
+  text-transform:uppercase;line-height:1.2;
+}
+.bc-cat-n{font-size:10px;color:var(--mute)}
+
+/* ══ TICKER ══ */
+.dm-ticker{
+  background:var(--amber);
+  padding:11px 0;
+  overflow:hidden;white-space:nowrap;
+}
+.dm-ticker-inner{
+  display:inline-block;
+  animation:roll 28s linear infinite;
+}
+.dm-ticker-inner span{
+  font-family:'Bebas Neue',cursive;
+  font-size:15px;letter-spacing:3px;
+  color:var(--ink);margin:0 36px;
+}
+.dm-ticker-inner span::before{content:'✦  ';opacity:.5}
+@keyframes roll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+/* ══ BENTO PRODUCTS ══ */
+.bento-products{
+  padding:60px 40px;
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  grid-template-rows:auto;
+  gap:12px;
+}
+.bento-products-header{
+  grid-column:1/7;
+  display:flex;align-items:flex-end;justify-content:space-between;
+  padding-bottom:8px;
+  border-bottom:1px solid var(--mute2);
+  margin-bottom:4px;
+}
+.bento-products-title{
+  font-family:'Bebas Neue',cursive;
+  font-size:48px;letter-spacing:2px;color:var(--w);
+}
+.bento-products-sub{
+  font-size:13px;color:var(--mute);margin-top:4px;
+}
+.bp-link{
+  font-family:'Space Mono',monospace;
+  font-size:11px;letter-spacing:1px;
+  color:var(--amber);text-decoration:none;
+  text-transform:uppercase;
+  border-bottom:1px solid transparent;
+  transition:border-color .2s;padding-bottom:2px;
+}
+.bp-link:hover{border-color:var(--amber)}
+
+/* Product card */
+.bp-card{
+  background:var(--ink2);
+  border:1px solid var(--mute2);
+  border-radius:16px;overflow:hidden;
+  text-decoration:none;color:var(--w);
+  display:flex;flex-direction:column;
+  transition:all .28s cubic-bezier(.34,1.2,.64,1);
+  position:relative;
+}
+.bp-card:hover{
+  border-color:rgba(245,158,11,.45);
+  transform:translateY(-6px);
+  box-shadow:0 20px 48px rgba(0,0,0,.45);
+}
+/* Feature card: span 2 */
+.bp-card.wide{grid-column:span 2}
+.bp-img{
+  height:176px;
+  background:var(--ink3);
+  display:flex;align-items:center;justify-content:center;
+  font-size:64px;
+  position:relative;
+}
+.bp-card.wide .bp-img{height:220px}
+.bp-badge{
+  position:absolute;top:12px;left:12px;
+  background:var(--ember);color:#fff;
+  font-family:'Space Mono',monospace;
+  font-size:10px;font-weight:700;
+  padding:3px 10px;border-radius:3px;letter-spacing:.5px;
+}
+.bp-cat-tag{
+  position:absolute;bottom:10px;right:10px;
+  background:rgba(0,0,0,.55);
+  color:rgba(255,255,255,.6);
+  font-size:10px;font-weight:600;
+  padding:3px 9px;border-radius:3px;
+  backdrop-filter:blur(4px);
+  text-transform:uppercase;letter-spacing:.5px;
+}
+.bp-body{padding:18px;flex:1;display:flex;flex-direction:column;gap:8px}
+.bp-name{
+  font-family:'Bebas Neue',cursive;
+  font-size:18px;letter-spacing:.5px;color:var(--w);
+  text-transform:uppercase;line-height:1.15;
+}
+.bp-card.wide .bp-name{font-size:22px}
+.bp-prices{display:flex;align-items:baseline;gap:10px;margin-top:2px}
+.bp-price{
+  font-family:'Bebas Neue',cursive;
+  font-size:26px;letter-spacing:.5px;color:var(--amber);
+}
+.bp-old{font-size:13px;color:var(--mute);text-decoration:line-through}
+.bp-add{
+  margin-top:auto;
+  background:transparent;
+  border:1px solid var(--mute2);
+  color:var(--w);
+  padding:9px;border-radius:6px;
+  font-size:12px;font-weight:600;
+  letter-spacing:.5px;text-transform:uppercase;
+  cursor:none;transition:all .2s;
+  font-family:'DM Sans',sans-serif;
+}
+.bp-add:hover{background:var(--lime);border-color:var(--lime);color:var(--ink)}
+
+/* ══ INFO STRIP ══ */
+.dm-info{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  border-top:1px solid var(--mute2);
+  border-bottom:1px solid var(--mute2);
+  background:var(--ink2);
+}
+.dm-info-item{
+  padding:28px 32px;
+  display:flex;align-items:center;gap:16px;
+  border-left:1px solid var(--mute2);
+  transition:background .2s;
+}
+.dm-info-item:last-child{border-right:none}
+.dm-info-item:hover{background:var(--mute3)}
+.dm-info-ico{font-size:28px;flex-shrink:0}
+.dm-info-title{
+  font-family:'Bebas Neue',cursive;
+  font-size:16px;letter-spacing:1px;color:var(--w);margin-bottom:3px;
+}
+.dm-info-sub{font-size:12px;color:var(--mute);line-height:1.4}
+
+/* ══ BRANDS ══ */
+.dm-brands{
+  padding:60px 40px;
+  background:var(--ink2);
+  border-top:1px solid var(--mute2);
+}
+.dm-brands-header{
+  display:flex;align-items:flex-end;justify-content:space-between;
+  margin-bottom:36px;
+}
+.dm-brands-title{
+  font-family:'Bebas Neue',cursive;
+  font-size:44px;letter-spacing:2px;color:var(--w);
+}
+.dm-brands-sub{font-size:13px;color:var(--mute);margin-top:4px}
+.dm-brands-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+.dm-brand{
+  background:#fff;
+  border:1px solid rgba(255,255,255,.15);
+  border-radius:12px;
+  padding:22px 14px;
+  text-align:center;
+  display:flex;flex-direction:column;align-items:center;gap:10px;
+  transition:all .22s;
+}
+.dm-brand:hover{background:#f5f5f5;border-color:var(--amber);transform:translateY(-3px)}
+.dm-brand-ico{font-size:26px;width:100%;height:60px;display:flex;align-items:center;justify-content:center}
+.dm-brand-ico img{max-width:100%;max-height:100%;object-fit:contain}
+.dm-brand-name{
+  font-family:'Bebas Neue',cursive;
+  font-size:22px;letter-spacing:2px;color:var(--ink);text-transform:uppercase;
+}
+.dm-brand-from{font-size:10px;color:#888}
+
+/* ══ FOOTER ══ */
+.dm-footer{
+  background:#07183a;
+  padding:64px 40px 28px;
+  border-top:1px solid var(--mute2);
+}
+.dm-footer-grid{
+  display:grid;grid-template-columns:2fr 1fr 1fr 1fr;
+  gap:48px;margin-bottom:48px;
+}
+.dm-footer-logo{
+  display:flex;align-items:center;gap:12px;
+  text-decoration:none;margin-bottom:16px;
+}
+.dm-footer-logo-mark{
+  width:40px;height:40px;background:var(--amber);
+  border-radius:8px;display:flex;align-items:center;
+  justify-content:center;font-size:20px;
+}
+.dm-footer-logo-txt{
+  font-family:'Bebas Neue',cursive;
+  font-size:20px;letter-spacing:2px;color:var(--w);
+  line-height:1.1;
+}
+.dm-footer-logo-txt small{
+  display:block;font-family:'Space Mono',monospace;
+  font-size:8px;letter-spacing:3px;color:var(--amber);
+  text-transform:uppercase;
+}
+.dm-footer-desc{font-size:13px;color:var(--mute);line-height:1.7;margin-bottom:20px}
+.dm-footer-socials{display:flex;gap:8px}
+.dm-social{
+  width:36px;height:36px;border:1px solid var(--mute2);
+  border-radius:6px;display:flex;align-items:center;justify-content:center;
+  font-size:16px;text-decoration:none;transition:all .2s;
+}
+.dm-social:hover{background:var(--amber);border-color:var(--amber)}
+.dm-footer-col h5{
+  font-family:'Space Mono',monospace;
+  font-size:10px;letter-spacing:2.5px;text-transform:uppercase;
+  color:var(--amber);margin-bottom:18px;
+}
+.dm-footer-col ul{list-style:none}
+.dm-footer-col ul li{margin-bottom:10px}
+.dm-footer-col ul li a{
+  color:var(--mute);text-decoration:none;
+  font-size:13.5px;transition:color .18s;
+  display:flex;align-items:center;gap:8px;
+}
+.dm-footer-col ul li a:hover{color:var(--w)}
+.dm-footer-bottom{
+  border-top:1px solid var(--mute2);
+  padding-top:22px;
+  display:flex;justify-content:space-between;align-items:center;
+}
+.dm-footer-bottom p{font-size:12px;color:rgba(255,255,255,.2)}
+
+/* ── BENTO QTY STEPPER ── */
+.bp-actions{display:flex;align-items:center;gap:6px;margin-top:auto}
+.bp-qty{display:flex;align-items:center;gap:2px;flex-shrink:0}
+.bp-qty-btn{width:28px;height:28px;border-radius:5px;border:1px solid var(--mute2);background:none;color:var(--w);font-size:16px;font-weight:700;cursor:none;display:flex;align-items:center;justify-content:center;transition:all .15s;font-family:'DM Sans',sans-serif;padding:0;line-height:1}
+.bp-qty-btn:hover{background:var(--amber);border-color:var(--amber);color:var(--ink)}
+.bp-qty-val{min-width:22px;text-align:center;font-size:14px;font-weight:700;color:var(--w);font-family:'Space Mono',monospace}
+
+/* ══ LOAD ANIMATIONS ══ */
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.anim-1{animation:fadeUp .7s .1s both}
+.anim-2{animation:fadeUp .7s .25s both}
+.anim-3{animation:fadeUp .7s .4s both}
+.anim-4{animation:fadeUp .7s .55s both}
+.anim-5{animation:fadeUp .7s .7s both}
+
+/* ══ RESPONSIVE ══ */
+@media(max-width:1100px){
+  .hero-bento{grid-template-columns:1fr 1fr;padding:80px 20px 20px}
+  .bc-main{grid-column:1/3;grid-row:1}
+  .bc-promo{grid-column:1;grid-row:2}
+  .bc-stats{grid-column:2;grid-row:2}
+  .bc-cats{grid-column:1/3}
+  .bc-cats-grid{grid-template-columns:repeat(3,1fr)}
+  .bento-products{grid-template-columns:repeat(2,1fr);padding:40px 20px}
+  .bento-products-header{grid-column:1/3}
+  .bp-card.wide{grid-column:1/3}
+  .dm-brands-grid{grid-template-columns:repeat(3,1fr)}
+  .dm-info{grid-template-columns:repeat(2,1fr)}
+  .dm-info-item{border-right:none;border-bottom:1px solid var(--mute2)}
+  .dm-footer-grid{grid-template-columns:1fr 1fr}
+  .dm-brands{padding:40px 20px}
+  .dm-footer{padding:40px 20px 20px}
+}
+@media(max-width:700px){
+  .hero-bento{grid-template-columns:1fr;padding:72px 14px 14px}
+  .bc-main{grid-column:1;padding:40px 28px 36px;min-height:auto}
+  .bc-promo{grid-column:1;grid-row:3}
+  .bc-stats{grid-column:1;grid-row:2;grid-template-columns:repeat(4,1fr)}
+  .bc-cats{grid-column:1}
+  .bc-cats-grid{grid-template-columns:repeat(2,1fr)}
+  .bc-h1{font-size:56px}
+  .bento-products{grid-template-columns:1fr 1fr;padding:14px 10px;gap:8px}
+  .bento-products-header{grid-column:1/3;padding-bottom:4px;margin-bottom:0}
+  .bento-products-title{font-size:22px}
+  .bento-products-sub{font-size:10px}
+  .bp-card.wide{grid-column:span 2}
+  .bp-card{flex-direction:column;border-radius:10px}
+  .bp-img{width:auto;height:80px;font-size:28px;border-radius:10px 10px 0 0}
+  .bp-card.wide .bp-img{height:80px}
+  .bp-body{padding:8px 10px 10px;flex-direction:column;align-items:stretch;gap:4px}
+  .bp-name{font-size:11px;letter-spacing:0}
+  .bp-card.wide .bp-name{font-size:11px}
+  .bp-prices{margin:0}
+  .bp-price{font-size:14px}
+  .bp-old{font-size:10px}
+  .bp-add{padding:4px 8px;font-size:9px;margin:0;width:auto;white-space:nowrap}
+  .bp-badge{top:4px;left:4px;font-size:7px;padding:1px 5px}
+  .bp-cat-tag{display:none}
+  .bp-img .bp-cat-tag{display:none}
+  .bp-actions{gap:4px}
+  .bp-qty-btn{width:20px;height:20px;font-size:11px;border-radius:3px}
+  .bp-qty-val{min-width:16px;font-size:11px}
+  .dm-brands-grid{grid-template-columns:repeat(2,1fr)}
+  .dm-info{grid-template-columns:1fr}
+  .dm-footer-grid{grid-template-columns:1fr}
+  .dm-nav-links{display:none}
+  .dm-nav{height:72px;padding:0 12px}
+  #cursor,#cursor-ring{display:none}
+  body{cursor:auto}
+  .bc-cta-row{flex-direction:column;align-items:flex-start}
+  .dm-logo-text{font-size:22px}
+  .dm-logo-text span{font-size:11px}
+  .dm-nav-btn{min-width:42px;height:42px;font-size:20px}
+  #cart-panel{width:100vw;right:-100vw}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="dm-nav">
+  <a class="dm-logo" href="index.html">
+    <div class="dm-logo-mark">🔧</div>
+    <div class="dm-logo-text">
+      Distrib. e Inv. Mathias
+      <span>Lima, Perú · Est. 2020</span>
+    </div>
+  </a>
+  <ul class="dm-nav-links">
+    <li><a href="electrico.html">⚡ Eléctrico</a></li>
+    <li><a href="herramienta.html">🔨 Herramientas</a></li>
+    <li><a href="gasfiteria.html">🚿 Gasfitería</a></li>
+    <li><a href="quimicos.html">🧪 Químicos</a></li>
+    <li><a href="construccion.html">🧱 Construcción</a></li>
+    <li><a href="otros.html">🔩 Otros</a></li>
+  </ul>
+  <div class="dm-nav-icons">
+    <button class="dm-nav-btn" id="search-btn" title="Buscar">🔍</button>
+    <button class="dm-nav-btn" id="user-btn" title="Cuenta">👤</button>
+    <button class="dm-nav-btn" id="cart-btn" title="Carrito">🛒<span class="cart-badge">0</span></button>
+  </div>
+</nav>
+
+<!-- SEARCH / CART / USER -->
+<div id="search-bar"><input type="text" id="search-input" placeholder="🔍  Buscar productos..."/><div id="search-results"></div></div>
+<div id="user-panel"></div>
+<div id="cart-overlay"></div>
+<div id="cart-panel">
+  <div class="cart-header"><h3>🛒 Carrito</h3><button class="cart-close" onclick="closeCart()">✕</button></div>
+  <div id="cart-body"></div>
+  <div class="cart-footer">
+    <div class="cart-total-row"><span>Total:</span><span id="cart-total">S/ 0.00</span></div>
+    <button class="btn-checkout" onclick="checkout()">Proceder al pago →</button>
+  </div>
+</div>
+
+<!-- ══ HERO BENTO GRID ══ -->
+<div class="hero-bento">
+
+  <!-- CARD PRINCIPAL -->
+  <div class="bc bc-main">
+    <div class="bc-main-bg"></div>
+    <div class="bc-main-grid"></div>
+    <div class="bc-main-number">50</div>
+    <div class="bc-eyebrow anim-1">Distribuidora e Inversiones Mathias</div>
+    <h1 class="bc-h1 anim-2">
+      Todo para<br>
+      <em>construir</em><br>
+      grande
+    </h1>
+    <p class="bc-sub anim-3">Herramientas, materiales eléctricos, gasfitería y más. Precios directos, calidad garantizada y delivery en toda Lima.</p>
+    <div class="bc-cta-row anim-4">
+      <a href="catalogo.html" class="bc-cta-a">Ver Catálogo →</a>
+    </div>
+  </div>
+
+  <!-- CARD PROMO -->
+  <div class="bc bc-promo anim-3">
+    <div class="bc-promo-num">50</div>
+    <span class="bc-tag">🇵🇪 Oferta especial</span>
+    <div class="bc-promo-title">Hasta<br>50% OFF<br>en Julio</div>
+    <p class="bc-promo-desc">Stock limitado en herramientas y materiales eléctricos</p>
+    <a href="herramienta.html" class="bc-btn-sm">Ver herramientas →</a>
+  </div>
+
+  <!-- CARD STATS -->
+  <div class="bc bc-stats anim-4">
+    <div class="bc-stat-item">
+      <div class="bc-stat-n">500+</div>
+      <div class="bc-stat-label">Productos</div>
+    </div>
+    <div class="bc-stat-item">
+      <div class="bc-stat-n">6</div>
+      <div class="bc-stat-label">Categorías</div>
+    </div>
+    <div class="bc-stat-item">
+      <div class="bc-stat-n">50%</div>
+      <div class="bc-stat-label">Desc. máx.</div>
+    </div>
+    <div class="bc-stat-item">
+      <div class="bc-stat-n">Lima</div>
+      <div class="bc-stat-label">Delivery</div>
+    </div>
+  </div>
+
+  <!-- CARD CATEGORÍAS -->
+  <div class="bc bc-cats anim-5">
+    <div class="bc-cats-header">
+      <span class="bc-cats-label">Categorías</span>
+      <a href="otros.html" class="bc-cats-link">Ver todas →</a>
+    </div>
+    <div class="bc-cats-grid">
+      <a class="bc-cat" href="electrico.html"><div class="bc-cat-ico">⚡</div><div class="bc-cat-name">Eléctrico</div><div class="bc-cat-n">Cables, focos, llaves</div></a>
+      <a class="bc-cat" href="herramienta.html"><div class="bc-cat-ico">🔨</div><div class="bc-cat-name">Herramientas</div><div class="bc-cat-n">Taladros, sets, llaves</div></a>
+      <a class="bc-cat" href="gasfiteria.html"><div class="bc-cat-ico">🚿</div><div class="bc-cat-name">Gasfitería</div><div class="bc-cat-n">Tuberías, conexiones</div></a>
+      <a class="bc-cat" href="quimicos.html"><div class="bc-cat-ico">🧪</div><div class="bc-cat-name">Químicos</div><div class="bc-cat-n">Pinturas, thinners</div></a>
+      <a class="bc-cat" href="construccion.html"><div class="bc-cat-ico">🧱</div><div class="bc-cat-name">Construcción</div><div class="bc-cat-n">Cemento, fierro</div></a>
+      <a class="bc-cat" href="otros.html"><div class="bc-cat-ico">🔩</div><div class="bc-cat-name">Otros</div><div class="bc-cat-n">Tornillería, fijaciones</div></a>
+    </div>
+  </div>
+
+</div>
+
+<!-- TICKER -->
+<div class="dm-ticker">
+  <div class="dm-ticker-inner">
+    <span>Distribuidora e Inversiones Mathias</span>
+    <span>Lima, Perú</span>
+    <span>Hasta 50% OFF</span>
+    <span>Delivery en Lima</span>
+    <span>+500 Productos</span>
+    <span>Calidad Garantizada</span>
+    <span>Marcas Originales</span>
+    <span>Fiestas Patrias 2025</span>
+    <span>Distribuidora e Inversiones Mathias</span>
+    <span>Lima, Perú</span>
+    <span>Hasta 50% OFF</span>
+    <span>Delivery en Lima</span>
+    <span>+500 Productos</span>
+    <span>Calidad Garantizada</span>
+    <span>Marcas Originales</span>
+    <span>Fiestas Patrias 2025</span>
+  </div>
+</div>
+
+<!-- INFO STRIP -->
+<div class="dm-info">
+  <div class="dm-info-item"><span class="dm-info-ico">🚚</span><div><div class="dm-info-title">Delivery en Lima</div><div class="dm-info-sub">Entrega rápida a domicilio en todo Lima</div></div></div>
+  <div class="dm-info-item"><span class="dm-info-ico">🏪</span><div><div class="dm-info-title">Recojo en Tienda</div><div class="dm-info-sub">Retira tu pedido el mismo día</div></div></div>
+  <div class="dm-info-item"><span class="dm-info-ico">🛡️</span><div><div class="dm-info-title">Calidad Garantizada</div><div class="dm-info-sub">Solo marcas originales certificadas</div></div></div>
+  <div class="dm-info-item"><span class="dm-info-ico">💬</span><div><div class="dm-info-title">Atención Directa</div><div class="dm-info-sub">WhatsApp · +51 980 583 077<br>WhatsApp · +51 997 057 917</div></div></div>
+</div>
+
+<!-- PRODUCTOS BENTO -->
+<div class="bento-products">
+  <div class="bento-products-header">
+    <div>
+      <div class="bento-products-title">Productos Destacados</div>
+      <div class="bento-products-sub">Selección de lo más vendido con los mejores precios</div>
+    </div>
+    <a href="electrico.html" class="bp-link">Ver todos →</a>
+  </div>
+
+  <a href="productos/cable-thw-2-5mm.html" class="bp-card">
+    <div class="bp-img">🔌<span class="bp-badge">-30%</span><span class="bp-cat-tag">Eléctrico</span></div>
+    <div class="bp-body">
+      <div class="bp-name">Cable THW 2.5mm — Rollo 100m</div>
+      <div class="bp-prices"><span class="bp-price">S/ 89.90</span><span class="bp-old">S/ 129.00</span></div>
+      <div class="bp-actions">
+        <div class="bp-qty"><button class="bp-qty-btn bp-qty-dec" type="button">−</button><span class="bp-qty-val">1</span><button class="bp-qty-btn bp-qty-inc" type="button">+</button></div>
+        <button class="bp-add" type="button">Agregar</button>
+      </div>
+    </div>
+  </a>
+
+  <a href="productos/foco-led-12w.html" class="bp-card">
+    <div class="bp-img">💡<span class="bp-badge">-50%</span><span class="bp-cat-tag">Eléctrico</span></div>
+    <div class="bp-body">
+      <div class="bp-name">Foco LED 12W Pack x10</div>
+      <div class="bp-prices"><span class="bp-price">S/ 45.00</span><span class="bp-old">S/ 90.00</span></div>
+      <div class="bp-actions">
+        <div class="bp-qty"><button class="bp-qty-btn bp-qty-dec" type="button">−</button><span class="bp-qty-val">1</span><button class="bp-qty-btn bp-qty-inc" type="button">+</button></div>
+        <button class="bp-add" type="button">Agregar</button>
+      </div>
+    </div>
+  </a>
+
+  <a href="productos/taladro-percutor-800w.html" class="bp-card">
+    <div class="bp-img">🔧<span class="bp-badge">-25%</span><span class="bp-cat-tag">Herramientas</span></div>
+    <div class="bp-body">
+      <div class="bp-name">Taladro Percutor 800W Pro</div>
+      <div class="bp-prices"><span class="bp-price">S/ 219.00</span><span class="bp-old">S/ 295.00</span></div>
+      <div class="bp-actions">
+        <div class="bp-qty"><button class="bp-qty-btn bp-qty-dec" type="button">−</button><span class="bp-qty-val">1</span><button class="bp-qty-btn bp-qty-inc" type="button">+</button></div>
+        <button class="bp-add" type="button">Agregar</button>
+      </div>
+    </div>
+  </a>
+
+  <a href="productos/set-destornilladores.html" class="bp-card">
+    <div class="bp-img">🔩<span class="bp-cat-tag">Herramientas</span></div>
+    <div class="bp-body">
+      <div class="bp-name">Set Destornilladores 12 piezas</div>
+      <div class="bp-prices"><span class="bp-price">S/ 67.00</span><span class="bp-old">S/ 89.00</span></div>
+      <div class="bp-actions">
+        <div class="bp-qty"><button class="bp-qty-btn bp-qty-dec" type="button">−</button><span class="bp-qty-val">1</span><button class="bp-qty-btn bp-qty-inc" type="button">+</button></div>
+        <button class="bp-add" type="button">Agregar</button>
+      </div>
+    </div>
+  </a>
+
+  <a href="productos/pintura-latex-4-galones.html" class="bp-card">
+    <div class="bp-img">🎨<span class="bp-badge">-40%</span><span class="bp-cat-tag">Químicos</span></div>
+    <div class="bp-body">
+      <div class="bp-name">Pintura Látex Interior 4 Gal</div>
+      <div class="bp-prices"><span class="bp-price">S/ 148.00</span><span class="bp-old">S/ 248.00</span></div>
+      <div class="bp-actions">
+        <div class="bp-qty"><button class="bp-qty-btn bp-qty-dec" type="button">−</button><span class="bp-qty-val">1</span><button class="bp-qty-btn bp-qty-inc" type="button">+</button></div>
+        <button class="bp-add" type="button">Agregar</button>
+      </div>
+    </div>
+  </a>
+
+  <a href="productos/thinner-acrilico-1-galon.html" class="bp-card">
+    <div class="bp-img">🪣<span class="bp-badge">-35%</span><span class="bp-cat-tag">Químicos</span></div>
+    <div class="bp-body">
+      <div class="bp-name">Thinner Acrílico 1 Galón</div>
+      <div class="bp-prices"><span class="bp-price">S/ 22.50</span><span class="bp-old">S/ 34.90</span></div>
+      <div class="bp-actions">
+        <div class="bp-qty"><button class="bp-qty-btn bp-qty-dec" type="button">−</button><span class="bp-qty-val">1</span><button class="bp-qty-btn bp-qty-inc" type="button">+</button></div>
+        <button class="bp-add" type="button">Agregar</button>
+      </div>
+    </div>
+  </a>
+
+  <a href="productos/tuberia-pvc-4.html" class="bp-card">
+    <div class="bp-img">🚿<span class="bp-badge">-20%</span><span class="bp-cat-tag">Gasfitería</span></div>
+    <div class="bp-body">
+      <div class="bp-name">Tubería PVC 4" x 3m Desagüe</div>
+      <div class="bp-prices"><span class="bp-price">S/ 34.50</span><span class="bp-old">S/ 43.00</span></div>
+      <div class="bp-actions">
+        <div class="bp-qty"><button class="bp-qty-btn bp-qty-dec" type="button">−</button><span class="bp-qty-val">1</span><button class="bp-qty-btn bp-qty-inc" type="button">+</button></div>
+        <button class="bp-add" type="button">Agregar</button>
+      </div>
+    </div>
+  </a>
+
+  <a href="productos/cemento-portland.html" class="bp-card">
+    <div class="bp-img">🧱<span class="bp-cat-tag">Construcción</span></div>
+    <div class="bp-body">
+      <div class="bp-name">Cemento Portland 42.5 kg</div>
+      <div class="bp-prices"><span class="bp-price">S/ 28.90</span></div>
+      <div class="bp-actions">
+        <div class="bp-qty"><button class="bp-qty-btn bp-qty-dec" type="button">−</button><span class="bp-qty-val">1</span><button class="bp-qty-btn bp-qty-inc" type="button">+</button></div>
+        <button class="bp-add" type="button">Agregar</button>
+      </div>
+    </div>
+  </a>
+
+</div>
+
+<!-- MARCAS -->
+<div class="dm-brands">
+  <div class="dm-brands-header">
+    <div>
+      <div class="dm-brands-title">Marcas que distribuimos</div>
+      <div class="dm-brands-sub">Trabajamos con las mejores marcas del mercado</div>
+    </div>
+  </div>
+  <div class="dm-brands-grid">
+    <div class="dm-brand"><span class="dm-brand-ico">🔧</span><div class="dm-brand-name">Uyustool Peru</div><div class="dm-brand-from">Perú</div></div>
+    <div class="dm-brand"><span class="dm-brand-ico">🇲🇽</span><div class="dm-brand-name">Truper</div><div class="dm-brand-from">México</div></div>
+    <div class="dm-brand"><span class="dm-brand-ico">🚿</span><div class="dm-brand-name">Vainsa Peru</div><div class="dm-brand-from">Perú</div></div>
+    <div class="dm-brand"><span class="dm-brand-ico">🇯🇵</span><div class="dm-brand-name">Toyaki Japan</div><div class="dm-brand-from">Japón</div></div>
+    <div class="dm-brand"><span class="dm-brand-ico">⚡</span><div class="dm-brand-name">Opalux Electric</div><div class="dm-brand-from">Perú</div></div>
+    <div class="dm-brand"><span class="dm-brand-ico">🛠️</span><div class="dm-brand-name">Sali Tool</div><div class="dm-brand-from">Perú</div></div>
+    <div class="dm-brand"><span class="dm-brand-ico"><img src="Aceros-Arequipa.png" alt="Aceros Arequipa"></span><div class="dm-brand-name">Aceros Arequipa</div><div class="dm-brand-from">Perú</div></div>
+    <div class="dm-brand"><span class="dm-brand-ico"><img src="Progresol.png" alt="Progresol"></span><div class="dm-brand-name">Progresol</div><div class="dm-brand-from">Perú</div></div>
+    <div class="dm-brand"><span class="dm-brand-ico"><img src="Sagitario.png" alt="Sagitario" style="transform:scale(1.9)"></span><div class="dm-brand-name">Sagitario</div><div class="dm-brand-from">Perú</div></div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="dm-footer">
+  <div class="dm-footer-grid">
+    <div>
+      <a class="dm-footer-logo" href="index.html">
+        <div class="dm-footer-logo-mark">🔧</div>
+        <div class="dm-footer-logo-txt">
+          Distrib. e Inv. Mathias
+          <small>Lima, Perú · Est. 2020</small>
+        </div>
+      </a>
+      <p class="dm-footer-desc">Tu distribuidora de confianza en Lima. Herramientas, materiales y más para tus proyectos con calidad garantizada y precios directos.</p>
+      <div class="dm-footer-socials">
+        <a class="dm-social" href="https://wa.me/51980583077" target="_blank">💬</a>
+        <a class="dm-social" href="#">📘</a>
+        <a class="dm-social" href="#">📸</a>
+      </div>
+    </div>
+    <div class="dm-footer-col"><h5>Categorías</h5><ul>
+      <li><a href="electrico.html">⚡ Eléctrico</a></li>
+      <li><a href="herramienta.html">🔨 Herramienta</a></li>
+      <li><a href="gasfiteria.html">🚿 Gasfitería</a></li>
+      <li><a href="quimicos.html">🧪 Químicos</a></li>
+      <li><a href="construccion.html">🧱 Construcción</a></li>
+      <li><a href="otros.html">🔩 Otros</a></li>
+    </ul></div>
+    <div class="dm-footer-col"><h5>Empresa</h5><ul>
+
+
+      <li><a href="#">Sobre Nosotros</a></li>
+      <li><a href="#">Devoluciones</a></li>
+      <li><a href="#">Términos y Condiciones</a></li>
+      <li><a href="#">Preguntas Frecuentes</a></li>
+    </ul></div>
+    <div class="dm-footer-col"><h5>Contacto</h5><ul>
+      <li><a href="#">📍 Lima, Perú</a></li>
+      <li><a href="tel:+51980583077">📞 +51 980 583 077</a></li>
+      <li><a href="tel:+51997057917">📞 +51 997 057 917</a></li>
+      <li><a href="https://wa.me/51980583077" target="_blank">💬 WhatsApp</a></li>
+    </ul></div>
+  </div>
+  <div class="dm-footer-bottom">
+    <p>© 2025 Distribuidora e Inversiones Mathias. Todos los derechos reservados.</p>
+    <p>Hecho con ❤️ en Lima, Perú 🇵🇪</p>
+  </div>
+</footer>
+
+<a class="wa-float" href="https://wa.me/51980583077?text=Hola%20%F0%9F%91%8B%20quiero%20m%C3%A1s%20informaci%C3%B3n" target="_blank" title="WhatsApp">💬</a>
+
+<script src="shared.js"></script>
+<script>
+// Stagger bento cards on load
+document.querySelectorAll('.bc,.bp-card,.bc-cat,.dm-brand').forEach((el,i)=>{
+  el.style.opacity='0';
+  el.style.transform='translateY(24px)';
+  setTimeout(()=>{
+    el.style.transition='opacity .55s ease, transform .55s ease';
+    el.style.opacity='1';
+    el.style.transform='translateY(0)';
+  },100+(i*60));
+});
+
+// Botones de producto (bento cards)
+document.querySelectorAll('.bp-add').forEach(btn=>{
+  btn.addEventListener('click',function(e){
+    e.preventDefault();e.stopPropagation();
+    const card=this.closest('.bp-card');
+    const name=card.querySelector('.bp-name').textContent.trim();
+    const priceStr=card.querySelector('.bp-price').textContent.replace('S/ ','').trim();
+    const price=parseFloat(priceStr);
+    const ico=card.querySelector('.bp-img').textContent.trim().charAt(0);
+    const cat=card.querySelector('.bp-cat-tag').textContent.trim();
+    const qtyEl=card.querySelector('.bp-qty-val');
+    const qty=qtyEl?parseInt(qtyEl.textContent)||1:1;
+    addToCart(name,price,ico,cat,qty);
+  });
+});
+</script>
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+</body>
+</html>

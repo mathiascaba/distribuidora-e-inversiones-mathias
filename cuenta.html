@@ -1,0 +1,205 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mi Cuenta – Distribuidora Mathias</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+  <style>
+.cuenta-card{background:var(--ink2);border:1px solid var(--mute2);border-radius:14px;padding:28px 32px;margin-top:28px;max-width:500px}
+.cuenta-card h3{font-family:'Bebas Neue',cursive;font-size:22px;color:var(--w);letter-spacing:1px;margin-bottom:20px}
+.cuenta-field{margin-bottom:16px}
+.cuenta-field label{display:block;font-size:12px;color:var(--mute);font-weight:600;margin-bottom:4px;text-transform:uppercase;letter-spacing:1px}
+.cuenta-field .val{font-size:15px;color:var(--w);padding:10px 14px;background:var(--ink3);border-radius:6px;border:1px solid var(--mute2);width:100%;box-sizing:border-box}
+.cuenta-field input{font-size:14px;color:var(--w);padding:10px 14px;background:var(--ink3);border:1px solid var(--mute2);border-radius:6px;width:100%;box-sizing:border-box;font-family:'DM Sans',sans-serif;outline:none;transition:border-color .2s}
+.cuenta-field input:focus{border-color:var(--amber)}
+.cuenta-btn{background:var(--amber);color:var(--ink);border:none;padding:10px 24px;border-radius:6px;font-weight:700;font-size:13px;cursor:pointer;transition:background .2s;font-family:'DM Sans',sans-serif}
+.cuenta-btn:hover{background:var(--amber2)}
+.cuenta-btn.sec{background:var(--ink3);color:var(--mute);border:1px solid var(--mute2)}
+.cuenta-btn.sec:hover{background:var(--mute2);color:var(--w)}
+.cuenta-danger{background:rgba(234,88,12,.1);color:#f97316;border:1px solid rgba(234,88,12,.3)}
+.cuenta-danger:hover{background:rgba(234,88,12,.2)}
+.cuenta-danger.del{background:rgba(220,38,38,.1);color:#ef4444;border-color:rgba(220,38,38,.3)}
+.cuenta-danger.del:hover{background:rgba(220,38,38,.2)}
+.cuenta-logout{margin-top:24px}
+.cuenta-row-btns{display:flex;gap:12px;flex-wrap:wrap}
+.cuenta-empty{text-align:center;padding:60px 20px;color:var(--mute)}
+.cuenta-empty span{font-size:56px;display:block;margin-bottom:16px}
+.cuenta-empty h3{font-size:22px;color:var(--w);margin-bottom:8px}
+.cuenta-empty .btn-ir{display:inline-block;background:var(--amber);color:var(--ink);padding:10px 28px;border-radius:8px;font-weight:700;font-size:14px;text-decoration:none}
+@media(max-width:600px){.cuenta-card{padding:20px}}
+</style>
+</head>
+<body>
+
+<nav class="dm-nav">
+  <a class="dm-logo" href="index.html">
+    <div class="dm-logo-mark">🔧</div>
+    <div class="dm-logo-text">Distrib. e Inv. Mathias<span>Lima, Perú · Est. 2020</span></div>
+  </a>
+  <ul class="dm-nav-links">
+    <li><a href="catalogo.html">📦 Catálogo</a></li>
+    <li><a href="electrico.html">⚡ Eléctrico</a></li>
+    <li><a href="herramienta.html">🔨 Herramientas</a></li>
+    <li><a href="gasfiteria.html">🚿 Gasfitería</a></li>
+    <li><a href="quimicos.html">🧪 Químicos</a></li>
+    <li><a href="construccion.html">🧱 Construcción</a></li>
+    <li><a href="otros.html">🔩 Otros</a></li>
+  </ul>
+  <div class="dm-nav-icons">
+    <button class="dm-nav-btn" id="search-btn" title="Buscar">🔍</button>
+    <button class="dm-nav-btn" id="user-btn" title="Cuenta">👤</button>
+    <button class="dm-nav-btn" id="cart-btn" title="Carrito">🛒<span class="cart-badge">0</span></button>
+  </div>
+</nav>
+
+<div id="search-bar"><input type="text" id="search-input" placeholder="🔍  Buscar productos..."/><div id="search-results"></div></div>
+<div id="user-panel"></div>
+<div id="cart-overlay"></div>
+<div id="cart-panel">
+  <div class="cart-header"><h3>🛒 Carrito</h3><button class="cart-close" onclick="closeCart()">✕</button></div>
+  <div id="cart-body"></div>
+  <div class="cart-footer">
+    <div class="cart-total-row"><span>Total:</span><span id="cart-total">S/ 0.00</span></div>
+    <button class="btn-checkout" onclick="checkout()">Proceder al pago →</button>
+  </div>
+</div>
+
+<div class="cat-page">
+  <div class="cat-hero-card">
+    <div class="cat-hero-bg-icon">⚙️</div>
+    <div class="cat-breadcrumb"><a href="index.html">Inicio</a> › Mi Cuenta</div>
+    <h1>⚙️ Mi Cuenta</h1>
+    <p>Administra tu información personal.</p>
+  </div>
+  <div id="cuenta-content"></div>
+</div>
+
+<footer class="dm-footer">
+  <div class="dm-footer-grid">
+    <div>
+      <a class="dm-footer-logo" href="index.html">
+        <div class="dm-footer-logo-mark">🔧</div>
+        <div class="dm-footer-logo-txt">Distrib. e Inv. Mathias<small>Lima, Perú · Est. 2020</small></div>
+      </a>
+      <p class="dm-footer-desc">Tu distribuidora de confianza en Lima. Herramientas, materiales y más para tus proyectos con calidad garantizada y precios directos.</p>
+      <div class="dm-footer-socials">
+        <a class="dm-social" href="https://wa.me/51980583077" target="_blank">💬</a>
+        <a class="dm-social" href="#">📘</a>
+        <a class="dm-social" href="#">📸</a>
+      </div>
+    </div>
+    <div class="dm-footer-col"><h5>Categorías</h5><ul>
+      <li><a href="electrico.html">⚡ Eléctrico</a></li>
+      <li><a href="herramienta.html">🔨 Herramienta</a></li>
+      <li><a href="gasfiteria.html">🚿 Gasfitería</a></li>
+      <li><a href="quimicos.html">🧪 Químicos</a></li>
+      <li><a href="construccion.html">🧱 Construcción</a></li>
+      <li><a href="otros.html">🔩 Otros</a></li>
+    </ul></div>
+    <div class="dm-footer-col"><h5>Empresa</h5><ul>
+
+
+      <li><a href="#">Sobre Nosotros</a></li>
+      <li><a href="#">Devoluciones</a></li>
+      <li><a href="#">Términos y Condiciones</a></li>
+      <li><a href="#">Preguntas Frecuentes</a></li>
+    </ul></div>
+    <div class="dm-footer-col"><h5>Contacto</h5><ul>
+      <li><a href="#">📍 Lima, Perú</a></li>
+      <li><a href="tel:+51980583077">📞 +51 980 583 077</a></li>
+      <li><a href="tel:+51997057917">📞 +51 997 057 917</a></li>
+      <li><a href="https://wa.me/51980583077" target="_blank">💬 WhatsApp</a></li>
+    </ul></div>
+  </div>
+  <div class="dm-footer-bottom"><p>© 2025 Distribuidora e Inversiones Mathias. Todos los derechos reservados.</p><p>Hecho con ❤️ en Lima, Perú 🇵🇪</p></div>
+</footer>
+
+<a class="wa-float" href="https://wa.me/51980583077?text=Hola%20%F0%9F%91%8B%20quiero%20m%C3%A1s%20informaci%C3%B3n" target="_blank" title="WhatsApp">💬</a>
+
+<script src="shared.js"></script>
+<script>
+function renderCuenta() {
+  const div = document.getElementById('cuenta-content');
+  const user = getUser();
+  if (!user) {
+    div.innerHTML = '<div class="cuenta-empty"><span>🔒</span><h3>Inicia sesión</h3><p>Debes iniciar sesión para ver tu cuenta.</p><a class="btn-ir" href="javascript:void(0)" onclick="closeUserPanel();document.getElementById(\'user-btn\').click()">Iniciar Sesión</a></div>';
+    return;
+  }
+  div.innerHTML = `
+    <div class="cuenta-card">
+      <h3>Información Personal</h3>
+      <div class="cuenta-field">
+        <label>Nombre</label>
+        <input type="text" id="cuenta-name" value="${user.name}" />
+      </div>
+      <div class="cuenta-field">
+        <label>Correo electrónico</label>
+        <div class="val">${user.email}</div>
+      </div>
+      <div class="cuenta-field">
+        <label>Número de celular</label>
+        <input type="tel" id="cuenta-phone" value="${user.phone || ''}" />
+      </div>
+      <button class="cuenta-btn" onclick="guardarCambios()">Guardar Cambios</button>
+    </div>
+    <div class="cuenta-card">
+      <h3>Cambiar Contraseña</h3>
+      <div class="cuenta-field">
+        <label>Nueva contraseña</label>
+        <input type="password" id="cuenta-pass" placeholder="••••••••" />
+      </div>
+      <button class="cuenta-btn sec" onclick="cambiarPass()">Actualizar Contraseña</button>
+    </div>
+    <div class="cuenta-card cuenta-logout">
+      <div class="cuenta-row-btns">
+        <button class="cuenta-btn cuenta-danger" onclick="logoutUser()">Cerrar Sesión</button>
+        <button class="cuenta-btn cuenta-danger del" onclick="eliminarCuenta()">Eliminar Cuenta</button>
+      </div>
+    </div>
+  `;
+}
+
+function guardarCambios() {
+  const user = getUser();
+  if (!user) return;
+  const name = document.getElementById('cuenta-name').value.trim();
+  const phone = document.getElementById('cuenta-phone').value.trim();
+  if (!name) { showToast('⚠️ El nombre no puede estar vacío'); return; }
+  user.name = name;
+  user.phone = phone;
+  saveUser(user);
+  const users = JSON.parse(localStorage.getItem('fp_users') || '[]');
+  const idx = users.findIndex(u => u.email === user.email);
+  if (idx >= 0) { users[idx].name = name; users[idx].phone = phone; localStorage.setItem('fp_users', JSON.stringify(users)); }
+  updateUserUI();
+  showToast('✅ Datos actualizados');
+}
+
+function eliminarCuenta() {
+  if (!confirm('¿Estás seguro de eliminar tu cuenta? Todos tus datos se borrarán permanentemente.')) return;
+  const user = getUser();
+  if (!user) return;
+  const users = JSON.parse(localStorage.getItem('fp_users') || '[]');
+  const idx = users.findIndex(u => u.email === user.email);
+  if (idx >= 0) { users.splice(idx, 1); localStorage.setItem('fp_users', JSON.stringify(users)); }
+  logoutUser();
+}
+
+function cambiarPass() {
+  const user = getUser();
+  if (!user) return;
+  const pass = document.getElementById('cuenta-pass').value;
+  if (!pass || pass.length < 4) { showToast('⚠️ La contraseña debe tener al menos 4 caracteres'); return; }
+  const users = JSON.parse(localStorage.getItem('fp_users') || '[]');
+  const idx = users.findIndex(u => u.email === user.email);
+  if (idx >= 0) { users[idx].pass = pass; localStorage.setItem('fp_users', JSON.stringify(users)); }
+  document.getElementById('cuenta-pass').value = '';
+  showToast('✅ Contraseña actualizada');
+}
+
+renderCuenta();
+</script>
+</body>
+</html>

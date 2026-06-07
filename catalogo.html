@@ -1,0 +1,138 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Catálogo – Distribuidora Mathias</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+</head>
+<body>
+
+<nav class="dm-nav">
+  <a class="dm-logo" href="index.html">
+    <div class="dm-logo-mark">🔧</div>
+    <div class="dm-logo-text">Distrib. e Inv. Mathias<span>Lima, Perú · Est. 2020</span></div>
+  </a>
+  <ul class="dm-nav-links">
+    <li><a href="catalogo.html" class="active">📦 Catálogo</a></li>
+    <li><a href="electrico.html">⚡ Eléctrico</a></li>
+    <li><a href="herramienta.html">🔨 Herramientas</a></li>
+    <li><a href="gasfiteria.html">🚿 Gasfitería</a></li>
+    <li><a href="quimicos.html">🧪 Químicos</a></li>
+    <li><a href="construccion.html">🧱 Construcción</a></li>
+    <li><a href="otros.html">🔩 Otros</a></li>
+  </ul>
+  <div class="dm-nav-icons">
+    <button class="dm-nav-btn" id="search-btn" title="Buscar">🔍</button>
+    <button class="dm-nav-btn" id="user-btn" title="Cuenta">👤</button>
+    <button class="dm-nav-btn" id="cart-btn" title="Carrito">🛒<span class="cart-badge">0</span></button>
+
+  </div>
+</nav>
+
+<div id="search-bar"><input type="text" id="search-input" placeholder="🔍  Buscar productos..."/><div id="search-results"></div></div>
+<div id="user-panel"></div>
+<div id="cart-overlay"></div>
+<div id="cart-panel">
+  <div class="cart-header"><h3>🛒 Carrito</h3><button class="cart-close" onclick="closeCart()">✕</button></div>
+  <div id="cart-body"></div>
+  <div class="cart-footer">
+    <div class="cart-total-row"><span>Total:</span><span id="cart-total">S/ 0.00</span></div>
+    <button class="btn-checkout" onclick="checkout()">Proceder al pago →</button>
+  </div>
+</div>
+
+<div class="cat-page">
+  <div class="cat-hero-card">
+    <div class="cat-hero-bg-icon">📦</div>
+    <div class="cat-breadcrumb"><a href="index.html">Inicio</a> › Catálogo</div>
+    <h1>📦 Catálogo Completo</h1>
+    <p>Todos nuestros productos en un solo lugar. Eléctricos, herramientas, gasfitería, químicos, construcción y más.</p>
+  </div>
+
+  <div class="cat-filter-bar">
+    <span class="cat-filter-label">ORDENAR</span>
+    <button class="cat-filter-btn active" onclick="sortProducts('default',this)">Relevancia</button>
+    <button class="cat-filter-btn" onclick="sortProducts('asc',this)">Menor precio</button>
+    <button class="cat-filter-btn" onclick="sortProducts('desc',this)">Mayor precio</button>
+    <button class="cat-filter-btn" onclick="sortProducts('discount',this)">Con descuento</button>
+  </div>
+
+  <div class="cat-products-grid" id="prod-grid"></div>
+</div>
+
+<footer class="dm-footer">
+  <div class="dm-footer-grid">
+    <div>
+      <a class="dm-footer-logo" href="index.html">
+        <div class="dm-footer-logo-mark">🔧</div>
+        <div class="dm-footer-logo-txt">Distrib. e Inv. Mathias<small>Lima, Perú · Est. 2020</small></div>
+      </a>
+      <p class="dm-footer-desc">Tu distribuidora de confianza en Lima. Herramientas, materiales y más para tus proyectos con calidad garantizada y precios directos.</p>
+      <div class="dm-footer-socials">
+        <a class="dm-social" href="https://wa.me/51980583077" target="_blank">💬</a>
+        <a class="dm-social" href="#">📘</a>
+        <a class="dm-social" href="#">📸</a>
+      </div>
+    </div>
+    <div class="dm-footer-col"><h5>Categorías</h5><ul>
+      <li><a href="electrico.html">⚡ Eléctrico</a></li>
+      <li><a href="herramienta.html">🔨 Herramienta</a></li>
+      <li><a href="gasfiteria.html">🚿 Gasfitería</a></li>
+      <li><a href="quimicos.html">🧪 Químicos</a></li>
+      <li><a href="construccion.html">🧱 Construcción</a></li>
+      <li><a href="otros.html">🔩 Otros</a></li>
+    </ul></div>
+    <div class="dm-footer-col"><h5>Empresa</h5><ul>
+
+
+      <li><a href="#">Sobre Nosotros</a></li>
+      <li><a href="#">Devoluciones</a></li>
+      <li><a href="#">Términos y Condiciones</a></li>
+      <li><a href="#">Preguntas Frecuentes</a></li>
+    </ul></div>
+    <div class="dm-footer-col"><h5>Contacto</h5><ul>
+      <li><a href="#">📍 Lima, Perú</a></li>
+      <li><a href="tel:+51980583077">📞 +51 980 583 077</a></li>
+      <li><a href="tel:+51997057917">📞 +51 997 057 917</a></li>
+      <li><a href="https://wa.me/51980583077" target="_blank">💬 WhatsApp</a></li>
+    </ul></div>
+  </div>
+  <div class="dm-footer-bottom"><p>© 2025 Distribuidora e Inversiones Mathias. Todos los derechos reservados.</p><p>Hecho con ❤️ en Lima, Perú 🇵🇪</p></div>
+</footer>
+
+<a class="wa-float" href="https://wa.me/51980583077?text=Hola%20%F0%9F%91%8B%20quiero%20m%C3%A1s%20informaci%C3%B3n" target="_blank" title="WhatsApp">💬</a>
+
+<script src="shared.js"></script>
+<script>
+let currentProducts = [...allProducts];
+function renderGrid(prods) {
+  const grid = document.getElementById('prod-grid');
+  grid.innerHTML = prods.map(p => `
+    <div class="cat-prod-card">
+      <div class="cat-prod-img">${productImages[p.name] ? `<img src="${productImages[p.name]}" alt="${p.name}" style="width:100%;height:100%;object-fit:contain;padding:10px">` : p.icon}${p.badge ? `<span class="cat-prod-badge">${p.badge}</span>` : ''}<span class="cat-prod-ctag">${p.cat}</span></div>
+      <div class="cat-prod-body">
+        <div class="cat-prod-name">${p.name}</div>
+        <div class="cat-prod-prices"><span class="cat-prod-price">S/ ${p.price.toFixed(2)}</span>${p.old ? `<span class="cat-prod-old">S/ ${p.old.toFixed(2)}</span>` : ''}</div>
+        <div class="cat-prod-actions">
+          <div class="cat-prod-qty"><button class="cat-prod-qty-btn cat-prod-qty-dec" type="button">−</button><span class="cat-prod-qty-val">1</span><button class="cat-prod-qty-btn cat-prod-qty-inc" type="button">+</button></div>
+          <button class="cat-prod-add" data-pname='${p.name.replace(/'/g,'&#39;')}' data-pprice='${p.price}' data-picon='${p.icon}' data-pcat='${p.cat}'>Agregar</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+function sortProducts(type, btn) {
+  document.querySelectorAll('.cat-filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  let sorted = [...currentProducts];
+  if (type === 'asc') sorted.sort((a,b) => a.price - b.price);
+  else if (type === 'desc') sorted.sort((a,b) => b.price - a.price);
+  else if (type === 'discount') sorted = sorted.filter(p => p.badge);
+  renderGrid(sorted);
+}
+renderGrid(currentProducts);
+</script>
+</body>
+</html>

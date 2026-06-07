@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Compras – Distribuidora Mathias</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<style>body{cursor:auto}
+.cmp-page{padding:96px 48px 60px;max-width:1100px;margin:0 auto}
+.cmp-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:10px}
+.cmp-head h1{font-family:'Bebas Neue',cursive;font-size:32px;color:var(--w);letter-spacing:1px;margin:0}
+.cmp-btn{background:var(--amber);color:var(--ink);border:none;padding:8px 18px;border-radius:8px;font-weight:700;font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;transition:background .2s}
+.cmp-btn:hover{background:var(--amber2)}
+.cmp-btn.sec{background:transparent;border:1px solid var(--mute2);color:var(--w)}
+.cmp-btn.sec:hover{background:var(--mute2)}
+.cmp-btn.del{background:rgba(220,38,38,.1);color:#ef4444;border:1px solid rgba(220,38,38,.3);padding:4px 10px;font-size:11px}
+.cmp-btn.del:hover{background:rgba(220,38,38,.2)}
+.cmp-btn.sm{font-size:11px;padding:5px 12px}
+.cmp-search{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+.cmp-search input{flex:1;min-width:180px;padding:10px 14px;background:var(--ink3);border:1px solid var(--mute2);border-radius:10px;color:var(--w);font-size:14px;outline:none;font-family:'DM Sans',sans-serif;transition:border-color .2s}
+.cmp-search input:focus{border-color:var(--amber)}
+.cmp-tbl{width:100%;border-collapse:collapse;background:var(--ink2);border-radius:14px;overflow:hidden;border:1px solid var(--mute2)}
+.cmp-tbl th{padding:12px 12px;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--mute);text-align:left;background:var(--ink3);border-bottom:1px solid var(--mute2)}
+.cmp-tbl td{padding:10px 12px;font-size:13px;color:var(--w);border-bottom:1px solid var(--mute2);vertical-align:middle}
+.cmp-tbl tr:last-child td{border-bottom:none}
+.cmp-tbl tr:hover td{background:rgba(255,255,255,.03)}
+.cmp-badge{display:inline-block;padding:2px 10px;border-radius:20px;font-size:10px;font-weight:700;font-family:'Space Mono',monospace;letter-spacing:.5px;text-transform:uppercase}
+.cmp-badge.pendiente{background:rgba(245,158,11,.15);color:var(--amber)}
+.cmp-badge.completada{background:rgba(132,204,22,.15);color:var(--lime)}
+.cmp-badge.anulada{background:rgba(239,68,68,.15);color:#ef4444}
+.cmp-actions{display:flex;gap:4px;flex-wrap:wrap}
+.cmp-empty{text-align:center;padding:60px 20px;color:var(--mute)}
+.cmp-empty span{font-size:56px;display:block;margin-bottom:12px}
+.cmp-empty p{font-size:14px}
+
+/* ── MODAL ── */
+.cmp-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:800;backdrop-filter:blur(4px)}
+.cmp-overlay.open{display:block}
+.cmp-modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:90%;max-width:720px;max-height:90vh;background:var(--ink2);border:1px solid var(--mute2);border-radius:18px;z-index:801;display:none;flex-direction:column;overflow:hidden}
+.cmp-modal.open{display:flex}
+.cmp-modal-h{padding:20px 24px;border-bottom:1px solid var(--mute2);display:flex;justify-content:space-between;align-items:center}
+.cmp-modal-h h3{font-family:'Bebas Neue',cursive;font-size:22px;color:var(--amber);letter-spacing:1px;margin:0}
+.cmp-modal-close{background:none;border:none;color:var(--mute);font-size:20px;cursor:pointer;transition:color .2s;font-family:'DM Sans',sans-serif}
+.cmp-modal-close:hover{color:var(--w)}
+.cmp-modal-b{padding:20px 24px;overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:14px}
+.cmp-form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cmp-field{display:flex;flex-direction:column;gap:4px}
+.cmp-field label{font-size:11px;font-weight:600;color:var(--mute);text-transform:uppercase;letter-spacing:.5px;font-family:'Space Mono',monospace}
+.cmp-field input,.cmp-field select,.cmp-field textarea{padding:9px 12px;background:var(--ink3);border:1px solid var(--mute2);border-radius:7px;color:var(--w);font-size:13px;outline:none;font-family:'DM Sans',sans-serif;transition:border-color .2s}
+.cmp-field input:focus,.cmp-field select:focus,.cmp-field textarea:focus{border-color:var(--amber)}
+.cmp-field textarea{resize:vertical;min-height:50px}
+.cmp-field select option{background:var(--ink);color:var(--w)}
+.cmp-field .cmp-full{grid-column:1/-1}
+
+/* ── ITEMS TABLE ── */
+.cmp-items-tbl{width:100%;border-collapse:collapse;margin-top:4px}
+.cmp-items-tbl th{padding:6px 8px;font-size:9px;font-family:'Space Mono',monospace;letter-spacing:1px;text-transform:uppercase;color:var(--mute);text-align:left;border-bottom:1px solid var(--mute2)}
+.cmp-items-tbl td{padding:6px 8px;font-size:12px;color:var(--w);border-bottom:1px solid var(--mute2);vertical-align:middle}
+.cmp-items-tbl select,.cmp-items-tbl input{width:100%;padding:5px 6px;background:var(--ink3);border:1px solid var(--mute2);border-radius:5px;color:var(--w);font-size:12px;outline:none;font-family:'DM Sans',sans-serif;box-sizing:border-box;transition:border-color .2s}
+.cmp-items-tbl select:focus,.cmp-items-tbl input:focus{border-color:var(--amber)}
+.cmp-items-tbl select option{background:var(--ink);color:var(--w)}
+.cmp-items-tbl .cmp-item-del{background:none;border:none;color:#ef4444;cursor:pointer;font-size:16px;opacity:.5;transition:opacity .2s;padding:2px}
+.cmp-items-tbl .cmp-item-del:hover{opacity:1}
+
+.cmp-modal-total{display:flex;justify-content:flex-end;align-items:center;gap:12px;padding:12px 24px;border-top:1px solid var(--mute2);background:var(--ink3)}
+.cmp-modal-total span{font-size:13px;color:var(--mute)}
+.cmp-modal-total strong{font-family:'Bebas Neue',cursive;font-size:28px;color:var(--amber);letter-spacing:1px}
+.cmp-modal-ft{padding:14px 24px;border-top:1px solid var(--mute2);display:flex;justify-content:flex-end;gap:8px}
+.cmp-max-w{max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:inline-block;vertical-align:middle}
+
+@media(max-width:600px){.cmp-page{padding:80px 12px 40px}.cmp-modal{width:96%;max-height:92vh}.cmp-modal-b{padding:14px 16px}.cmp-form-row{grid-template-columns:1fr}.cmp-tbl th,.cmp-tbl td{padding:8px 8px;font-size:11px}.cmp-tbl th:nth-child(3),.cmp-tbl td:nth-child(3){display:none}}
+</style>
+</head>
+<body>
+
+<nav class="dm-nav">
+  <a class="dm-logo" href="index.html">
+    <div class="dm-logo-mark">🔧</div>
+    <div class="dm-logo-text">Distrib. e Inv. Mathias<span>Lima, Perú · Est. 2020</span></div>
+  </a>
+  <ul class="dm-nav-links">
+    <li><a href="catalogo.html">📦 Catálogo</a></li>
+    <li><a href="electrico.html">⚡ Eléctrico</a></li>
+    <li><a href="herramienta.html">🔨 Herramientas</a></li>
+    <li><a href="gasfiteria.html">🚿 Gasfitería</a></li>
+    <li><a href="quimicos.html">🧪 Químicos</a></li>
+    <li><a href="construccion.html">🧱 Construcción</a></li>
+    <li><a href="otros.html">🔩 Otros</a></li>
+  </ul>
+  <div class="dm-nav-icons">
+    <button class="dm-nav-btn" id="search-btn" title="Buscar">🔍</button>
+    <button class="dm-nav-btn" id="user-btn" title="Cuenta">👤</button>
+    <button class="dm-nav-btn" id="cart-btn" title="Carrito">🛒<span class="cart-badge">0</span></button>
+  </div>
+</nav>
+
+<div id="search-bar"><input type="text" id="search-input" placeholder="🔍  Buscar productos..."/><div id="search-results"></div></div>
+<div id="user-panel"></div>
+<div id="cart-overlay"></div>
+<div id="cart-panel">
+  <div class="cart-header"><h3>🛒 Carrito</h3><button class="cart-close" onclick="closeCart()">✕</button></div>
+  <div id="cart-body"></div>
+  <div class="cart-footer">
+    <div class="cart-total-row"><span>Total:</span><span id="cart-total">S/ 0.00</span></div>
+    <button class="btn-checkout" onclick="checkout()">Proceder al pago →</button>
+  </div>
+</div>
+
+<div class="cmp-page" id="cmp-page">
+  <div class="cmp-head">
+    <div>
+      <h1>📥 Compras</h1>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="cmp-btn" onclick="openModal()">+ Nueva Compra</button>
+    </div>
+  </div>
+  <div class="cmp-search">
+    <input type="text" id="cmp-f" placeholder="🔍  Buscar por proveedor, documento o nota..." oninput="renderCompras()">
+    <select id="cmp-state-f" onchange="renderCompras()" style="padding:10px 14px;background:var(--ink3);border:1px solid var(--mute2);border-radius:10px;color:var(--w);font-size:13px;outline:none;font-family:'DM Sans',sans-serif;min-width:120px">
+      <option value="">Todos los estados</option>
+      <option value="pendiente">Pendiente</option>
+      <option value="completada">Completada</option>
+      <option value="anulada">Anulada</option>
+    </select>
+  </div>
+  <div id="cmp-list"></div>
+</div>
+
+<div class="cmp-overlay" id="cmp-overlay" onclick="closeModal()"></div>
+<div class="cmp-modal" id="cmp-modal">
+  <div class="cmp-modal-h">
+    <h3 id="cmp-modal-title">📥 Nueva Compra</h3>
+    <button class="cmp-modal-close" onclick="closeModal()">✕</button>
+  </div>
+  <div class="cmp-modal-b" id="cmp-modal-b">
+    <div class="cmp-form-row">
+      <div class="cmp-field">
+        <label>Proveedor</label>
+        <select id="cmp-prov"><option value="">Seleccionar proveedor...</option></select>
+      </div>
+      <div class="cmp-field">
+        <label>Fecha</label>
+        <input type="date" id="cmp-date">
+      </div>
+    </div>
+    <div class="cmp-field">
+      <label>Documento (factura, guía, etc.)</label>
+      <input type="text" id="cmp-doc" placeholder="Opcional">
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:4px">
+      <label style="font-size:11px;font-weight:600;color:var(--mute);text-transform:uppercase;letter-spacing:.5px;font-family:'Space Mono',monospace">Productos</label>
+      <button class="cmp-btn sm sec" onclick="addItemRow()">+ Agregar</button>
+    </div>
+    <table class="cmp-items-tbl" id="cmp-items-tbl">
+      <thead><tr><th style="width:35%">Producto</th><th style="width:18%">Variación</th><th style="width:10%">Cant.</th><th style="width:15%">Precio</th><th style="width:15%">Subtotal</th><th style="width:7%"></th></tr></thead>
+      <tbody id="cmp-items-body"></tbody>
+    </table>
+    <div class="cmp-field">
+      <label>Nota</label>
+      <textarea id="cmp-nota" placeholder="Opcional"></textarea>
+    </div>
+  </div>
+  <div class="cmp-modal-total">
+    <span>Total:</span>
+    <strong id="cmp-modal-total-val">S/ 0.00</strong>
+  </div>
+  <div class="cmp-modal-ft">
+    <button class="cmp-btn sec" onclick="closeModal()">Cancelar</button>
+    <button class="cmp-btn" id="cmp-save-btn" onclick="saveCompra()">💾 Guardar Compra</button>
+  </div>
+</div>
+
+<script src="shared.js"></script>
+<script>
+const user = getUser();
+if (!user || user.type !== 'owner') { window.location.href = 'index.html'; }
+
+let editId = null;
+
+function renderCompras() {
+  const list = document.getElementById('cmp-list');
+  let compras = compGet();
+  const f = (document.getElementById('cmp-f')?.value || '').toLowerCase();
+  const sf = document.getElementById('cmp-state-f')?.value || '';
+  if (f) compras = compras.filter(c => (c.proveedor||'').toLowerCase().includes(f) || (c.documento||'').toLowerCase().includes(f) || (c.nota||'').toLowerCase().includes(f));
+  if (sf) compras = compras.filter(c => c.estado === sf);
+  compras.sort((a,b) => b.fecha.localeCompare(a.fecha));
+  if (!compras.length) {
+    list.innerHTML = '<div class="cmp-empty"><span>📭</span><p>No hay compras registradas</p></div>';
+    return;
+  }
+  const provs = provGet();
+  list.innerHTML = `<table class="cmp-tbl"><thead><tr><th>#</th><th>Fecha</th><th>Proveedor</th><th>Documento</th><th>Items</th><th>Total</th><th>Estado</th><th></th></tr></thead><tbody>${compras.map((c,i) => {
+    const prov = provs.find(p => p.id === c.proveedor);
+    const provName = prov ? prov.nombre : c.proveedor || '—';
+    return `<tr>
+      <td style="font-family:'Space Mono',monospace;color:var(--mute);font-size:11px">${String(i+1).padStart(3,'0')}</td>
+      <td style="font-family:'Space Mono',monospace;font-size:11px;color:var(--mute)">${c.fecha}</td>
+      <td><span class="cmp-max-w">${provName}</span></td>
+      <td style="font-size:11px;color:var(--mute)">${c.documento || '—'}</td>
+      <td style="font-family:'Space Mono',monospace;font-size:11px;color:var(--mute)">${c.items ? c.items.length : 0}</td>
+      <td style="font-family:'Space Mono',monospace;font-weight:700;color:var(--amber)">S/ ${(c.total||0).toFixed(2)}</td>
+      <td><span class="cmp-badge ${c.estado}">${c.estado}</span></td>
+      <td><div class="cmp-actions">
+        <select onchange="cambiarEstado('${c.id}',this.value)" style="padding:4px 6px;background:var(--ink3);border:1px solid var(--mute2);border-radius:5px;color:var(--w);font-size:10px;outline:none;font-family:'DM Sans',sans-serif">
+          <option value="pendiente" ${c.estado==='pendiente'?'selected':''}>Pendiente</option>
+          <option value="completada" ${c.estado==='completada'?'selected':''}>Completada</option>
+          <option value="anulada" ${c.estado==='anulada'?'selected':''}>Anulada</option>
+        </select>
+        <button class="cmp-btn del sm" onclick="delCompra('${c.id}')">🗑️</button>
+      </div></td>
+    </tr>`;
+  }).join('')}</tbody></table>`;
+}
+
+function cambiarEstado(id, estado) {
+  compUpd(id, { estado });
+  showToast('✅ Estado actualizado');
+  renderCompras();
+}
+
+function delCompra(id) {
+  if (!confirm('¿Anular/Eliminar esta compra?')) return;
+  compUpd(id, { estado: 'anulada' });
+  showToast('✅ Compra anulada');
+  renderCompras();
+}
+
+function openModal(data) {
+  editId = data ? data.id : null;
+  document.getElementById('cmp-overlay').classList.add('open');
+  document.getElementById('cmp-modal').classList.add('open');
+  document.getElementById('cmp-modal-title').textContent = data ? '✏️ Editar Compra' : '📥 Nueva Compra';
+  document.getElementById('cmp-save-btn').textContent = data ? '💾 Actualizar' : '💾 Guardar Compra';
+
+  const provSel = document.getElementById('cmp-prov');
+  const provs = provGet();
+  provSel.innerHTML = '<option value="">Seleccionar proveedor...</option>' + provs.map(p => `<option value="${p.id}">${p.nombre}</option>`).join('');
+
+  document.getElementById('cmp-date').value = data ? data.fecha.slice(0,10) : dbToday();
+  document.getElementById('cmp-doc').value = data ? (data.documento||'') : '';
+  document.getElementById('cmp-nota').value = data ? (data.nota||'') : '';
+  if (data) {
+    provSel.value = data.proveedor || '';
+    loadItems(data.items || []);
+  } else {
+    loadItems([]);
+    setTimeout(() => addItemRow(), 100);
+  }
+  calcTotal();
+}
+
+function closeModal() {
+  document.getElementById('cmp-overlay').classList.remove('open');
+  document.getElementById('cmp-modal').classList.remove('open');
+  editId = null;
+}
+
+function loadItems(items) {
+  const body = document.getElementById('cmp-items-body');
+  if (!items.length) { body.innerHTML = ''; return; }
+  body.innerHTML = items.map((item, i) => renderItemRow(item, i)).join('');
+}
+
+let itemCounter = 0;
+
+function renderItemRow(item, idx) {
+  const inv = getInv();
+  itemCounter++;
+  const ci = idx != null ? idx : itemCounter;
+  const prodOptions = '<option value="">Seleccionar...</option>' + inv.map(p => `<option value="${p.id}" data-icon="${p.icon||'📦'}">${p.name}</option>`).join('');
+  return `<tr data-idx="${ci}">
+    <td><select onchange="onProdChange(this,${ci})" class="cmp-prod-sel" data-idx="${ci}">${prodOptions.replace(`value="${item.producto}"`, `value="${item.producto}" selected`)}</select></td>
+    <td><select class="cmp-var-sel" data-idx="${ci}" onchange="onItemChange(${ci})"></select></td>
+    <td><input type="number" min="1" value="${item.cantidad||1}" class="cmp-item-qty" data-idx="${ci}" onchange="onItemChange(${ci})" oninput="onItemChange(${ci})"></td>
+    <td><input type="number" min="0" step="0.01" value="${item.precio||0}" class="cmp-item-price" data-idx="${ci}" onchange="onItemChange(${ci})" oninput="onItemChange(${ci})"></td>
+    <td style="font-family:'Space Mono',monospace;font-weight:700;color:var(--amber);font-size:12px" class="cmp-item-subtotal">S/ ${((item.cantidad||0)*(item.precio||0)).toFixed(2)}</td>
+    <td><button class="cmp-item-del" onclick="delItemRow(this)">✕</button></td>
+  </tr>`;
+}
+
+function addItemRow() {
+  const body = document.getElementById('cmp-items-body');
+  const div = document.createElement('template');
+  div.innerHTML = renderItemRow({ producto:'', variacion:'', cantidad:1, precio:0, subtotal:0 });
+  body.appendChild(div.content);
+  const lastRow = body.lastElementChild;
+  const sel = lastRow.querySelector('.cmp-prod-sel');
+  onProdChange(sel, parseInt(lastRow.dataset.idx));
+  calcTotal();
+}
+
+function delItemRow(btn) {
+  const row = btn.closest('tr');
+  row.remove();
+  calcTotal();
+}
+
+function onProdChange(sel, idx) {
+  const inv = getInv();
+  const prod = inv.find(p => p.id === sel.value);
+  const varSel = sel.closest('tr').querySelector('.cmp-var-sel');
+  varSel.innerHTML = '';
+  if (prod && prod.variations) {
+    varSel.innerHTML = prod.variations.map((v, vi) => `<option value="${v.id}" ${vi===0?'selected':''}>${v.name}</option>`).join('');
+    const priceInput = sel.closest('tr').querySelector('.cmp-item-price');
+    if (prod.variations[0] && prod.variations[0].price > 0) {
+      priceInput.value = prod.variations[0].price;
+    }
+  }
+  onItemChange(idx);
+}
+
+function onItemChange(idx) {
+  const row = document.querySelector(`tr[data-idx="${idx}"]`);
+  if (!row) return;
+  const qty = parseFloat(row.querySelector('.cmp-item-qty').value) || 0;
+  const price = parseFloat(row.querySelector('.cmp-item-price').value) || 0;
+  const sub = qty * price;
+  row.querySelector('.cmp-item-subtotal').textContent = `S/ ${sub.toFixed(2)}`;
+  calcTotal();
+}
+
+function calcTotal() {
+  let total = 0;
+  document.querySelectorAll('.cmp-item-subtotal').forEach(el => {
+    const val = parseFloat(el.textContent.replace('S/','')) || 0;
+    total += val;
+  });
+  document.getElementById('cmp-modal-total-val').textContent = `S/ ${total.toFixed(2)}`;
+}
+
+function saveCompra() {
+  const proveedor = document.getElementById('cmp-prov').value;
+  const fecha = document.getElementById('cmp-date').value;
+  const documento = document.getElementById('cmp-doc').value.trim();
+  const nota = document.getElementById('cmp-nota').value.trim();
+  if (!proveedor) { showToast('⚠️ Selecciona un proveedor'); return; }
+  if (!fecha) { showToast('⚠️ Ingresa la fecha'); return; }
+
+  const rows = document.querySelectorAll('#cmp-items-body tr');
+  const items = [];
+  for (const row of rows) {
+    const prodSel = row.querySelector('.cmp-prod-sel');
+    const varSel = row.querySelector('.cmp-var-sel');
+    const qty = parseFloat(row.querySelector('.cmp-item-qty').value) || 0;
+    const price = parseFloat(row.querySelector('.cmp-item-price').value) || 0;
+    if (!prodSel.value || qty <= 0) continue;
+    items.push({
+      producto: prodSel.value,
+      variacion: varSel.value,
+      cantidad: qty,
+      precio: price,
+      subtotal: qty * price
+    });
+  }
+  if (!items.length) { showToast('⚠️ Agrega al menos un producto'); return; }
+
+  const total = items.reduce((s, it) => s + it.subtotal, 0);
+  const data = { proveedor, fecha, documento, items, total, nota };
+  if (editId) {
+    compUpd(editId, data);
+    showToast('✅ Compra actualizada');
+  } else {
+    compAdd(data);
+    showToast('✅ Compra registrada');
+  }
+  closeModal();
+  renderCompras();
+}
+
+renderCompras();
+</script>
+</body>
+</html>

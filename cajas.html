@@ -1,0 +1,253 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Cajas – Distribuidora Mathias</title><link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="shared.css"><style>body{cursor:auto}
+.caj-page{padding:96px 48px 60px;max-width:1200px;margin:0 auto}
+.caj-head{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:24px}
+.caj-head h1{font-family:'Bebas Neue',cursive;font-size:36px;color:var(--w);letter-spacing:1px;margin:0}
+.caj-head p{font-size:13px;color:var(--mute);margin:4px 0 0}
+.caj-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:28px}
+.caj-stat{background:var(--ink2);border:1px solid var(--mute2);border-radius:14px;padding:20px 24px}
+.caj-stat-label{font-size:11px;color:var(--mute);text-transform:uppercase;letter-spacing:1px;font-family:'Space Mono',monospace}
+.caj-stat-val{font-family:'Bebas Neue',cursive;font-size:26px;letter-spacing:1px;margin-top:4px}
+.caj-stat-val.abierta{color:#22c55e}.caj-stat-val.ingreso{color:var(--amber)}.caj-stat-val.egreso{color:#ef4444}
+.caj-btn{background:var(--ink3);border:1px solid var(--amber);color:var(--amber);padding:9px 18px;border-radius:8px;cursor:pointer;font-weight:600;font-size:13px;transition:all .2s;font-family:'DM Sans',sans-serif}
+.caj-btn:hover{background:var(--amber);color:var(--ink)}
+.caj-btn-primary{background:var(--amber);color:var(--ink);border-color:var(--amber)}
+.caj-btn-primary:hover{background:var(--amber2);border-color:var(--amber2)}
+.caj-btn-danger{border-color:#ef4444;color:#ef4444}
+.caj-btn-danger:hover{background:#ef4444;color:#fff}
+.caj-table-wrap{background:var(--ink2);border:1px solid var(--mute2);border-radius:14px;overflow:hidden;margin-bottom:24px}
+.caj-table{width:100%;border-collapse:collapse;font-size:13px}
+.caj-table th{text-align:left;padding:14px 16px;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--mute);background:var(--ink3);border-bottom:1px solid var(--mute2)}
+.caj-table td{padding:12px 16px;border-bottom:1px solid var(--mute3);color:var(--w)}
+.caj-table tr:last-child td{border-bottom:none}
+.caj-table tr{cursor:pointer;transition:background .15s}
+.caj-table tr:hover{background:var(--mute3)}
+.caj-table-row-open td:first-child{position:relative;padding-left:20px}
+.caj-table-row-open td:first-child::before{content:'';position:absolute;left:8px;top:50%;transform:translateY(-50%);width:6px;height:6px;border-radius:50%;background:#22c55e}
+.caj-expanded{padding:16px 16px 16px 48px;background:var(--ink3);border-bottom:1px solid var(--mute2)}
+.caj-expanded-inner{background:var(--ink2);border:1px solid var(--mute2);border-radius:10px;padding:16px}
+.caj-expanded h4{font-family:'Bebas Neue',cursive;font-size:18px;color:var(--w);margin:0 0 10px;letter-spacing:.5px}
+.caj-expanded table{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:12px}
+.caj-expanded table th{text-align:left;padding:6px 8px;font-family:'Space Mono',monospace;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--mute);border-bottom:1px solid var(--mute2)}
+.caj-expanded table td{padding:6px 8px;border-bottom:1px solid var(--mute3);color:var(--w)}
+.caj-expanded .caj-mov-form{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:10px;padding-top:10px;border-top:1px solid var(--mute2)}
+.caj-expanded .caj-mov-form input,.caj-expanded .caj-mov-form select{padding:7px 12px;background:var(--ink);border:1px solid var(--mute2);border-radius:6px;font-size:12px;color:var(--w);outline:none;font-family:'DM Sans',sans-serif}
+.caj-expanded .caj-mov-form input:focus,.caj-expanded .caj-mov-form select:focus{border-color:var(--amber)}
+.caj-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);z-index:800;align-items:center;justify-content:center}
+.caj-modal-overlay.open{display:flex}
+.caj-modal{background:var(--ink2);border:1px solid var(--mute2);border-radius:16px;padding:28px;width:100%;max-width:420px}
+.caj-modal h3{font-family:'Bebas Neue',cursive;font-size:24px;color:var(--amber);letter-spacing:1px;margin:0 0 16px}
+.caj-modal-close{float:right;background:none;border:none;color:var(--mute);font-size:20px;cursor:pointer}
+.caj-modal-close:hover{color:var(--w)}
+.caj-form-group{margin-bottom:12px}
+.caj-form-group label{display:block;font-size:11px;color:var(--mute);margin-bottom:4px;font-family:'Space Mono',monospace;letter-spacing:.5px;text-transform:uppercase}
+.caj-form-group input,.caj-form-group select{padding:9px 14px;background:var(--ink3);border:1px solid var(--mute2);border-radius:6px;font-size:13px;color:var(--w);outline:none;width:100%;font-family:'DM Sans',sans-serif}
+.caj-form-group input:focus,.caj-form-group select:focus{border-color:var(--amber)}
+@media(max-width:600px){.caj-page{padding:80px 12px 40px}.caj-stats{grid-template-columns:1fr}.caj-stat{padding:14px 18px}.caj-stat-val{font-size:22px}.caj-table th,.caj-table td{padding:10px}.caj-expanded{padding:12px 12px 12px 16px}.caj-modal{padding:20px;max-width:96vw}}
+</style></head><body>
+
+<nav class="dm-nav">
+  <a class="dm-logo" href="index.html">
+    <div class="dm-logo-mark">🔧</div>
+    <div class="dm-logo-text">Distrib. e Inv. Mathias<span>Lima, Perú · Est. 2020</span></div>
+  </a>
+  <ul class="dm-nav-links">
+    <li><a href="catalogo.html">📦 Catálogo</a></li>
+    <li><a href="electrico.html">⚡ Eléctrico</a></li>
+    <li><a href="herramienta.html">🔨 Herramientas</a></li>
+    <li><a href="gasfiteria.html">🚿 Gasfitería</a></li>
+    <li><a href="quimicos.html">🧪 Químicos</a></li>
+    <li><a href="construccion.html">🧱 Construcción</a></li>
+    <li><a href="otros.html">🔩 Otros</a></li>
+  </ul>
+  <div class="dm-nav-icons">
+    <button class="dm-nav-btn" id="search-btn" title="Buscar">🔍</button>
+    <button class="dm-nav-btn" id="user-btn" title="Cuenta">👤</button>
+    <button class="dm-nav-btn" id="cart-btn" title="Carrito">🛒<span class="cart-badge">0</span></button>
+  </div>
+</nav>
+
+<div id="search-bar"><input type="text" id="search-input" placeholder="🔍  Buscar productos..."/><div id="search-results"></div></div>
+<div id="user-panel"></div>
+<div id="cart-overlay"></div>
+<div id="cart-panel">
+  <div class="cart-header"><h3>🛒 Carrito</h3><button class="cart-close" onclick="closeCart()">✕</button></div>
+  <div id="cart-body"></div>
+  <div class="cart-footer">
+    <div class="cart-total-row"><span>Total:</span><span id="cart-total">S/ 0.00</span></div>
+    <button class="btn-checkout" onclick="checkout()">Proceder al pago →</button>
+  </div>
+</div>
+
+<div class="caj-page">
+  <div class="caj-head">
+    <div>
+      <h1>🧾 Cajas</h1>
+      <p>Apertura, cierre y movimientos de caja</p>
+    </div>
+    <button class="caj-btn caj-btn-primary" onclick="showAbrirCaja()" id="btnAbrirCaja">+ Abrir Caja</button>
+  </div>
+
+  <div class="caj-stats" id="cajStats">
+    <div class="caj-stat"><div class="caj-stat-label">Caja Actual</div><div class="caj-stat-val abierta" id="statActual">—</div></div>
+    <div class="caj-stat"><div class="caj-stat-label">Ingresos Hoy</div><div class="caj-stat-val ingreso" id="statIngresos">S/ 0.00</div></div>
+    <div class="caj-stat"><div class="caj-stat-label">Egresos Hoy</div><div class="caj-stat-val egreso" id="statEgresos">S/ 0.00</div></div>
+  </div>
+
+  <div class="caj-table-wrap">
+    <table class="caj-table">
+      <thead><tr>
+        <th>Apertura</th><th>Cierre</th><th>Saldo Inicial</th><th>Saldo Actual</th><th>Estado</th><th>Movimientos</th>
+      </tr></thead>
+      <tbody id="cajTbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<div class="caj-modal-overlay" id="cajModal"><div class="caj-modal">
+  <button class="caj-modal-close" onclick="closeCajModal()">✕</button>
+  <h3 id="cajModalTitle">Abrir Caja</h3>
+  <div id="cajModalBody"></div>
+</div></div>
+
+<script src="shared.js"></script>
+<script>
+const user = getUser();
+if (!user || user.type !== 'owner') { window.location.href = 'index.html'; }
+
+function renderCajas() {
+  const cajas = cajasGet().sort((a,b) => b.apertura.localeCompare(a.apertura));
+  const today = dbToday();
+  let abierta = null;
+  let ingHoy = 0, egHoy = 0;
+
+  cajas.forEach(c => {
+    if (c.estado === 'abierta') { abierta = c; }
+    (c.movimientos||[]).forEach(m => {
+      if (m.fecha && m.fecha.startsWith(today)) {
+        if (m.tipo === 'ingreso') ingHoy += m.monto;
+        else egHoy += m.monto;
+      }
+    });
+  });
+
+  document.getElementById('statActual').textContent = abierta ? 'S/ ' + (abierta.saldo||0).toFixed(2) : '🔴 Cerrada';
+  document.getElementById('statIngresos').textContent = 'S/ ' + ingHoy.toFixed(2);
+  document.getElementById('statEgresos').textContent = 'S/ ' + egHoy.toFixed(2);
+  document.getElementById('btnAbrirCaja').style.display = abierta ? 'none' : 'inline-block';
+
+  const tbody = document.getElementById('cajTbody');
+  if (!cajas.length) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:40px;color:var(--mute)">No hay sesiones de caja</td></tr>';
+    return;
+  }
+  tbody.innerHTML = cajas.map(c => {
+    const cls = c.estado === 'abierta' ? 'caj-table-row-open' : '';
+    const badgeClass = c.estado === 'abierta' ? 'cred-badge' : 'cred-badge';
+    const badgeStyle = c.estado === 'abierta' ? 'color:#22c55e;background:rgba(34,197,94,.15)' : 'color:var(--mute);background:var(--mute3)';
+    return `<tr class="${cls}" onclick="toggleCajExpand('${c.id}')">
+      <td>${c.apertura}</td>
+      <td>${c.cierre || '—'}</td>
+      <td>S/ ${(c.saldoInicial||0).toFixed(2)}</td>
+      <td><strong>S/ ${(c.saldo||0).toFixed(2)}</strong></td>
+      <td><span class="cred-badge" style="${badgeStyle}">${c.estado.charAt(0).toUpperCase()+c.estado.slice(1)}</span></td>
+      <td>${(c.movimientos||[]).length}</td>
+    </tr>
+    <tr id="cajExpand-${c.id}" style="display:none"><td colspan="6"><div class="caj-expanded">${renderCajExpand(c)}</div></td></tr>`;
+  }).join('');
+}
+
+function renderCajExpand(c) {
+  let html = '<div class="caj-expanded-inner">';
+  if (c.estado === 'abierta') {
+    html += `<button class="caj-btn caj-btn-danger" onclick="cerrarCaja('${c.id}')" style="float:right">🔒 Cerrar Caja</button>`;
+  }
+
+  html += '<h4>📋 Movimientos</h4>';
+  const movs = c.movimientos || [];
+  if (!movs.length) {
+    html += '<p style="color:var(--mute);font-size:12px;margin-bottom:12px">Sin movimientos</p>';
+  } else {
+    html += '<table><thead><tr><th>Fecha</th><th>Tipo</th><th>Monto</th><th>Concepto</th><th>Método</th></tr></thead><tbody>';
+    movs.forEach(m => {
+      const tColor = m.tipo === 'ingreso' ? 'color:#22c55e' : 'color:#ef4444';
+      html += `<tr><td>${m.fecha}</td><td style="${tColor};font-weight:700">${m.tipo.charAt(0).toUpperCase()+m.tipo.slice(1)}</td><td>S/ ${m.monto.toFixed(2)}</td><td>${m.concepto||'—'}</td><td>${m.metodo||'—'}</td></tr>`;
+    });
+    html += '</tbody></table>';
+  }
+
+  if (c.estado === 'abierta') {
+    html += `<div class="caj-mov-form">
+      <select id="movTipo-${c.id}"><option value="ingreso">💰 Ingreso</option><option value="egreso">💸 Egreso</option></select>
+      <input type="number" id="movMonto-${c.id}" placeholder="Monto" step="0.01" min="0.01" style="width:90px">
+      <input type="text" id="movConcepto-${c.id}" placeholder="Concepto" style="width:130px">
+      <select id="movMetodo-${c.id}"><option value="Efectivo">Efectivo</option><option value="Yape">Yape</option><option value="Transferencia">Transferencia</option><option value="Tarjeta">Tarjeta</option></select>
+      <button class="caj-btn caj-btn-primary" onclick="registrarMov('${c.id}')">+ Registrar</button>
+    </div>`;
+  } else {
+    html += `<div style="background:var(--ink);border-radius:8px;padding:12px;margin-top:8px">
+      <p style="font-size:12px;color:var(--mute)"><strong>Resumen</strong></p>
+      <p style="font-size:12px;color:var(--w)">Apertura: ${c.apertura}</p>
+      <p style="font-size:12px;color:var(--w)">Cierre: ${c.cierre}</p>
+      <p style="font-size:12px;color:var(--w)">Saldo Inicial: S/ ${(c.saldoInicial||0).toFixed(2)}</p>
+      <p style="font-size:12px;color:var(--amber);font-weight:700">Saldo Final: S/ ${(c.saldo||0).toFixed(2)}</p>
+    </div>`;
+  }
+
+  html += '</div></div>';
+  return html;
+}
+
+function toggleCajExpand(id) {
+  const row = document.getElementById('cajExpand-' + id);
+  if (!row) return;
+  const isOpen = row.style.display !== 'none';
+  document.querySelectorAll('[id^="cajExpand-"]').forEach(r => r.style.display = 'none');
+  if (!isOpen) row.style.display = 'table-row';
+}
+
+function showAbrirCaja() {
+  document.getElementById('cajModalTitle').textContent = 'Abrir Caja';
+  document.getElementById('cajModalBody').innerHTML = `
+    <div class="caj-form-group">
+      <label>Saldo Inicial</label>
+      <input type="number" id="acSaldoInicial" value="0" step="0.01" min="0">
+    </div>
+    <button class="caj-btn caj-btn-primary" onclick="abrirCaja()" style="width:100%;margin-top:8px">✅ Abrir Caja</button>
+  `;
+  document.getElementById('cajModal').classList.add('open');
+}
+
+function abrirCaja() {
+  const saldoInicial = parseFloat(document.getElementById('acSaldoInicial').value) || 0;
+  cajasAbrir({ saldoInicial, saldo: saldoInicial });
+  showToast('✅ Caja abierta con S/ ' + saldoInicial.toFixed(2));
+  closeCajModal();
+  renderCajas();
+}
+
+function cerrarCaja(id) {
+  if (!confirm('¿Cerrar esta caja?')) return;
+  cajasCerrar(id);
+  showToast('🔒 Caja cerrada');
+  renderCajas();
+}
+
+function registrarMov(id) {
+  const tipo = document.getElementById('movTipo-' + id).value;
+  const monto = parseFloat(document.getElementById('movMonto-' + id).value);
+  const concepto = document.getElementById('movConcepto-' + id).value.trim();
+  const metodo = document.getElementById('movMetodo-' + id).value;
+  if (!monto || monto <= 0) { showToast('⚠️ Ingresa un monto válido'); return; }
+  if (!concepto) { showToast('⚠️ Ingresa un concepto'); return; }
+  cajasMovimiento(id, { tipo, monto, concepto, metodo });
+  showToast('✅ Movimiento registrado: ' + (tipo === 'ingreso' ? '💰 +' : '💸 -') + 'S/ ' + monto.toFixed(2));
+  renderCajas();
+}
+
+function closeCajModal() { document.getElementById('cajModal').classList.remove('open'); }
+
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(renderCajas, 100);
+  document.getElementById('cajModal').addEventListener('click', e => { if (e.target === document.getElementById('cajModal')) closeCajModal(); });
+});
+</script></body></html>

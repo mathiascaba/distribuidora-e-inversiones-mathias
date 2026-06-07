@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ventas – Distribuidora Mathias</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<style>body{cursor:auto}
+.ven-page{padding:96px 48px 60px;max-width:1100px;margin:0 auto}
+.ven-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:10px}
+.ven-head h1{font-family:'Bebas Neue',cursive;font-size:32px;color:var(--w);letter-spacing:1px;margin:0}
+.ven-btn{background:var(--amber);color:var(--ink);border:none;padding:8px 18px;border-radius:8px;font-weight:700;font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;transition:background .2s}
+.ven-btn:hover{background:var(--amber2)}
+.ven-btn.sec{background:transparent;border:1px solid var(--mute2);color:var(--w)}
+.ven-btn.sec:hover{background:var(--mute2)}
+.ven-btn.del{background:rgba(220,38,38,.1);color:#ef4444;border:1px solid rgba(220,38,38,.3);padding:4px 10px;font-size:11px}
+.ven-btn.del:hover{background:rgba(220,38,38,.2)}
+.ven-btn.sm{font-size:11px;padding:5px 12px}
+.ven-tabs{display:flex;gap:4px;margin-bottom:20px;border-bottom:1px solid var(--mute2);padding-bottom:2px;flex-wrap:wrap}
+.ven-tab{padding:8px 20px;border:none;background:none;cursor:pointer;font-size:13px;font-weight:600;color:var(--mute);font-family:'DM Sans',sans-serif;border-radius:8px 8px 0 0;transition:all .18s}
+.ven-tab:hover{color:var(--w);background:var(--mute3)}
+.ven-tab.active{color:var(--amber);background:rgba(245,158,11,.08);border-bottom:2px solid var(--amber);margin-bottom:-3px}
+.ven-search{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+.ven-search input{flex:1;min-width:180px;padding:10px 14px;background:var(--ink3);border:1px solid var(--mute2);border-radius:10px;color:var(--w);font-size:14px;outline:none;font-family:'DM Sans',sans-serif;transition:border-color .2s}
+.ven-search input:focus{border-color:var(--amber)}
+.ven-tbl{width:100%;border-collapse:collapse;background:var(--ink2);border-radius:14px;overflow:hidden;border:1px solid var(--mute2)}
+.ven-tbl th{padding:12px 12px;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--mute);text-align:left;background:var(--ink3);border-bottom:1px solid var(--mute2)}
+.ven-tbl td{padding:10px 12px;font-size:13px;color:var(--w);border-bottom:1px solid var(--mute2);vertical-align:middle}
+.ven-tbl tr:last-child td{border-bottom:none}
+.ven-tbl tr:hover td{background:rgba(255,255,255,.03)}
+.ven-badge{display:inline-block;padding:2px 10px;border-radius:20px;font-size:10px;font-weight:700;font-family:'Space Mono',monospace;letter-spacing:.5px;text-transform:uppercase}
+.ven-badge.completada{background:rgba(132,204,22,.15);color:var(--lime)}
+.ven-badge.anulada{background:rgba(239,68,68,.15);color:#ef4444}
+.ven-badge.boleta{background:rgba(59,130,246,.15);color:#60a5fa}
+.ven-badge.factura{background:rgba(245,158,11,.15);color:var(--amber)}
+.ven-badge.cotizacion{background:rgba(168,85,247,.15);color:#a78bfa}
+.ven-actions{display:flex;gap:4px;flex-wrap:wrap;align-items:center}
+.ven-empty{text-align:center;padding:60px 20px;color:var(--mute)}
+.ven-empty span{font-size:56px;display:block;margin-bottom:12px}
+.ven-empty p{font-size:14px}
+.ven-max-w{max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:inline-block;vertical-align:middle}
+
+/* ── MODAL ── */
+.ven-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:800;backdrop-filter:blur(4px)}
+.ven-overlay.open{display:block}
+.ven-modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:90%;max-width:740px;max-height:90vh;background:var(--ink2);border:1px solid var(--mute2);border-radius:18px;z-index:801;display:none;flex-direction:column;overflow:hidden}
+.ven-modal.open{display:flex}
+.ven-modal-h{padding:20px 24px;border-bottom:1px solid var(--mute2);display:flex;justify-content:space-between;align-items:center}
+.ven-modal-h h3{font-family:'Bebas Neue',cursive;font-size:22px;color:var(--amber);letter-spacing:1px;margin:0}
+.ven-modal-close{background:none;border:none;color:var(--mute);font-size:20px;cursor:pointer;transition:color .2s;font-family:'DM Sans',sans-serif}
+.ven-modal-close:hover{color:var(--w)}
+.ven-modal-b{padding:20px 24px;overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:14px}
+.ven-form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ven-form-row.three{grid-template-columns:1fr 1fr 1fr}
+.ven-field{display:flex;flex-direction:column;gap:4px}
+.ven-field label{font-size:11px;font-weight:600;color:var(--mute);text-transform:uppercase;letter-spacing:.5px;font-family:'Space Mono',monospace}
+.ven-field input,.ven-field select,.ven-field textarea{padding:9px 12px;background:var(--ink3);border:1px solid var(--mute2);border-radius:7px;color:var(--w);font-size:13px;outline:none;font-family:'DM Sans',sans-serif;transition:border-color .2s}
+.ven-field input:focus,.ven-field select:focus,.ven-field textarea:focus{border-color:var(--amber)}
+.ven-field textarea{resize:vertical;min-height:50px}
+.ven-field select option{background:var(--ink);color:var(--w)}
+
+/* ── VENTA ITEMS TABLE ── */
+.ven-items-tbl{width:100%;border-collapse:collapse;margin-top:4px}
+.ven-items-tbl th{padding:6px 8px;font-size:9px;font-family:'Space Mono',monospace;letter-spacing:1px;text-transform:uppercase;color:var(--mute);text-align:left;border-bottom:1px solid var(--mute2)}
+.ven-items-tbl td{padding:6px 8px;font-size:12px;color:var(--w);border-bottom:1px solid var(--mute2);vertical-align:middle}
+.ven-items-tbl select,.ven-items-tbl input{width:100%;padding:5px 6px;background:var(--ink3);border:1px solid var(--mute2);border-radius:5px;color:var(--w);font-size:12px;outline:none;font-family:'DM Sans',sans-serif;box-sizing:border-box;transition:border-color .2s}
+.ven-items-tbl select:focus,.ven-items-tbl input:focus{border-color:var(--amber)}
+.ven-items-tbl select option{background:var(--ink);color:var(--w)}
+.ven-items-tbl .ven-item-del{background:none;border:none;color:#ef4444;cursor:pointer;font-size:16px;opacity:.5;transition:opacity .2s;padding:2px}
+.ven-items-tbl .ven-item-del:hover{opacity:1}
+
+.ven-totals{padding:12px 24px;border-top:1px solid var(--mute2);background:var(--ink3);display:flex;flex-direction:column;gap:4px;align-items:flex-end}
+.ven-totals .vt-row{display:flex;justify-content:flex-end;align-items:center;gap:16px}
+.ven-totals .vt-row span{font-size:12px;color:var(--mute)}
+.ven-totals .vt-row strong{font-family:'Bebas Neue',cursive;font-size:26px;color:var(--amber);letter-spacing:1px;min-width:100px;text-align:right}
+.ven-totals .vt-row .vt-label{font-size:12px;color:var(--mute);text-transform:uppercase;letter-spacing:.5px;font-family:'Space Mono',monospace}
+.ven-totals .vt-row .vt-line{border-top:1px solid var(--mute2);width:100%;margin:4px 0}
+.ven-modal-ft{padding:14px 24px;border-top:1px solid var(--mute2);display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap}
+
+/* ── PRINT VIEW ── */
+.ven-print{display:none}
+@media print{body *{visibility:hidden}.ven-print,.ven-print *{visibility:visible}.ven-print{position:fixed;top:0;left:0;right:0;display:block;padding:40px;background:#fff;color:#000;font-size:14px;z-index:9999}.ven-print h2{font-size:28px;margin-bottom:8px}.ven-print table{width:100%;border-collapse:collapse;margin:12px 0}.ven-print th,.ven-print td{border:1px solid #ddd;padding:8px;text-align:left;font-size:12px}}
+
+@media(max-width:600px){.ven-page{padding:80px 12px 40px}.ven-modal{width:96%;max-height:92vh}.ven-modal-b{padding:14px 16px}.ven-form-row{grid-template-columns:1fr}.ven-form-row.three{grid-template-columns:1fr}.ven-tbl th,.ven-tbl td{padding:8px 8px;font-size:11px}.ven-tbl th:nth-child(5),.ven-tbl td:nth-child(5){display:none}}
+</style>
+</head>
+<body>
+
+<nav class="dm-nav">
+  <a class="dm-logo" href="index.html">
+    <div class="dm-logo-mark">🔧</div>
+    <div class="dm-logo-text">Distrib. e Inv. Mathias<span>Lima, Perú · Est. 2020</span></div>
+  </a>
+  <ul class="dm-nav-links">
+    <li><a href="catalogo.html">📦 Catálogo</a></li>
+    <li><a href="electrico.html">⚡ Eléctrico</a></li>
+    <li><a href="herramienta.html">🔨 Herramientas</a></li>
+    <li><a href="gasfiteria.html">🚿 Gasfitería</a></li>
+    <li><a href="quimicos.html">🧪 Químicos</a></li>
+    <li><a href="construccion.html">🧱 Construcción</a></li>
+    <li><a href="otros.html">🔩 Otros</a></li>
+  </ul>
+  <div class="dm-nav-icons">
+    <button class="dm-nav-btn" id="search-btn" title="Buscar">🔍</button>
+    <button class="dm-nav-btn" id="user-btn" title="Cuenta">👤</button>
+    <button class="dm-nav-btn" id="cart-btn" title="Carrito">🛒<span class="cart-badge">0</span></button>
+  </div>
+</nav>
+
+<div id="search-bar"><input type="text" id="search-input" placeholder="🔍  Buscar productos..."/><div id="search-results"></div></div>
+<div id="user-panel"></div>
+<div id="cart-overlay"></div>
+<div id="cart-panel">
+  <div class="cart-header"><h3>🛒 Carrito</h3><button class="cart-close" onclick="closeCart()">✕</button></div>
+  <div id="cart-body"></div>
+  <div class="cart-footer">
+    <div class="cart-total-row"><span>Total:</span><span id="cart-total">S/ 0.00</span></div>
+    <button class="btn-checkout" onclick="checkout()">Proceder al pago →</button>
+  </div>
+</div>
+
+<div class="ven-page" id="ven-page">
+  <div class="ven-head">
+    <div>
+      <h1>📋 Ventas</h1>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="ven-btn" onclick="openVentaModal()">+ Nueva Venta</button>
+    </div>
+  </div>
+  <div class="ven-tabs" id="ven-tabs">
+    <button class="ven-tab active" data-tab="facturas" onclick="switchTab('facturas')">📄 Facturas</button>
+    <button class="ven-tab" data-tab="boletas" onclick="switchTab('boletas')">🧾 Boletas</button>
+    <button class="ven-tab" data-tab="cotizaciones" onclick="switchTab('cotizaciones')">📝 Cotizaciones</button>
+    <button class="ven-tab" data-tab="historial" onclick="switchTab('historial')">📋 Historial</button>
+  </div>
+  <div id="ven-content"></div>
+</div>
+
+<div class="ven-overlay" id="ven-overlay" onclick="closeVentaModal()"></div>
+<div class="ven-modal" id="ven-modal">
+  <div class="ven-modal-h">
+    <h3 id="ven-modal-title">📋 Nueva Venta</h3>
+    <button class="ven-modal-close" onclick="closeVentaModal()">✕</button>
+  </div>
+  <div class="ven-modal-b" id="ven-modal-b">
+    <div class="ven-form-row three">
+      <div class="ven-field">
+        <label>Cliente</label>
+        <select id="ven-cli"><option value="general">Cliente General</option></select>
+      </div>
+      <div class="ven-field">
+        <label>Fecha</label>
+        <input type="date" id="ven-date">
+      </div>
+      <div class="ven-field">
+        <label>Tipo</label>
+        <select id="ven-tipo" onchange="updateDocLabel()"><option value="boleta">Boleta</option><option value="factura">Factura</option><option value="cotizacion">Cotización</option></select>
+      </div>
+    </div>
+    <div class="ven-form-row">
+      <div class="ven-field">
+        <label id="ven-doc-label">DNI</label>
+        <input type="text" id="ven-doc" placeholder="Nro. de DNI" onblur="lookupDocument()">
+        <input type="hidden" id="ven-doc-name">
+        <div id="ven-doc-result" style="font-size:11px;color:var(--mute);min-height:16px;margin-top:2px"></div>
+      </div>
+      <div class="ven-field">
+        <label>Método de Pago</label>
+        <select id="ven-pago"><option value="efectivo">Efectivo</option><option value="yape">Yape</option><option value="transferencia">Transferencia</option><option value="credito">Crédito</option></select>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:4px">
+      <label style="font-size:11px;font-weight:600;color:var(--mute);text-transform:uppercase;letter-spacing:.5px;font-family:'Space Mono',monospace">Productos</label>
+      <button class="ven-btn sm sec" onclick="addVentaItemRow()">+ Agregar</button>
+    </div>
+    <table class="ven-items-tbl" id="ven-items-tbl">
+      <thead><tr><th style="width:32%">Producto</th><th style="width:18%">Variación</th><th style="width:10%">Cant.</th><th style="width:15%">Precio</th><th style="width:15%">Subtotal</th><th style="width:7%"></th></tr></thead>
+      <tbody id="ven-items-body"></tbody>
+    </table>
+    <div class="ven-field">
+      <label>Nota</label>
+      <textarea id="ven-nota" placeholder="Opcional"></textarea>
+    </div>
+  </div>
+  <div class="ven-totals">
+    <div class="vt-row"><span class="vt-label">Subtotal</span><strong id="ven-subtotal" style="font-size:20px">S/ 0.00</strong></div>
+    <div class="vt-row"><span class="vt-label">IGV (18%)</span><strong id="ven-igv" style="font-size:20px">S/ 0.00</strong></div>
+    <div class="vt-row" style="border-top:1px solid var(--mute2);padding-top:4px"><span class="vt-label">Total</span><strong id="ven-total" style="font-size:28px">S/ 0.00</strong></div>
+  </div>
+  <div class="ven-modal-ft">
+    <button class="ven-btn sec" onclick="closeVentaModal()">Cancelar</button>
+    <button class="ven-btn sec" id="ven-print-btn" onclick="printVenta()" style="display:none">🖨️ Imprimir</button>
+    <button class="ven-btn" id="ven-save-btn" onclick="saveVenta()">💾 Registrar Venta</button>
+  </div>
+</div>
+
+<div class="ven-print" id="ven-print"></div>
+
+<script src="shared.js"></script>
+<script>
+const user = getUser();
+if (!user || user.type !== 'owner') { window.location.href = 'index.html'; }
+
+let currentTab = 'facturas';
+let ventaEditId = null;
+
+const PROXY_URL = '/.netlify/functions/peruapi';
+
+function lookupDocument() {
+  const doc = document.getElementById('ven-doc').value.trim();
+  const tipo = document.getElementById('ven-tipo').value;
+  const resultEl = document.getElementById('ven-doc-result');
+  resultEl.textContent = '';
+
+  if (tipo === 'boleta' && doc.length === 8) {
+    resultEl.textContent = '⏳ Consultando DNI...';
+    fetch(PROXY_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({dni:doc}) })
+      .then(r => r.text().then(t => ({ status: r.status, text: t })))
+      .then(res => {
+        try {
+          const d = JSON.parse(res.text);
+          if (d.success) {
+            resultEl.innerHTML = `✅ <strong>${d.data.nombre_completo}</strong>`;
+            document.getElementById('ven-doc-name').value = d.data.nombre_completo;
+          } else {
+            resultEl.textContent = '⚠️ ' + (d.message || 'No se encontró el DNI');
+            document.getElementById('ven-doc-name').value = '';
+          }
+        } catch(e) {
+          resultEl.textContent = `⚠️ Respuesta (${res.status}): ${res.text.slice(0,100)}`;
+        }
+      })
+      .catch(e => { resultEl.textContent = `⚠️ Error: ${e.message}`; });
+  } else if (tipo === 'factura' && doc.length === 11) {
+    resultEl.textContent = '⏳ Consultando RUC...';
+    fetch(PROXY_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ruc:doc}) })
+      .then(r => r.text().then(t => ({ status: r.status, text: t })))
+      .then(res => {
+        try {
+          const d = JSON.parse(res.text);
+          if (d.success) {
+            resultEl.innerHTML = `✅ <strong>${d.data.nombre_o_razon_social}</strong>`;
+            document.getElementById('ven-doc-name').value = d.data.nombre_o_razon_social;
+          } else {
+            resultEl.textContent = '⚠️ ' + (d.message || 'No se encontró el RUC');
+            document.getElementById('ven-doc-name').value = '';
+          }
+        } catch(e) {
+          resultEl.textContent = `⚠️ Respuesta (${res.status}): ${res.text.slice(0,100)}`;
+        }
+      })
+      .catch(e => { resultEl.textContent = `⚠️ Error: ${e.message}`; });
+  }
+}
+
+function switchTab(tab) {
+  currentTab = tab;
+  document.querySelectorAll('.ven-tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
+  renderVentas();
+}
+
+function renderVentas() {
+  const c = document.getElementById('ven-content');
+  let ventas = ventasGet();
+  ventas.sort((a,b) => b.fecha.localeCompare(a.fecha));
+
+  if (currentTab === 'facturas') {
+    ventas = ventas.filter(v => v.tipo === 'factura');
+    renderTabla(c, ventas);
+  } else if (currentTab === 'boletas') {
+    ventas = ventas.filter(v => v.tipo === 'boleta');
+    renderTabla(c, ventas);
+  } else if (currentTab === 'cotizaciones') {
+    ventas = ventas.filter(v => v.tipo === 'cotizacion');
+    renderTabla(c, ventas);
+  } else {
+    const sf = (document.getElementById('ven-hist-f')?.value || '').toLowerCase();
+    if (sf) ventas = ventas.filter(v => (v.cliente||'').toLowerCase().includes(sf) || (v.documento||'').toLowerCase().includes(sf) || (v.nota||'').toLowerCase().includes(sf));
+    c.innerHTML = `
+      <div class="ven-search"><input type="text" id="ven-hist-f" placeholder="🔍  Buscar en historial..." oninput="renderVentas()" value="${sf}"></div>
+      <div id="ven-hist-list"></div>`;
+    renderTabla(document.getElementById('ven-hist-list'), ventas);
+  }
+}
+
+function renderTabla(container, ventas) {
+  if (!container) return;
+  if (!ventas.length) {
+    container.innerHTML = '<div class="ven-empty"><span>📭</span><p>No hay ventas registradas</p></div>';
+    return;
+  }
+  const cfg = cfgGet();
+  const igt = (cfg.igv || 18) / 100;
+  container.innerHTML = `<table class="ven-tbl"><thead><tr><th>#</th><th>Fecha</th><th>Cliente</th><th>Documento</th><th>Items</th><th>Total</th><th>Pago</th><th>Estado</th><th></th></tr></thead><tbody>${ventas.map((v,i) => {
+    const totalConIgv = v.total || 0;
+    return `<tr>
+      <td style="font-family:'Space Mono',monospace;color:var(--mute);font-size:11px">${v.id ? v.id.slice(-5) : String(i+1)}</td>
+      <td style="font-family:'Space Mono',monospace;font-size:11px;color:var(--mute)">${v.fecha}</td>
+      <td><span class="ven-max-w">${v.cliente === 'general' ? 'Cliente General' : v.cliente || '—'}</span></td>
+      <td style="font-size:11px;color:var(--mute)">${v.documento || '—'}</td>
+      <td style="font-family:'Space Mono',monospace;font-size:11px;color:var(--mute)">${v.items ? v.items.length : 0}</td>
+      <td style="font-family:'Space Mono',monospace;font-weight:700;color:var(--amber)">S/ ${totalConIgv.toFixed(2)}</td>
+      <td><span class="ven-badge" style="background:rgba(255,255,255,.06);color:var(--mute);font-size:9px">${v.metodoPago || '—'}</span></td>
+      <td><span class="ven-badge ${v.estado}">${v.estado}</span></td>
+      <td><div class="ven-actions">
+        <button class="ven-btn sm sec" onclick="printExistingVenta('${v.id}')" title="Imprimir">🖨️</button>
+        <select onchange="cambiarEstadoVenta('${v.id}',this.value)" style="padding:4px 6px;background:var(--ink3);border:1px solid var(--mute2);border-radius:5px;color:var(--w);font-size:10px;outline:none;font-family:'DM Sans',sans-serif">
+          <option value="completada" ${v.estado==='completada'?'selected':''}>Completada</option>
+          <option value="anulada" ${v.estado==='anulada'?'selected':''}>Anulada</option>
+        </select>
+      </div></td>
+    </tr>`;
+  }).join('')}</tbody></table>`;
+}
+
+function cambiarEstadoVenta(id, estado) {
+  const ventas = ventasGet();
+  const v = ventas.find(x => x.id === id);
+  if (!v) return;
+  v.estado = estado;
+  ventasSave(ventas);
+  showToast('✅ Estado actualizado');
+  renderVentas();
+}
+
+function updateDocLabel() {
+  const tipo = document.getElementById('ven-tipo').value;
+  const label = document.getElementById('ven-doc-label');
+  const input = document.getElementById('ven-doc');
+  document.getElementById('ven-doc-result').textContent = '';
+  if (tipo === 'boleta') {
+    label.textContent = 'DNI';
+    input.placeholder = 'Nro. de DNI';
+  } else if (tipo === 'factura') {
+    label.textContent = 'RUC';
+    input.placeholder = 'Nro. de RUC';
+  } else {
+    label.textContent = 'Documento';
+    input.placeholder = 'Opcional';
+  }
+}
+
+function openVentaModal() {
+  ventaEditId = null;
+  document.getElementById('ven-overlay').classList.add('open');
+  document.getElementById('ven-modal').classList.add('open');
+  document.getElementById('ven-modal-title').textContent = '📋 Nueva Venta';
+  document.getElementById('ven-save-btn').textContent = '💾 Registrar Venta';
+  document.getElementById('ven-print-btn').style.display = 'none';
+
+  const cliSel = document.getElementById('ven-cli');
+  const clientes = cliGet();
+  cliSel.innerHTML = '<option value="general">Cliente General</option>' + clientes.map(c => `<option value="${c.id}">${c.nombre||c.razonSocial||c.id}</option>`).join('');
+
+  document.getElementById('ven-date').value = dbToday();
+  document.getElementById('ven-doc').value = '';
+  document.getElementById('ven-doc-name').value = '';
+  document.getElementById('ven-nota').value = '';
+  document.getElementById('ven-tipo').value = 'boleta';
+  document.getElementById('ven-pago').value = 'efectivo';
+  updateDocLabel();
+
+  const body = document.getElementById('ven-items-body');
+  body.innerHTML = '';
+  setTimeout(() => addVentaItemRow(), 100);
+  calcVentaTotals();
+}
+
+function closeVentaModal() {
+  document.getElementById('ven-overlay').classList.remove('open');
+  document.getElementById('ven-modal').classList.remove('open');
+  ventaEditId = null;
+}
+
+let ventaItemCounter = 0;
+
+function renderVentaItemRow(item, idx) {
+  const inv = getInv();
+  ventaItemCounter++;
+  const ci = idx != null ? idx : ventaItemCounter;
+  const prodOptions = '<option value="">Seleccionar...</option>' + inv.map(p => {
+    const basePrice = p.variations && p.variations[0] ? p.variations[0].price : 0;
+    return `<option value="${p.id}">${p.name} - S/ ${basePrice.toFixed(2)}</option>`;
+  }).join('');
+  return `<tr data-idx="${ci}">
+    <td><select class="ven-prod-sel" onchange="onVentaProdChange(this,${ci})">${prodOptions}</select></td>
+    <td><select class="ven-var-sel" onchange="onVentaItemChange(${ci})"></select></td>
+    <td><input type="number" min="1" value="${item.cantidad||1}" class="ven-item-qty" onchange="onVentaItemChange(${ci})" oninput="onVentaItemChange(${ci})"></td>
+    <td><input type="number" min="0" step="0.01" value="${item.precio||0}" class="ven-item-price" onchange="onVentaItemChange(${ci})" oninput="onVentaItemChange(${ci})"></td>
+    <td style="font-family:'Space Mono',monospace;font-weight:700;color:var(--amber);font-size:12px" class="ven-item-subtotal">S/ ${((item.cantidad||0)*(item.precio||0)).toFixed(2)}</td>
+    <td><button class="ven-item-del" onclick="delVentaItemRow(this)">✕</button></td>
+  </tr>`;
+}
+
+function addVentaItemRow() {
+  const body = document.getElementById('ven-items-body');
+  const t = document.createElement('template');
+  t.innerHTML = renderVentaItemRow({ producto:'', variacion:'', cantidad:1, precio:0, subtotal:0 });
+  body.appendChild(t.content);
+  const lastRow = body.lastElementChild;
+  const sel = lastRow.querySelector('.ven-prod-sel');
+  onVentaProdChange(sel, parseInt(lastRow.dataset.idx));
+  calcVentaTotals();
+}
+
+function delVentaItemRow(btn) {
+  btn.closest('tr').remove();
+  calcVentaTotals();
+}
+
+function onVentaProdChange(sel, idx) {
+  const inv = getInv();
+  const prod = inv.find(p => p.id === sel.value);
+  const varSel = sel.closest('tr').querySelector('.ven-var-sel');
+  varSel.innerHTML = '';
+  if (prod && prod.variations) {
+    varSel.innerHTML = prod.variations.map((v, vi) => `<option value="${v.id}" ${vi===0?'selected':''}>${v.name}</option>`).join('');
+    const priceInput = sel.closest('tr').querySelector('.ven-item-price');
+    if (prod.variations[0] && prod.variations[0].price > 0) {
+      priceInput.value = prod.variations[0].price;
+    }
+  }
+  onVentaItemChange(idx);
+}
+
+function onVentaItemChange(idx) {
+  const row = document.querySelector(`#ven-items-body tr[data-idx="${idx}"]`);
+  if (!row) return;
+  const qty = parseFloat(row.querySelector('.ven-item-qty').value) || 0;
+  const price = parseFloat(row.querySelector('.ven-item-price').value) || 0;
+  const sub = qty * price;
+  row.querySelector('.ven-item-subtotal').textContent = `S/ ${sub.toFixed(2)}`;
+  calcVentaTotals();
+}
+
+function calcVentaTotals() {
+  let subtotal = 0;
+  document.querySelectorAll('.ven-item-subtotal').forEach(el => {
+    subtotal += parseFloat(el.textContent.replace('S/','')) || 0;
+  });
+  const cfg = cfgGet();
+  const igvRate = (cfg.igv || 18) / 100;
+  const igv = subtotal * igvRate;
+  const total = subtotal + igv;
+  document.getElementById('ven-subtotal').textContent = `S/ ${subtotal.toFixed(2)}`;
+  document.getElementById('ven-igv').textContent = `S/ ${igv.toFixed(2)}`;
+  document.getElementById('ven-total').textContent = `S/ ${total.toFixed(2)}`;
+}
+
+function saveVenta() {
+  let cliente = document.getElementById('ven-cli').value;
+  const fecha = document.getElementById('ven-date').value;
+  const tipo = document.getElementById('ven-tipo').value;
+  const documento = document.getElementById('ven-doc').value.trim();
+  const metodoPago = document.getElementById('ven-pago').value;
+  const nota = document.getElementById('ven-nota').value.trim();
+  if (!fecha) { showToast('⚠️ Ingresa la fecha'); return; }
+
+  const docName = document.getElementById('ven-doc-name').value.trim();
+  if (docName && cliente === 'general') {
+    cliente = docName;
+  }
+
+  const rows = document.querySelectorAll('#ven-items-body tr');
+  const items = [];
+  for (const row of rows) {
+    const prodSel = row.querySelector('.ven-prod-sel');
+    const varSel = row.querySelector('.ven-var-sel');
+    const qty = parseFloat(row.querySelector('.ven-item-qty').value) || 0;
+    const price = parseFloat(row.querySelector('.ven-item-price').value) || 0;
+    if (!prodSel.value || qty <= 0) continue;
+    items.push({
+      producto: prodSel.value,
+      variacion: varSel.value,
+      cantidad: qty,
+      precio: price,
+      subtotal: qty * price
+    });
+  }
+  if (!items.length) { showToast('⚠️ Agrega al menos un producto'); return; }
+
+  const subtotal = items.reduce((s, it) => s + it.subtotal, 0);
+  const cfg = cfgGet();
+  const igvRate = (cfg.igv || 18) / 100;
+  const igv = subtotal * igvRate;
+  const total = subtotal + igv;
+
+  const data = { cliente, fecha, tipo, documento, items, subtotal, igv, total, metodoPago, nota };
+  const saved = ventasAdd(data);
+
+  if (metodoPago !== 'credito') {
+    cajaPriMov({
+      tipo: 'ingreso',
+      monto: total,
+      concepto: `Venta ${tipo} - ${cliente === 'general' ? 'Cliente General' : cliente}`,
+      referencia: saved.id
+    });
+  }
+
+  showToast(`✅ ${tipo.charAt(0).toUpperCase()+tipo.slice(1)} registrada`);
+  closeVentaModal();
+  renderVentas();
+}
+
+function printExistingVenta(id) {
+  const ventas = ventasGet();
+  const v = ventas.find(x => x.id === id);
+  if (!v) { showToast('⚠️ Venta no encontrada'); return; }
+  printVentaData(v);
+}
+
+function printVentaData(v) {
+  const cfg = cfgGet();
+  const inv = getInv();
+  const printEl = document.getElementById('ven-print');
+  let clienteName = v.cliente;
+  if (v.cliente === 'general') clienteName = 'Cliente General';
+  else {
+    const cl = cliGet().find(c => c.id === v.cliente);
+    if (cl) clienteName = cl.nombre || cl.razonSocial || v.cliente;
+  }
+  printEl.innerHTML = `
+    <div style="max-width:700px;margin:0 auto">
+      <h2 style="margin:0;color:#111">${cfg.empresa || 'Distribuidora Mathias'}</h2>
+      <p style="color:#555;font-size:12px;margin:4px 0">${cfg.direccion || 'Lima, Perú'} | ${cfg.telefono || ''}</p>
+      <p style="color:#555;font-size:12px;margin:4px 0">RUC: ${cfg.ruc || '—'}</p>
+      <hr style="margin:12px 0;border:none;border-top:2px solid #111">
+      <div style="display:flex;justify-content:space-between;margin:8px 0;font-size:13px">
+        <div><strong>Cliente:</strong> ${clienteName}</div>
+        <div><strong>Fecha:</strong> ${v.fecha}</div>
+      </div>
+      <div style="font-size:13px;margin:4px 0"><strong>Tipo:</strong> ${v.tipo.toUpperCase()} <strong>| Documento:</strong> ${v.documento || '—'}</div>
+      <table style="width:100%;border-collapse:collapse;margin:12px 0;font-size:12px">
+        <thead><tr style="background:#f5f5f5"><th style="padding:8px;border:1px solid #ddd;text-align:left">Producto</th><th style="padding:8px;border:1px solid #ddd;text-align:left">Variación</th><th style="padding:8px;border:1px solid #ddd;text-align:center">Cant.</th><th style="padding:8px;border:1px solid #ddd;text-align:right">Precio</th><th style="padding:8px;border:1px solid #ddd;text-align:right">Subtotal</th></tr></thead>
+        <tbody>${(v.items||[]).map(it => {
+          const prod = inv.find(p => p.id === it.producto);
+          const varName = prod && prod.variations ? (prod.variations.find(vr => vr.id === it.variacion)?.name || it.variacion) : it.variacion;
+          return `<tr><td style="padding:6px 8px;border:1px solid #ddd">${prod ? prod.name : it.producto}</td><td style="padding:6px 8px;border:1px solid #ddd">${varName}</td><td style="padding:6px 8px;border:1px solid #ddd;text-align:center">${it.cantidad}</td><td style="padding:6px 8px;border:1px solid #ddd;text-align:right">S/ ${(it.precio||0).toFixed(2)}</td><td style="padding:6px 8px;border:1px solid #ddd;text-align:right">S/ ${(it.subtotal||0).toFixed(2)}</td></tr>`;
+        }).join('')}</tbody>
+      </table>
+      <div style="text-align:right;font-size:14px;margin-top:8px">
+        <div>Subtotal: S/ ${(v.subtotal||0).toFixed(2)}</div>
+        <div>IGV (${cfg.igv||18}%): S/ ${(v.igv||0).toFixed(2)}</div>
+        <div style="font-size:18px;font-weight:700;border-top:2px solid #111;padding-top:4px;margin-top:4px">Total: S/ ${(v.total||0).toFixed(2)}</div>
+      </div>
+      ${v.nota ? `<p style="margin-top:12px;font-size:12px;color:#555"><strong>Nota:</strong> ${v.nota}</p>` : ''}
+      <p style="margin-top:24px;font-size:11px;color:#999;text-align:center">¡Gracias por su compra!</p>
+    </div>
+  `;
+  setTimeout(() => window.print(), 300);
+}
+
+function printVenta() { }
+
+renderVentas();
+</script>
+</body>
+</html>

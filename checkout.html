@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checkout – Distribuidora Mathias</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<style>
+.chk-page{padding:96px 48px 60px;max-width:840px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:32px}
+.chk-section{background:var(--ink2);border:1px solid var(--mute2);border-radius:16px;padding:24px 28px}
+.chk-section h3{font-family:'Bebas Neue',cursive;font-size:22px;color:var(--w);letter-spacing:1px;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.chk-field{margin-bottom:14px}
+.chk-field label{display:block;font-size:11px;color:var(--mute);font-weight:600;margin-bottom:4px;text-transform:uppercase;letter-spacing:1px}
+.chk-field input,.chk-field select{width:100%;font-size:14px;color:var(--w);padding:10px 14px;background:var(--ink3);border:1px solid var(--mute2);border-radius:8px;outline:none;font-family:'DM Sans',sans-serif;transition:border-color .2s;box-sizing:border-box}
+.chk-field input:focus,.chk-field select:focus{border-color:var(--amber)}
+.chk-field select option{background:var(--ink2);color:var(--w)}
+.chk-row{display:flex;gap:12px}
+.chk-row .chk-field{flex:1}
+.chk-radio{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--ink3);border:1px solid var(--mute2);border-radius:8px;cursor:pointer;transition:border-color .2s;margin-bottom:8px}
+.chk-radio:hover{border-color:var(--amber)}
+.chk-radio input{accent-color:var(--amber);width:16px;height:16px;flex-shrink:0;cursor:pointer}
+.chk-radio label{cursor:pointer;flex:1;font-size:13px;color:var(--w)}
+.chk-radio small{font-size:11px;color:var(--mute)}
+.chk-radio .chk-cost{font-family:'Space Mono',monospace;font-size:12px;color:var(--amber);font-weight:700}
+#cart-summary{display:flex;flex-direction:column;gap:10px}
+.chk-cart-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--mute2)}
+.chk-cart-item:last-child{border-bottom:none}
+.chk-cart-item .chk-ci-icon{font-size:24px;flex-shrink:0}
+.chk-cart-item .chk-ci-info{flex:1}
+.chk-cart-item .chk-ci-name{font-size:12px;font-weight:600;color:var(--w)}
+.chk-cart-item .chk-ci-qty{font-family:'Space Mono',monospace;font-size:11px;color:var(--mute)}
+.chk-cart-item .chk-ci-price{font-family:'Bebas Neue',cursive;font-size:18px;color:var(--amber);letter-spacing:.5px}
+.chk-totals{border-top:1px solid var(--mute2);padding-top:12px;margin-top:8px}
+.chk-total-row{display:flex;justify-content:space-between;font-size:13px;color:var(--mute);margin-bottom:4px}
+.chk-total-row.grand{font-family:'Bebas Neue',cursive;font-size:26px;color:var(--amber);letter-spacing:1px;border-top:1px solid var(--mute2);padding-top:8px;margin-top:8px}
+.chk-total-row.grand span:last-child{color:var(--amber)}
+.chk-actions{display:flex;flex-direction:column;gap:10px;margin-top:16px}
+.chk-btn{background:var(--amber);color:var(--ink);border:none;padding:14px;border-radius:8px;font-weight:700;font-size:14px;cursor:pointer;transition:all .25s;font-family:'DM Sans',sans-serif;width:100%}
+.chk-btn:hover{background:var(--amber2);transform:translateY(-2px)}
+.chk-btn.outline{background:transparent;border:1px solid var(--mute2);color:var(--w)}
+.chk-btn.outline:hover{background:var(--mute2);border-color:var(--w)}
+.empty-cart{grid-column:1/-1;text-align:center;padding:80px 20px;color:var(--mute)}
+.empty-cart span{font-size:64px;display:block;margin-bottom:16px}
+.empty-cart h3{font-family:'Bebas Neue',cursive;font-size:28px;color:var(--w);margin-bottom:8px}
+.empty-cart a{display:inline-block;background:var(--amber);color:var(--ink);padding:12px 32px;border-radius:8px;font-weight:700;font-size:14px;text-decoration:none;margin-top:12px}
+@media(max-width:700px){.chk-page{grid-template-columns:1fr;padding:80px 16px 40px}.chk-section{padding:18px}}
+</style>
+</head>
+<body>
+
+<nav class="dm-nav">
+  <a class="dm-logo" href="index.html">
+    <div class="dm-logo-mark">🔧</div>
+    <div class="dm-logo-text">Distrib. e Inv. Mathias<span>Lima, Perú · Est. 2020</span></div>
+  </a>
+  <ul class="dm-nav-links">
+    <li><a href="catalogo.html">📦 Catálogo</a></li>
+    <li><a href="electrico.html">⚡ Eléctrico</a></li>
+    <li><a href="herramienta.html">🔨 Herramientas</a></li>
+    <li><a href="gasfiteria.html">🚿 Gasfitería</a></li>
+    <li><a href="quimicos.html">🧪 Químicos</a></li>
+    <li><a href="construccion.html">🧱 Construcción</a></li>
+    <li><a href="otros.html">🔩 Otros</a></li>
+  </ul>
+  <div class="dm-nav-icons">
+    <button class="dm-nav-btn" id="search-btn" title="Buscar">🔍</button>
+    <button class="dm-nav-btn" id="user-btn" title="Cuenta">👤</button>
+    <button class="dm-nav-btn" id="cart-btn" title="Carrito">🛒<span class="cart-badge">0</span></button>
+  </div>
+</nav>
+
+<div id="search-bar"><input type="text" id="search-input" placeholder="🔍  Buscar productos..."/><div id="search-results"></div></div>
+<div id="user-panel"></div>
+<div id="cart-overlay"></div>
+<div id="cart-panel">
+  <div class="cart-header"><h3>🛒 Carrito</h3><button class="cart-close" onclick="closeCart()">✕</button></div>
+  <div id="cart-body"></div>
+  <div class="cart-footer">
+    <div class="cart-total-row"><span>Total:</span><span id="cart-total">S/ 0.00</span></div>
+    <button class="btn-checkout" onclick="checkout()">Proceder al pago →</button>
+  </div>
+</div>
+
+<div class="chk-page" id="chk-page">
+  <div class="chk-section">
+    <h3>📋 Resumen del Pedido</h3>
+    <div id="cart-summary"></div>
+  </div>
+  <div>
+    <div class="chk-section" style="margin-bottom:20px">
+      <h3>👤 Datos del Cliente</h3>
+      <div class="chk-field">
+        <label>Nombre completo</label>
+        <input type="text" id="chk-name" placeholder="Ej: Juan Pérez">
+      </div>
+      <div class="chk-row">
+        <div class="chk-field">
+          <label>Teléfono</label>
+          <input type="tel" id="chk-phone" placeholder="Ej: 999 888 777">
+        </div>
+        <div class="chk-field">
+          <label>Correo electrónico</label>
+          <input type="email" id="chk-email" placeholder="ejemplo@correo.com">
+        </div>
+      </div>
+      <div class="chk-field">
+        <label>Dirección</label>
+        <input type="text" id="chk-address" placeholder="Dirección de entrega (opcional si recoge en tienda)">
+      </div>
+    </div>
+
+    <div class="chk-section" style="margin-bottom:20px">
+      <h3>🚚 Método de Envío</h3>
+      <div class="chk-radio">
+        <input type="radio" name="shipping" value="pickup" id="ship-pickup" checked>
+        <label for="ship-pickup">Recoger en tienda</label>
+        <small>Sin costo</small>
+      </div>
+      <div class="chk-radio">
+        <input type="radio" name="shipping" value="delivery" id="ship-delivery">
+        <label for="ship-delivery">Envío a domicilio</label>
+        <small class="chk-cost">+ S/ 15.00</small>
+      </div>
+    </div>
+
+    <div class="chk-section" style="margin-bottom:20px">
+      <h3>💳 Método de Pago</h3>
+      <div class="chk-field">
+        <select id="chk-payment" onchange="updatePaymentNotice()">
+          <option value="">Seleccionar método de pago</option>
+          <option value="Yape">Yape</option>
+          <option value="Transferencia Bancaria">Transferencia Bancaria</option>
+          <option value="Efectivo">Efectivo (al recoger)</option>
+        </select>
+        <div id="chk-payment-notice" style="font-size:11px;color:var(--amber);margin-top:6px;display:none">📱 Después de confirmar, envía el comprobante de pago al WhatsApp +51 980 583 077</div>
+      </div>
+    </div>
+
+    <div class="chk-actions">
+      <button class="chk-btn" onclick="confirmarPedido()">✅ Confirmar Pedido</button>
+      <button class="chk-btn outline" onclick="enviarCotizacion()">💬 Enviar Cotización por WhatsApp</button>
+    </div>
+  </div>
+</div>
+
+<footer class="dm-footer">
+  <div class="dm-footer-grid">
+    <div>
+      <a class="dm-footer-logo" href="index.html">
+        <div class="dm-footer-logo-mark">🔧</div>
+        <div class="dm-footer-logo-txt">Distrib. e Inv. Mathias<small>Lima, Perú · Est. 2020</small></div>
+      </a>
+      <p class="dm-footer-desc">Tu distribuidora de confianza en Lima. Herramientas, materiales y más para tus proyectos con calidad garantizada y precios directos.</p>
+      <div class="dm-footer-socials">
+        <a class="dm-social" href="https://wa.me/51980583077" target="_blank">💬</a>
+        <a class="dm-social" href="#">📘</a>
+        <a class="dm-social" href="#">📸</a>
+      </div>
+    </div>
+    <div class="dm-footer-col"><h5>Categorías</h5><ul>
+      <li><a href="electrico.html">⚡ Eléctrico</a></li>
+      <li><a href="herramienta.html">🔨 Herramienta</a></li>
+      <li><a href="gasfiteria.html">🚿 Gasfitería</a></li>
+      <li><a href="quimicos.html">🧪 Químicos</a></li>
+      <li><a href="construccion.html">🧱 Construcción</a></li>
+      <li><a href="otros.html">🔩 Otros</a></li>
+    </ul></div>
+    <div class="dm-footer-col"><h5>Empresa</h5><ul>
+      <li><a href="#">Sobre Nosotros</a></li>
+      <li><a href="#">Devoluciones</a></li>
+      <li><a href="#">Términos y Condiciones</a></li>
+      <li><a href="#">Preguntas Frecuentes</a></li>
+    </ul></div>
+    <div class="dm-footer-col"><h5>Contacto</h5><ul>
+      <li><a href="#">📍 Lima, Perú</a></li>
+      <li><a href="tel:+51980583077">📞 +51 980 583 077</a></li>
+      <li><a href="tel:+51997057917">📞 +51 997 057 917</a></li>
+      <li><a href="https://wa.me/51980583077" target="_blank">💬 WhatsApp</a></li>
+    </ul></div>
+  </div>
+  <div class="dm-footer-bottom"><p>© 2025 Distribuidora e Inversiones Mathias. Todos los derechos reservados.</p><p>Hecho con ❤️ en Lima, Perú 🇵🇪</p></div>
+</footer>
+
+<a class="wa-float" href="https://wa.me/51980583077?text=Hola%20%F0%9F%91%8B%20quiero%20m%C3%A1s%20informaci%C3%B3n" target="_blank" title="WhatsApp">💬</a>
+
+<script src="shared.js"></script>
+<script>
+function renderCheckout() {
+  const cart = getCart();
+  const container = document.getElementById('cart-summary');
+  if (!cart.length) {
+    document.getElementById('chk-page').innerHTML = '<div class="empty-cart"><span>🛒</span><h3>Tu carrito está vacío</h3><p>Agrega productos antes de finalizar tu pedido.</p><a href="catalogo.html">Ir al Catálogo</a></div>';
+    return;
+  }
+  const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
+  container.innerHTML = cart.map(item => `
+    <div class="chk-cart-item">
+      <div class="chk-ci-icon">${item.icon}</div>
+      <div class="chk-ci-info">
+        <div class="chk-ci-name">${item.name}</div>
+        <div class="chk-ci-qty">Cantidad: ${item.qty}</div>
+      </div>
+      <div class="chk-ci-price">S/ ${(item.price * item.qty).toFixed(2)}</div>
+    </div>
+  `).join('') + `
+    <div class="chk-totals">
+      <div class="chk-total-row"><span>Subtotal</span><span>S/ ${total.toFixed(2)}</span></div>
+      <div class="chk-total-row" id="chk-ship-row" style="display:none"><span>Envío a domicilio</span><span>+ S/ 15.00</span></div>
+      <div class="chk-total-row grand"><span>Total</span><span id="chk-grand-total">S/ ${total.toFixed(2)}</span></div>
+    </div>`;
+  document.querySelectorAll('input[name="shipping"]').forEach(r => {
+    r.addEventListener('change', function() {
+      const shipRow = document.getElementById('chk-ship-row');
+      const grandEl = document.getElementById('chk-grand-total');
+      if (this.value === 'delivery') {
+        shipRow.style.display = 'flex';
+        grandEl.textContent = 'S/ ' + (total + 15).toFixed(2);
+      } else {
+        shipRow.style.display = 'none';
+        grandEl.textContent = 'S/ ' + total.toFixed(2);
+      }
+    });
+  });
+  const user = getUser();
+  if (user) {
+    if (user.name) document.getElementById('chk-name').value = user.name;
+    if (user.phone) document.getElementById('chk-phone').value = user.phone;
+    if (user.email) document.getElementById('chk-email').value = user.email;
+  }
+}
+
+function updatePaymentNotice() {
+  const p = document.getElementById('chk-payment').value;
+  const n = document.getElementById('chk-payment-notice');
+  n.style.display = (p === 'Yape' || p === 'Transferencia Bancaria') ? 'block' : 'none';
+}
+
+function getCheckoutData() {
+  const name = document.getElementById('chk-name').value.trim();
+  const phone = document.getElementById('chk-phone').value.trim();
+  const email = document.getElementById('chk-email').value.trim();
+  const address = document.getElementById('chk-address').value.trim();
+  const shipping = document.querySelector('input[name="shipping"]:checked').value;
+  const payment = document.getElementById('chk-payment').value;
+  if (!name) { showToast('⚠️ Ingresa tu nombre'); return null; }
+  if (!phone) { showToast('⚠️ Ingresa tu teléfono'); return null; }
+  if (!email) { showToast('⚠️ Ingresa tu correo electrónico'); return null; }
+  if (!payment) { showToast('⚠️ Selecciona un método de pago'); return null; }
+  return { cart: getCart(), name, phone, email, address, shipping, payment };
+}
+
+function confirmarPedido() {
+  const data = getCheckoutData();
+  if (!data) return;
+  sendOrderToWhatsApp(data);
+}
+
+function enviarCotizacion() {
+  const cart = getCart();
+  const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
+  let msg = '¡Hola! Quiero una cotización de los siguientes productos:\n\n';
+  cart.forEach(item => { msg += `${item.icon} ${item.name} x${item.qty} = S/ ${(item.price * item.qty).toFixed(2)}\n`; });
+  msg += `\nTotal: S/ ${total.toFixed(2)}`;
+  const a = document.createElement('a');
+  a.href = `https://wa.me/51980583077?text=${encodeURIComponent(msg)}`;
+  a.target = '_blank'; a.click();
+  showToast('✅ Cotización enviada por WhatsApp');
+}
+
+renderCheckout();
+updatePaymentNotice();
+</script>
+</body>
+</html>
