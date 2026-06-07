@@ -528,9 +528,13 @@ const _origSet = Storage.prototype.setItem;
 const _fbQueue = [];
 let _fbReady = false;
 
+function _isAdminKey(key) {
+  return key.startsWith('fp_') && key !== 'fp_cart' && key !== 'fp_user';
+}
+
 Storage.prototype.setItem = function(key, value) {
   _origSet.call(this, key, value);
-  if (key.startsWith('fp_')) {
+  if (_isAdminKey(key)) {
     if (_fbReady) _fbWrite(key, value);
     else _fbQueue.push({ key, value });
   }
@@ -547,14 +551,14 @@ setTimeout(() => {
   _fbQueue.length = 0;
   for (let i = 0; i < localStorage.length; i++) {
     const k = localStorage.key(i);
-    if (k.startsWith('fp_')) _fbWrite(k, localStorage.getItem(k));
+    if (_isAdminKey(k)) _fbWrite(k, localStorage.getItem(k));
   }
   fetch('/.netlify/functions/data')
     .then(r => r.json())
     .then(docs => {
       let changed = false;
       Object.entries(docs).forEach(([k, v]) => {
-        if (v) { _origSet.call(localStorage, k, v); changed = true; }
+        if (_isAdminKey(k) && v) { _origSet.call(localStorage, k, v); changed = true; }
       });
       if (changed) {
         refreshCatalog();
