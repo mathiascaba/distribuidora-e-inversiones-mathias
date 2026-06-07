@@ -105,8 +105,8 @@
 
 <script src="shared.js"></script>
 <script>
-const CAT = 'gasfiteria';
-let currentProducts = allProducts.filter(p => p.cat === CAT);
+var CAT = 'gasfiteria';
+var currentProducts = allProducts.filter(p => p.cat === CAT);
 function renderGrid(prods) {
   const grid = document.getElementById('prod-grid');
   grid.innerHTML = prods.map(p => `

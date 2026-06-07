@@ -71,44 +71,7 @@ function updateUserUI() {
 }
 
 // ── BUSQUEDA ──────────────────────────────────────────────
-const allProducts = [
-  { name:'Cable THW 2.5mm Rollo 100m', price:89.90, icon:'🔌', cat:'electrico', badge:'-30%', old:129 },
-  { name:'Foco LED 12W Luz Fría Pack x10', price:45.00, icon:'💡', cat:'electrico', badge:'-50%', old:90 },
-  { name:'Interruptor Doble Ticino', price:18.50, icon:'🔆', cat:'electrico', badge:'', old:0 },
-  { name:'Tablero Eléctrico 12 Polos', price:125.00, icon:'⚡', cat:'electrico', badge:'', old:0 },
-  { name:'Taladro Percutor 800W Profesional', price:219.00, icon:'🔧', cat:'herramienta', badge:'-25%', old:295 },
-  { name:'Set Destornilladores 12 piezas', price:67.00, icon:'🔩', cat:'herramienta', badge:'', old:89 },
-  { name:'Amoladora Angular 4.5" 850W', price:189.00, icon:'⚙️', cat:'herramienta', badge:'', old:0 },
-  { name:'Sierra Circular 7.25" 1200W', price:310.00, icon:'🪚', cat:'herramienta', badge:'-15%', old:365 },
-  { name:'Tubería PVC 4" x 3m Desagüe', price:34.50, icon:'🚿', cat:'gasfiteria', badge:'-20%', old:43 },
-  { name:'Llave de Paso 1/2" Bronce', price:22.00, icon:'🔑', cat:'gasfiteria', badge:'', old:0 },
-  { name:'Codo PVC 90° 2" Presión', price:4.50, icon:'🔄', cat:'gasfiteria', badge:'', old:0 },
-  { name:'Termocalefón 20 Litros Gas', price:380.00, icon:'🌡️', cat:'gasfiteria', badge:'', old:0 },
-  { name:'Pintura Látex Interior 4 Galones', price:148.00, icon:'🎨', cat:'quimicos', badge:'-40%', old:248 },
-  { name:'Thinner Acrílico 1 Galón', price:22.50, icon:'🪣', cat:'quimicos', badge:'-35%', old:34.90 },
-  { name:'Sellador Acrílico 280ml', price:12.00, icon:'💊', cat:'quimicos', badge:'', old:0 },
-  { name:'Impermeabilizante 4 Litros', price:68.00, icon:'🧴', cat:'quimicos', badge:'', old:0 },
-  { name:'Cemento Sol Bolsa 42.5kg', price:28.90, icon:'🧱', cat:'construccion', badge:'', old:0 },
-  { name:'Cemento Andino Bolsa 42.5kg', price:28.90, icon:'🧱', cat:'construccion', badge:'', old:0 },
-  { name:'Cemento Andino Ultra Bolsa 42.5kg', price:32.90, icon:'🧱', cat:'construccion', badge:'', old:0 },
-  { name:'Cemento Apu Bolsa 42.5kg', price:26.90, icon:'🧱', cat:'construccion', badge:'', old:0 },
-  { name:'Fierro Corrugado 1/2" x 9m', price:52.00, icon:'🏗️', cat:'construccion', badge:'', old:0 },
-  { name:'Fierro 6mm x 9m', price:28.00, icon:'🏗️', cat:'construccion', badge:'', old:0 },
-  { name:'Fierro 8mm x 9m', price:38.00, icon:'🏗️', cat:'construccion', badge:'', old:0 },
-  { name:'Fierro 5/8" x 9m', price:65.00, icon:'🏗️', cat:'construccion', badge:'', old:0 },
-  { name:'Fierro 3/8" x 9m', price:35.00, icon:'🏗️', cat:'construccion', badge:'', old:0 },
-  { name:'Fierro 1/4" x 9m', price:18.00, icon:'🏗️', cat:'construccion', badge:'', old:0 },
-  { name:'Ladrillo 18 Huecos', price:2.00, icon:'🧱', cat:'construccion', badge:'', old:0 },
-  { name:'Ladrillo King Kong 18 Huecos', price:2.50, icon:'🧱', cat:'construccion', badge:'', old:0 },
-  { name:'Ladrillo Pandereta', price:1.50, icon:'🧱', cat:'construccion', badge:'', old:0 },
-  { name:'Arena Fina Bolsa 40kg', price:8.00, icon:'⛱️', cat:'construccion', badge:'', old:0 },
-  { name:'Arena Gruesa Bolsa 40kg', price:8.50, icon:'⛱️', cat:'construccion', badge:'', old:0 },
-  { name:'Cinta Aislante Pack x5', price:15.00, icon:'🎗️', cat:'otros', badge:'', old:0 },
-  { name:'Mascarilla N95 Pack x10', price:28.00, icon:'😷', cat:'otros', badge:'', old:0 },
-  { name:'Guantes de Seguridad Par', price:12.50, icon:'🧤', cat:'otros', badge:'', old:0 },
-  { name:'Casco de Seguridad', price:35.00, icon:'⛑️', cat:'otros', badge:'', old:0 },
-];
-
+let allProducts = [];
 const productImages = {
   'Cemento Sol Bolsa 42.5kg': 'bolsa-cemento-sol.png',
   'Cemento Andino Bolsa 42.5kg': 'bolsa-cemento-andino.png',
@@ -541,6 +504,25 @@ function getInv() {
 }
 function saveInv(d) { localStorage.setItem(INV_KEY, JSON.stringify(d)); }
 
+// ── CATÁLOGO DINÁMICO DESDE INVENTARIO ──
+function refreshCatalog() {
+  const inv = getInv();
+  allProducts.length = 0;
+  allProducts.push(...inv.map(p => ({
+    name: p.name,
+    price: p.variations[0]?.price || 0,
+    icon: p.icon,
+    cat: p.cat,
+    badge: '',
+    old: 0
+  })));
+  if (window.CAT !== undefined) {
+    window.currentProducts = window.CAT ? allProducts.filter(p => p.cat === window.CAT) : [...allProducts];
+    if (typeof window.renderGrid === 'function') window.renderGrid(window.currentProducts);
+  }
+}
+refreshCatalog();
+
 // ── SINCRONIZACIÓN MULTI-DISPOSITIVO ──
 const _origSet = Storage.prototype.setItem;
 const _fbQueue = [];
@@ -574,10 +556,13 @@ setTimeout(() => {
       Object.entries(docs).forEach(([k, v]) => {
         if (v) { _origSet.call(localStorage, k, v); changed = true; }
       });
-      if (changed) setTimeout(() => {
-        ['renderCart','renderVentas','renderInv','renderCompras','renderCreditos','renderCajas','loadDashboard','loadCompanyCfg']
-          .forEach(fn => { if (typeof window[fn] === 'function') window[fn](); });
-      }, 100);
+      if (changed) {
+        refreshCatalog();
+        setTimeout(() => {
+          ['renderCart','renderVentas','renderInv','renderCompras','renderCreditos','renderCajas','loadDashboard','loadCompanyCfg']
+            .forEach(fn => { if (typeof window[fn] === 'function') window[fn](); });
+        }, 100);
+      }
     })
     .catch(() => {});
 }, 1000);

@@ -105,7 +105,7 @@
 
 <script src="shared.js"></script>
 <script>
-const CAT = 'construccion';
+var CAT = 'construccion';
 const pageMap = {
   'Cemento Sol Bolsa 42.5kg':'cemento-sol.html',
   'Cemento Andino Bolsa 42.5kg':'cemento-andino.html',
@@ -123,7 +123,7 @@ const pageMap = {
   'Arena Fina Bolsa 40kg':'bolsa-arena-fina.html',
   'Arena Gruesa Bolsa 40kg':'bolsa-arena-gruesa.html'
 };
-let currentProducts = allProducts.filter(p => p.cat === CAT);
+var currentProducts = allProducts.filter(p => p.cat === CAT);
 function renderGrid(prods) {
   const grid = document.getElementById('prod-grid');
   grid.innerHTML = prods.map(p => `
