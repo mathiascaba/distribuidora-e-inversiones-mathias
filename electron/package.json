@@ -1,0 +1,25 @@
+{
+  "name": "ferreteria",
+  "version": "1.0.0",
+  "description": "Distribuidora e Inversiones Mathias",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder --win portable"
+  },
+  "build": {
+    "appId": "com.distribuidora.ferreteria",
+    "productName": "Ferreteria Mathias",
+    "directories": {
+      "output": "dist"
+    },
+    "win": {
+      "target": ["portable"],
+      "icon": null
+    }
+  },
+  "devDependencies": {
+    "electron": "^33.0.0",
+    "electron-builder": "^25.0.0"
+  }
+}
