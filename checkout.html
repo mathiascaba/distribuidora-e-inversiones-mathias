@@ -117,11 +117,6 @@
         <label for="ship-pickup">Recoger en tienda</label>
         <small>Sin costo</small>
       </div>
-      <div class="chk-radio">
-        <input type="radio" name="shipping" value="delivery" id="ship-delivery">
-        <label for="ship-delivery">Envío a domicilio</label>
-        <small class="chk-cost">+ S/ 15.00</small>
-      </div>
     </div>
 
     <div class="chk-section" style="margin-bottom:20px">
@@ -206,22 +201,8 @@ function renderCheckout() {
   `).join('') + `
     <div class="chk-totals">
       <div class="chk-total-row"><span>Subtotal</span><span>S/ ${total.toFixed(2)}</span></div>
-      <div class="chk-total-row" id="chk-ship-row" style="display:none"><span>Envío a domicilio</span><span>+ S/ 15.00</span></div>
       <div class="chk-total-row grand"><span>Total</span><span id="chk-grand-total">S/ ${total.toFixed(2)}</span></div>
     </div>`;
-  document.querySelectorAll('input[name="shipping"]').forEach(r => {
-    r.addEventListener('change', function() {
-      const shipRow = document.getElementById('chk-ship-row');
-      const grandEl = document.getElementById('chk-grand-total');
-      if (this.value === 'delivery') {
-        shipRow.style.display = 'flex';
-        grandEl.textContent = 'S/ ' + (total + 15).toFixed(2);
-      } else {
-        shipRow.style.display = 'none';
-        grandEl.textContent = 'S/ ' + total.toFixed(2);
-      }
-    });
-  });
   const user = getUser();
   if (user) {
     if (user.name) document.getElementById('chk-name').value = user.name;
