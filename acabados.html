@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Herramientas – Distribuidora Mathias</title>
+<title>Acabados – Distribuidora Mathias</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="shared.css">
 </head>
@@ -16,10 +16,11 @@
   </a>
   <ul class="dm-nav-links">
     <li><a href="electrico.html">⚡ Eléctrico</a></li>
-    <li><a href="herramienta.html" class="active">🔨 Herramientas</a></li>
+    <li><a href="herramienta.html">🔨 Herramientas</a></li>
     <li><a href="gasfiteria.html">🚿 Gasfitería</a></li>
     <li><a href="quimicos.html">🧪 Químicos</a></li>
     <li><a href="construccion.html">🧱 Construcción</a></li>
+    <li><a href="acabados.html" class="active">🎨 Acabados</a></li>
     <li><a href="acabados.html">🎨 Acabados</a></li>
     <li><a href="otros.html">🔩 Otros</a></li>
   </ul>
@@ -45,10 +46,10 @@
 
 <div class="cat-page">
   <div class="cat-hero-card">
-    <div class="cat-hero-bg-icon">🔨</div>
-    <div class="cat-breadcrumb"><a href="index.html">Inicio</a> › Herramientas</div>
-    <h1>🔨 Herramientas</h1>
-    <p>Taladros, amoladoras, sierras, destornilladores y todo lo que necesitas para tus proyectos.</p>
+    <div class="cat-hero-bg-icon">🎨</div>
+    <div class="cat-breadcrumb"><a href="index.html">Inicio</a> › Acabados</div>
+    <h1>🎨 Acabados</h1>
+    <p>Pinturas, barnices, thinner, masillas, lijas, rodillos y todo para el acabado perfecto de tus proyectos.</p>
   </div>
 
   <div class="cat-filter-bar">
@@ -83,6 +84,7 @@
       <li><a href="quimicos.html">🧪 Químicos</a></li>
       <li><a href="construccion.html">🧱 Construcción</a></li>
       <li><a href="acabados.html">🎨 Acabados</a></li>
+      <li><a href="acabados.html">🎨 Acabados</a></li>
     <li><a href="otros.html">🔩 Otros</a></li>
     </ul></div>
     <div class="dm-footer-col"><h5>Empresa</h5><ul>
@@ -107,7 +109,7 @@
 
 <script src="shared.js"></script>
 <script>
-var CAT = 'herramienta';
+var CAT = 'acabados';
 var currentProducts = allProducts.filter(p => p.cat === CAT);
 function renderGrid(prods) {
   const grid = document.getElementById('prod-grid');

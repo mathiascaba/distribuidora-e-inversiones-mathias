@@ -452,7 +452,7 @@ function corrNext(tipo) {
 
 // ── INVENTARIO ──
 const INV_KEY = 'fp_inventory';
-const CAT_NAMES = { electrico:'⚡ Eléctrico', herramienta:'🔨 Herramienta', gasfiteria:'🚿 Gasfitería', quimicos:'🧪 Químicos', construccion:'🧱 Construcción', otros:'🔩 Otros' };
+const CAT_NAMES = { electrico:'⚡ Eléctrico', herramienta:'🔨 Herramienta', gasfiteria:'🚿 Gasfitería', quimicos:'🧪 Químicos', construccion:'🧱 Construcción', acabados:'🎨 Acabados', otros:'🔩 Otros' };
 
 function getInv() {
   let inv = JSON.parse(localStorage.getItem(INV_KEY) || '[]');
