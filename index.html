@@ -297,8 +297,8 @@ body:has(a:hover) #cursor-ring,body:has(button:hover) #cursor-ring{
 /* CARD 2 — Oferta top (col 3, row 1) */
 .bc-promo{
   grid-column:3;grid-row:1;
-  background:linear-gradient(140deg,#1a0d00,#7c3d00 60%,#c46200 100%);
-  border:1px solid rgba(245,158,11,0.25);
+  background:linear-gradient(140deg,#1e4fa8,#1a3f8a 60%,#0d2a5e 100%);
+  border:1px solid rgba(30,79,168,0.25);
   padding:36px;
   display:flex;flex-direction:column;justify-content:flex-end;
   min-height:260px;
@@ -780,12 +780,10 @@ body:has(a:hover) #cursor-ring,body:has(button:hover) #cursor-ring{
   </div>
 
   <!-- CARD PROMO -->
-  <div class="bc bc-promo anim-3">
-    <div class="bc-promo-num">50</div>
-    <span class="bc-tag">🇵🇪 Oferta especial</span>
-    <div class="bc-promo-title">Hasta<br>50% OFF<br>en Julio</div>
-    <p class="bc-promo-desc">Stock limitado en herramientas y materiales eléctricos</p>
-    <a href="herramienta.html" class="bc-btn-sm">Ver herramientas →</a>
+  <div class="bc bc-promo anim-3" style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px;gap:4px">
+    <div class="bc-promo-num"></div>
+    <img src="logo-x.png" alt="Logo" style="max-width:100%;max-height:calc(100% - 30px);width:auto;height:auto;object-fit:contain;position:relative;z-index:2">
+    <p style="position:relative;z-index:2;font-size:13px;color:var(--amber);text-align:center;margin:0;font-family:'Space Mono',monospace;font-weight:700;letter-spacing:.5px">Somos distribuidores autorizados<br>de la marca Unacem</p>
   </div>
 
   <!-- CARD STATS -->
