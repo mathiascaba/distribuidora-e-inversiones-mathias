@@ -208,7 +208,7 @@ if (!user || user.type !== 'owner') { window.location.href = 'index.html'; }
 let currentTab = 'facturas';
 let ventaEditId = null;
 
-const PROXY_URL = '/.netlify/functions/peruapi';
+const PROXY_URL = '/api/peruapi';
 
 function lookupDocument() {
   const doc = document.getElementById('ven-doc').value.trim();

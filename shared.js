@@ -541,7 +541,7 @@ Storage.prototype.setItem = function(key, value) {
 };
 
 function _fbWrite(key, value) {
-  const url = `/.netlify/functions/data?key=${encodeURIComponent(key)}&value=${encodeURIComponent(value)}`;
+  const url = `/api/data?key=${encodeURIComponent(key)}&value=${encodeURIComponent(value)}`;
   fetch(url, { method: 'POST' }).catch(() => {});
 }
 
@@ -553,7 +553,7 @@ setTimeout(() => {
     const k = localStorage.key(i);
     if (_isAdminKey(k)) _fbWrite(k, localStorage.getItem(k));
   }
-  fetch('/.netlify/functions/data')
+  fetch('/api/data')
     .then(r => r.json())
     .then(docs => {
       let changed = false;

@@ -1,31 +1,24 @@
 const API_KEY = 'AIzaSyA1jN2fbdSIASmTXCrTtU19gLBLjl2GzhA';
 const FB_BASE = 'https://firestore.googleapis.com/v1/projects/distribuidora-e-inversiones/databases/(default)/documents';
 
-exports.handler = async (event) => {
-  const headers = {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type',
-    'Content-Type': 'application/json'
-  };
+module.exports = async (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-  if (event.httpMethod === 'OPTIONS') {
-    return { statusCode: 200, headers, body: '{}' };
-  }
+  if (req.method === 'OPTIONS') return res.status(200).json({});
 
   try {
-    const { key, value } = event.queryStringParameters || {};
+    const { key, value } = req.query || {};
 
-    if (event.httpMethod === 'GET') {
+    if (req.method === 'GET') {
       if (key) {
-        // Leer un documento específico
         const url = `${FB_BASE}/data/${encodeURIComponent(key)}?key=${API_KEY}`;
         const resp = await fetch(url);
-        if (!resp.ok) return { statusCode: resp.status, headers, body: '{}' };
+        if (!resp.ok) return res.status(resp.status).json({});
         const data = await resp.json();
-        return { statusCode: 200, headers, body: JSON.stringify({ value: data.fields?.value?.stringValue || '' }) };
+        return res.json({ value: data.fields?.value?.stringValue || '' });
       } else {
-        // Leer toda la colección
         const url = `${FB_BASE}/data?key=${API_KEY}`;
         const resp = await fetch(url);
         const data = await resp.json();
@@ -36,13 +29,13 @@ exports.handler = async (event) => {
             docs[k] = doc.fields?.value?.stringValue || '';
           });
         }
-        return { statusCode: 200, headers, body: JSON.stringify(docs) };
+        return res.json(docs);
       }
     }
 
-    if (event.httpMethod === 'POST') {
+    if (req.method === 'POST') {
       if (!key || !value) {
-        return { statusCode: 400, headers, body: JSON.stringify({ error: 'key y value requeridos' }) };
+        return res.status(400).json({ error: 'key y value requeridos' });
       }
       const url = `${FB_BASE}/data/${encodeURIComponent(key)}?key=${API_KEY}`;
       const body = JSON.stringify({
@@ -58,13 +51,13 @@ exports.handler = async (event) => {
       });
       if (!resp.ok) {
         const errText = await resp.text();
-        return { statusCode: resp.status, headers, body: JSON.stringify({ error: errText.slice(0,200) }) };
+        return res.status(resp.status).json({ error: errText.slice(0, 200) });
       }
-      return { statusCode: 200, headers, body: JSON.stringify({ ok: true }) };
+      return res.json({ ok: true });
     }
 
-    return { statusCode: 405, headers, body: JSON.stringify({ error: 'Method not allowed' }) };
+    return res.status(405).json({ error: 'Method not allowed' });
   } catch (e) {
-    return { statusCode: 500, headers, body: JSON.stringify({ error: e.message }) };
+    return res.status(500).json({ error: e.message });
   }
 };
