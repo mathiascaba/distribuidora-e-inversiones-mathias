@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Importar Inventario</title>
+<style>
+body{font-family:'DM Sans',sans-serif;background:#0d2a5e;color:#fff;padding:40px;max-width:800px;margin:auto}
+h1{font-family:'Bebas Neue',cursive;color:#f59e0b;letter-spacing:2px}
+.card{background:#1a3f8a;border-radius:12px;padding:24px;margin:16px 0}
+button{background:#f59e0b;color:#000;border:none;padding:12px 24px;border-radius:8px;font-weight:700;cursor:pointer;font-size:15px}
+button:disabled{opacity:.5;cursor:not-allowed}
+.log{background:#0d1f4a;padding:12px;border-radius:8px;font-family:monospace;font-size:13px;max-height:400px;overflow-y:auto;white-space:pre-wrap;color:#84cc16}
+.warn{color:#f59e0b}
+.error{color:#ef4444}
+</style>
+</head>
+<body>
+<h1>📦 Importar Inventario desde Excel</h1>
+<div class="card">
+  <p style="color:rgba(255,255,255,.6);margin-bottom:16px">Selecciona el archivo <code>import_inventory.json</code> generado desde el Excel. Los productos se agregarán al inventario existente sin reemplazar duplicados.</p>
+  <input type="file" id="fileInput" accept=".json" style="margin-bottom:16px;display:block">
+  <button id="importBtn" disabled>Importar Inventario</button>
+</div>
+<div id="log" class="log">Esperando archivo...</div>
+
+<script>
+const fileInput = document.getElementById('fileInput');
+const importBtn = document.getElementById('importBtn');
+const log = document.getElementById('log');
+
+function logMsg(msg, type = '') {
+  log.innerHTML += `<div class="${type}">${msg}</div>`;
+  log.scrollTop = log.scrollHeight;
+}
+
+let importData = null;
+
+fileInput.addEventListener('change', async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  log.innerHTML = '';
+  logMsg(`📄 Archivo: ${file.name} (${(file.size/1024).toFixed(1)} KB)`);
+  try {
+    const text = await file.text();
+    importData = JSON.parse(text);
+    logMsg(`✅ ${importData.length} productos leídos del archivo`);
+    logMsg(`⬇️ Categorías: ${[...new Set(importData.map(p=>p.cat))].join(', ')}`);
+    importBtn.disabled = false;
+    logMsg('▶️ Presiona "Importar Inventario" para agregarlos');
+  } catch(e) {
+    logMsg(`❌ Error leyendo JSON: ${e.message}`, 'error');
+  }
+});
+
+importBtn.addEventListener('click', () => {
+  if (!importData) return;
+  
+  const existing = JSON.parse(localStorage.getItem('fp_inventory') || '[]');
+  logMsg(`\n📋 Inventario actual: ${existing.length} productos`);
+  
+  const existingNames = new Set(existing.map(p => p.name.toLowerCase()));
+  let added = 0, skipped = 0;
+  
+  importData.forEach(p => {
+    if (existingNames.has(p.name.toLowerCase())) {
+      skipped++;
+    } else {
+      existing.push(p);
+      existingNames.add(p.name.toLowerCase());
+      added++;
+    }
+  });
+  
+  localStorage.setItem('fp_inventory', JSON.stringify(existing));
+  logMsg(`✅ Agregados: ${added} productos nuevos`);
+  logMsg(`⏭️ Omitidos: ${skipped} duplicados`);
+  logMsg(`📦 Total inventario: ${existing.length} productos`);
+  
+  // Show category breakdown
+  const cats = {};
+  existing.forEach(p => { cats[p.cat] = (cats[p.cat] || 0) + 1; });
+  logMsg('\n📊 Desglose por categoría:');
+  Object.entries(cats).forEach(([c, n]) => logMsg(`  ${c}: ${n}`));
+  
+  logMsg('\n✅ IMPORTACIÓN COMPLETADA');
+  importBtn.disabled = true;
+});
+</script>
+</body>
+</html>
