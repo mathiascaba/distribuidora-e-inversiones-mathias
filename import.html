@@ -22,6 +22,11 @@ button:disabled{opacity:.5;cursor:not-allowed}
   <input type="file" id="fileInput" accept=".json" style="margin-bottom:16px;display:block">
   <button id="importBtn" disabled>Importar Inventario</button>
 </div>
+<div class="card" style="border:1px solid #f59e0b">
+  <h3 style="color:#f59e0b;margin:0 0 8px">⚠️ Corregir precios de cemento</h3>
+  <p style="color:rgba(255,255,255,.6);margin-bottom:12px;font-size:14px">Elimina los productos CEMENTO SOL/CEMENTO ANDINO TIPO 1/CEMENTO ANDINO ULTRA/CEMENTO APU (importados del Excel) y actualiza los precios de los productos originales con los valores del Excel.</p>
+  <button id="fixBtn">Corregir Cemento</button>
+</div>
 <div id="log" class="log">Esperando archivo...</div>
 
 <script>
@@ -85,6 +90,45 @@ importBtn.addEventListener('click', () => {
   
   logMsg('\n✅ IMPORTACIÓN COMPLETADA');
   importBtn.disabled = true;
+});
+
+// ── CORREGIR PRECIOS CEMENTO ──
+document.getElementById('fixBtn').addEventListener('click', () => {
+  const inv = JSON.parse(localStorage.getItem('fp_inventory') || '[]');
+  const antes = inv.length;
+
+  // Eliminar importados del Excel
+  const eliminar = ['CEMENTO SOL', 'CEMENTO ANDINO   TIPO 1', 'CEMENTO ANDINO ULTRA', 'CEMENTO APU'];
+  const filtrado = inv.filter(p => {
+    const nom = p.name.toUpperCase().replace(/\s+/g, ' ');
+    return !eliminar.some(e => nom === e);
+  });
+  const eliminados = antes - filtrado.length;
+
+  // Actualizar precios de los existentes
+  const precios = {
+    'Cemento Sol Bolsa 42.5kg': { price: 29.80, stock: 18883 },
+    'Cemento Andino Bolsa 42.5kg': { price: 30.95, stock: 1606 },
+    'Cemento Andino Ultra Bolsa 42.5kg': { price: 31.35, stock: 1841 },
+    'Cemento Apu Bolsa 42.5kg': { price: 27.10, stock: 2255 },
+  };
+  let actualizados = 0;
+  filtrado.forEach(p => {
+    if (precios[p.name] && p.variations && p.variations[0]) {
+      p.variations[0].price = precios[p.name].price;
+      p.variations[0].stock = precios[p.name].stock;
+      actualizados++;
+    }
+  });
+
+  localStorage.setItem('fp_inventory', JSON.stringify(filtrado));
+
+  const log = document.getElementById('log');
+  log.innerHTML += `\n━━━ CORRECCIÓN CEMENTO ━━━\n`;
+  log.innerHTML += `✅ Eliminados: ${eliminados} productos importados duplicados\n`;
+  log.innerHTML += `✅ Actualizados: ${actualizados} productos con precios del Excel\n`;
+  log.innerHTML += `📦 Total inventario: ${filtrado.length} productos\n`;
+  document.getElementById('fixBtn').disabled = true;
 });
 </script>
 </body>
